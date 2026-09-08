@@ -94,7 +94,8 @@ export function Checkbox({
   label,
   ...props
 }: React.ComponentProps<typeof RC.Root> & { label: string }) {
-  const id = React.useId();
+  const generatedId = React.useId();
+  const id = props.id ?? generatedId;
   return (
     <div className="flex items-center gap-3">
       <RC.Root
@@ -116,7 +117,8 @@ export function Switch({
   label,
   ...props
 }: React.ComponentProps<typeof RS.Root> & { label: string }) {
-  const id = React.useId();
+  const generatedId = React.useId();
+  const id = props.id ?? generatedId;
   return (
     <div className="flex items-center gap-3">
       <RS.Root
@@ -179,8 +181,14 @@ export function Select({
   label,
   options,
   placeholder = "Choose an option",
+  id,
+  'aria-invalid': invalid,
+  'aria-describedby': describedBy,
   ...props
 }: React.ComponentProps<typeof SE.Root> & {
+  id?: string;
+  'aria-invalid'?: React.AriaAttributes['aria-invalid'];
+  'aria-describedby'?: string;
   label: string;
   placeholder?: string;
   options: { value: string; label: string; disabled?: boolean }[];
@@ -188,6 +196,9 @@ export function Select({
   return (
     <SE.Root {...props}>
       <SE.Trigger
+        id={id}
+        aria-invalid={invalid}
+        aria-describedby={describedBy}
         aria-label={label}
         className="a-input flex items-center justify-between gap-3"
       >

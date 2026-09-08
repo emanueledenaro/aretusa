@@ -33,7 +33,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "bg-surface text-ink hover:bg-surface/70": tone === "secondary",
             "border border-line bg-transparent text-ink": tone === "outline",
             "bg-transparent text-ink hover:bg-surface": tone === "quiet",
-            "bg-danger text-white": tone === "danger",
+          "bg-danger text-on-danger": tone === "danger",
             "bg-gold text-[#181818]": tone === "accent",
           },
           {

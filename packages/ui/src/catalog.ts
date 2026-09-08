@@ -285,7 +285,7 @@ export const catalog = [
     id: "toast",
     name: "Toast",
     module: "overlays",
-    exportName: "ToastDemo",
+    exportName: "Toast",
     description: "A temporary message with a dismiss action.",
   },
   {

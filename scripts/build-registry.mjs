@@ -1,10 +1,10 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import ts from 'typescript';
 const root = process.cwd();
 const text = await readFile("packages/ui/src/catalog.ts", "utf8");
-const catalog = JSON.parse(
-  text.slice(text.indexOf("["), text.indexOf("] as const") + 1),
-);
+const compiled = ts.transpileModule(text, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+const { catalog } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
 const imports = {
   basic: ["utils"],
   forms: ["utils"],

@@ -185,26 +185,7 @@ export function HoverCard({
     </H.Root>
   );
 }
-export function ToastDemo() {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <RT.Provider swipeDirection="right">
-      <Button tone="outline" onClick={() => setOpen(true)}>
-        Show notification
-      </Button>
-      <RT.Root
-        open={open}
-        onOpenChange={setOpen}
-        className="rounded-xl border border-line bg-card p-5 shadow-xl"
-      >
-        <RT.Title className="font-medium">Changes saved</RT.Title>
-        <RT.Description className="mt-1 text-sm text-muted">
-          Your local example has been updated.
-        </RT.Description>
-        <RT.Close className="mt-3 text-sm underline">Dismiss</RT.Close>
-      </RT.Root>
-      <RT.Viewport className="fixed bottom-4 right-4 z-[70] m-0 w-[min(360px,calc(100%-32px))] list-none outline-none" />
-    </RT.Provider>
-  );
+export function Toast({open,onOpenChange,title,description,duration=5000}:{open:boolean;onOpenChange:(open:boolean)=>void;title:string;description?:string;duration?:number}){
+ return <RT.Provider swipeDirection="right" duration={duration}><RT.Root open={open} onOpenChange={onOpenChange} className="rounded-xl border border-line bg-card p-5 text-ink shadow-xl"><RT.Title className="font-medium">{title}</RT.Title>{description&&<RT.Description className="mt-1 text-sm text-muted">{description}</RT.Description>}<RT.Close className="mt-3 text-sm underline">Dismiss</RT.Close></RT.Root><RT.Viewport className="fixed bottom-4 right-4 z-[70] m-0 w-[min(360px,calc(100%-32px))] list-none outline-none"/></RT.Provider>
 }
-export { RT as Toast };
+export function ToastDemo(){const [open,setOpen]=React.useState(false);return <><Button tone="outline" onClick={()=>setOpen(true)}>Show notification</Button><Toast open={open} onOpenChange={setOpen} title="Changes saved" description="Your local example has been updated."/></>}

@@ -16,6 +16,7 @@ import {
 import * as U from "../../../packages/ui/src/index";
 import { catalog } from "../../../packages/ui/src/catalog";
 import { Demo } from "./Demo";
+import {usageCode} from './usage';
 const github = "https://github.com/emanueledenaro/aretusa";
 function useRoute() {
   const [route, setRoute] = React.useState(location.hash.slice(1) || "/");
@@ -214,12 +215,16 @@ function ComponentPage({ id }: { id: string }) {
               <button
                 key={t}
                 role="tab"
+                id={'tab-'+t}
+                aria-controls={'panel-'+t}
+                tabIndex={tab===t?0:-1}
                 aria-selected={tab === t}
                 className={
                   "rounded-lg px-4 py-2 text-sm " +
                   (tab === t ? "bg-surface font-medium" : "text-muted")
                 }
                 onClick={() => setTab(t)}
+                onKeyDown={e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?'preview':e.key==='End'?'source':t==='preview'?'source':'preview';setTab(next);document.getElementById('tab-'+next)?.focus()}}}
               >
                 {t === "preview" ? "Preview" : "Source"}
               </button>
@@ -229,12 +234,14 @@ function ComponentPage({ id }: { id: string }) {
             <div
               className="flex min-h-64 items-center p-6 md:p-10"
               role="tabpanel"
+              id="panel-preview"
+              aria-labelledby="tab-preview"
               aria-label="Preview"
             >
               <Demo id={id} key={id} />
             </div>
           ) : (
-            <div className="p-4" role="tabpanel" aria-label="Source">
+            <div className="p-4" role="tabpanel" id="panel-source" aria-labelledby="tab-source" aria-label="Source">
               {error ? (
                 <U.Alert title="Source could not be loaded" tone="error">
                   Build the registry and reload this page.
@@ -281,11 +288,7 @@ function ComponentPage({ id }: { id: string }) {
             the source.
           </p>
           <Code>
-            {"import { " +
-              entry.exportName +
-              ' } from "./components/aretusa/' +
-              entry.module +
-              '"'}
+            {usageCode(id,entry.exportName,entry.module)}
           </Code>
         </section>
         <section className="mt-12">
@@ -514,7 +517,9 @@ function Themes() {
     accent +
     ";\n  --radius-lg: " +
     radius +
-    "px;\n}";
+    "px;\n  --font-editorial: " +
+    (font === "editorial" ? "'Lora Variable', Georgia, serif" : "'DM Sans Variable', Arial, sans-serif") +
+    ";\n}";
   return (
     <div className="shell py-16">
       <p className="text-xs uppercase tracking-widest text-muted">

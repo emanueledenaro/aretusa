@@ -14,7 +14,7 @@ export function Attachment({
       <Paperclip aria-hidden className="size-4 shrink-0" />
       <span className="truncate">{name}</span>
       {onRemove && (
-        <button onClick={onRemove} aria-label={"Remove " + name}>
+        <button type="button" onClick={onRemove} aria-label={"Remove " + name}>
           <X className="size-4" />
         </button>
       )}

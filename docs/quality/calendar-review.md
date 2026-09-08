@@ -4,6 +4,8 @@
 - Base: `6b27b5a`
 - Branch: `agent/calendar-28`
 - Author: Calendar Astra worker
+- Reviewed source commit: `f473ded1d4d67eb442f7d428762694d2ac646b6f`
+- Independent reviewers: `/root/calendar_28/standards_review` and `/root/calendar_28/spec_review`
 - Status: behavior-checked. Shared style, catalog and consumer integration remain open.
 
 ## Public contract
@@ -268,7 +270,36 @@ Rebuild the registry after integrating source and styles, verify the `calendar` 
 
 ## Validation and findings
 
-Focused tests: `npx vitest run tests/calendar.test.tsx`, 18 passed. TypeScript: `npm run typecheck`, passed. Full-suite and rendered evidence follow below when available.
+Focused tests: `npx vitest run tests/calendar.test.tsx`, 18 passed. TypeScript: `npm run typecheck`, passed. Full UI suite: `npx vitest run`, 132 passed across 13 files. CLI suite: `node --test tests/cli.test.mjs`, 5 passed. Existing Recharts zero-dimension warnings and a Node localStorage warning appeared in unrelated tests. The registry was not rebuilt because generated integration files are coordinator-owned.
+
+Documentation build: `npx vite build --config apps/docs/vite.config.ts`, passed (3410 modules). Vite reported an existing-style bundle-size warning for the 1083.07kB JavaScript chunk. This build used the checked-in registry artifact and is not regenerated-source parity evidence.
+
+### Standards review
+
+The independent reviewer found no documented-standard violations or actionable smell findings. The review confirmed the preserved discriminated API, caller overrides, public behavior tests and honest separation of proposed CSS from implemented source. Its focused rerun passed all 18 tests. It requested the reviewed SHA and reviewer identity, now recorded above.
+
+### Spec review
+
+The independent reviewer found no source behavior defect or scope creep. It identified four incomplete issue requirements: integrated visual refinement; the full responsive, touch, locale and zoom matrix; clean-consumer/source parity; and final rendered evidence. These remain coordinator integration work. Both reviewers assessed commit `f473ded1d4d67eb442f7d428762694d2ac646b6f`.
+
+### Rendered observations
+
+The worker ran Chromium through `npm exec --yes --package=agent-browser -- agent-browser --session aretusa-calendar`, using the repository-local Vite server at `http://127.0.0.1:4288`. This was an isolated browser session, not CUA or a Playwright CLI invocation. The coordinator subsequently communicated that external-browser verification was awaiting authorization in the main conversation. The worker stopped further external-browser checks and closed its session. These observations are exploratory evidence only; the coordinator must repeat accepted verification through the authorized browser.
+
+Fixtures imported the actual worktree Calendar module through Vite and mounted it in a temporary browser DOM node. The proposed CSS above was injected into that browser document, without changing the repository stylesheet. The original documentation app remained hidden during these fixture captures. These images do not prove that the current documentation preview or an installed consumer contains the proposal.
+
+| Viewport or container                       | Theme and state                                                              | Observed evidence                                        | Result                                                                                                                                                    |
+| ------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 320px                                       | Light, existing CSS, single calendar                                         | `/tmp/aretusa-calendar-before-320.png`                   | Existing dates have 36px height; today lacks a distinct visible style                                                                                     |
+| 320px                                       | Light, existing CSS, selected range                                          | `/tmp/aretusa-calendar-before-range-320.png`             | Individual selected buttons lack a connecting range band                                                                                                  |
+| 320px                                       | Light, injected CSS, two-month range                                         | `/tmp/aretusa-calendar-proposal-range-320.png`           | Months stack, range endpoints and middle differ, today has a border; measured page width 320px with scrollWidth 320px; sampled date targets 41.14 by 44px |
+| 390px                                       | Dark, injected CSS, selected today, disabled weekends and long dropdown text | `/tmp/aretusa-calendar-proposal-dark-dropdown-390.png`   | Theme and state differences visible; native select truncates the deliberately long option in its closed face                                              |
+| 768/1024/1440px                             | Both                                                                         | Not captured                                             | Pending                                                                                                                                                   |
+| 240px parent                                | Both                                                                         | Dense-grid rationale only                                | Pending measurement and visual inspection                                                                                                                 |
+| 200% text zoom                              | Both                                                                         | Not captured                                             | Pending                                                                                                                                                   |
+| Keyboard, focus, reduced motion, real touch | Browser                                                                      | DOM interaction tests exist; browser paths not completed | Pending accepted browser verification                                                                                                                     |
+
+The long native-select option is an open visual finding. The coordinator should use realistic localized month names and verify their fit, or provide a wrapping custom caption control if arbitrary long option text is promised. The exact complete responsive matrix must run after integrating the stylesheet and examples. The `/tmp` screenshots are local handoff artifacts, not committed public evidence.
 
 Shared styling and documentation are coordinator-owned. Their proposed changes above remain integration requirements, not changes present on this worker branch. The rendered review must distinguish the existing branch CSS from any browser-injected proposal. Clean-consumer installation, regenerated registry parity, deployment, physical touch testing and assistive-technology speech output remain unperformed.
 

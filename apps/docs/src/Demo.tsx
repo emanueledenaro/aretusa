@@ -428,15 +428,36 @@ export function Demo({ id }: { id: string }) {
       break;
     case "input":
       content = (
-        <div className="space-y-4">
-          <U.Field label="Project name">
-            <U.Input placeholder="A new beginning" />
+        <div className="grid w-full gap-5 sm:grid-cols-2">
+          <U.Field label="Project name" hint="Shown on the public page.">
+            <U.Input name="project" placeholder="A new beginning" autoComplete="off" />
           </U.Field>
-          <U.Input
-            aria-label="Disabled input"
-            disabled
-            placeholder="Unavailable"
-          />
+          <U.Field label="Work email" error="Enter a valid email address.">
+            <U.Input type="email" name="email" autoComplete="email" defaultValue="not-an-email" />
+          </U.Field>
+          <U.Field label="Password" hint="At least twelve characters.">
+            <U.Input type="password" name="password" autoComplete="new-password" />
+          </U.Field>
+          <U.Field label="Seats" hint="Whole numbers between 1 and 12.">
+            <U.Input type="number" name="seats" min={1} max={12} step={1} defaultValue={4} inputMode="numeric" />
+          </U.Field>
+          <U.Field label="Search the archive">
+            <U.Input type="search" name="q" placeholder="Prints, ceramics, maps" enterKeyHint="search" />
+          </U.Field>
+          <U.Field label="Workspace ID" hint="Assigned by the studio and cannot be changed here.">
+            <U.Input readOnly value="studio-ortigia-2026" />
+          </U.Field>
+          <U.Field label="Long value">
+            <U.Input defaultValue="A letter from Ortigia, second draft with margin notes from the printing room and the terrace conversation" />
+          </U.Field>
+          <U.Field label="Plan">
+            <U.Input disabled value="Studio, yearly" />
+          </U.Field>
+          <div className="w-60 max-w-full sm:col-span-2">
+            <U.Field label="In a 240px parent" hint="Long placeholder text stays inside the box.">
+              <U.Input placeholder="Type a name for this collection" />
+            </U.Field>
+          </div>
         </div>
       );
       break;

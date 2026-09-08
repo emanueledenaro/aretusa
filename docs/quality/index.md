@@ -27,7 +27,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Combobox | component | [#30](https://github.com/emanueledenaro/aretusa/issues/30) | implemented |
 | Date Picker | component | [#31](https://github.com/emanueledenaro/aretusa/issues/31) | implemented |
 | Field | component | [#32](https://github.com/emanueledenaro/aretusa/issues/32) | implemented |
-| Input | component | [#33](https://github.com/emanueledenaro/aretusa/issues/33) | implemented |
+| Input | component | [#33](https://github.com/emanueledenaro/aretusa/issues/33) | visually-reviewed |
 | Input Group | component | [#34](https://github.com/emanueledenaro/aretusa/issues/34) | implemented |
 | Input Otp | component | [#35](https://github.com/emanueledenaro/aretusa/issues/35) | implemented |
 | Label | component | [#36](https://github.com/emanueledenaro/aretusa/issues/36) | implemented |

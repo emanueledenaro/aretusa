@@ -75,7 +75,7 @@
     overflow-wrap: anywhere;
   }
   .a-input {
-    @apply min-h-10 w-full rounded-lg border border-line bg-paper/50 px-3 py-2 text-sm text-ink shadow-xs placeholder:text-muted/75 disabled:opacity-50 aria-invalid:border-danger focus-visible:bg-card transition-colors;
+    @apply min-h-10 w-full rounded-lg border border-line bg-paper/50 px-3 py-2 text-sm text-ink shadow-xs placeholder:text-muted/75 disabled:opacity-50 read-only:bg-surface/70 read-only:shadow-none read-only:focus-visible:bg-surface/70 aria-invalid:border-danger focus-visible:bg-card transition-colors;
   }
   .a-overlay {
     @apply fixed inset-0 z-50 bg-black/40 backdrop-blur-xs;

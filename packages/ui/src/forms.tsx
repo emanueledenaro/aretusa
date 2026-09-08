@@ -219,12 +219,12 @@ export function Select({
       </SE.Trigger>
       <SE.Portal>
         <SE.Content
-          className="a-popup w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-24px)] overflow-hidden"
+          className="a-popup w-[var(--radix-select-trigger-width)] min-w-[min(12rem,calc(100vw-24px))] max-w-[calc(100vw-24px)] overflow-hidden p-1.5"
           position="popper"
           sideOffset={6}
           collisionPadding={12}
         >
-          <SE.Viewport className="max-h-[min(320px,var(--radix-select-content-available-height))] p-1">
+          <SE.Viewport className="max-h-[min(320px,var(--radix-select-content-available-height))] space-y-1 p-0.5">
             {options.map((o) => (
               <SE.Item
                 key={o.value}
@@ -243,7 +243,7 @@ export function Select({
                 <span className="min-w-0 flex-1 break-words">
                   <SE.ItemText>{o.label}</SE.ItemText>
                   {o.description && (
-                    <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                    <span className="mt-1 block text-xs leading-relaxed text-muted">
                       {o.description}
                     </span>
                   )}

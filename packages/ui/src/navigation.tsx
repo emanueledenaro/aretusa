@@ -262,14 +262,33 @@ export function ScrollArea({
   children,
   className = "h-44",
   label = "Scrollable content",
+  fade = false,
 }: {
   children: React.ReactNode;
   className?: string;
   label?: string;
+  fade?: boolean;
 }) {
+  const viewport = React.useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = React.useState({top: false, bottom: false});
+  const updateEdges = React.useCallback(() => {
+    const node = viewport.current;
+    if (!node) return;
+    const top = node.scrollTop > 1;
+    const bottom = node.scrollHeight - node.clientHeight - node.scrollTop > 1;
+    setEdges(previous => previous.top === top && previous.bottom === bottom ? previous : {top, bottom});
+  }, []);
+  React.useEffect(() => {
+    if (!fade || !viewport.current) return;
+    updateEdges();
+    const observer = new ResizeObserver(updateEdges);
+    observer.observe(viewport.current);
+    if (viewport.current.firstElementChild) observer.observe(viewport.current.firstElementChild);
+    return () => observer.disconnect();
+  }, [fade, updateEdges]);
   return (
-    <SA.Root type="auto" className={"relative overflow-hidden " + className}>
-      <SA.Viewport role="region" aria-label={label} tabIndex={0} className="size-full rounded-[inherit] focus-visible:outline-offset-[-2px]">
+    <SA.Root type="auto" data-fade-top={fade && edges.top} data-fade-bottom={fade && edges.bottom} className={"a-scroll-area relative overflow-hidden " + className}>
+      <SA.Viewport ref={viewport} onScroll={fade ? updateEdges : undefined} role="region" aria-label={label} tabIndex={0} className="size-full rounded-[inherit] focus-visible:outline-offset-[-2px]">
         {children}
       </SA.Viewport>
       <SA.Scrollbar orientation="vertical" className="a-scroll-track">

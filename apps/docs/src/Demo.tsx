@@ -544,7 +544,9 @@ export function Demo({ id }: { id: string }) {
       break;
     case "scroll-area":
       content = (
-        <U.ScrollArea>
+        <div className="w-full space-y-4">
+        <U.Checkbox label="Smart edge fade" checked={flag} onCheckedChange={value => setFlag(value === true)} />
+        <U.ScrollArea fade={flag} label="Example chapters" className="h-60 rounded-xl border border-line bg-paper">
           <div className="space-y-3 pe-4">
             {Array.from({ length: 12 }, (_, i) => (
               <U.Item
@@ -555,6 +557,7 @@ export function Demo({ id }: { id: string }) {
             ))}
           </div>
         </U.ScrollArea>
+        </div>
       );
       break;
     case "sidebar":

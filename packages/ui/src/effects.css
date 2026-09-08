@@ -1,4 +1,19 @@
 /* Opt-in surface treatments. Decoration never intercepts interaction. */
+.a-scroll-area::before, .a-scroll-area::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0;
+  inset-inline-end: 14px;
+  height: min(48px, 12%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-normal, 220ms) var(--motion-ease, ease-out);
+}
+.a-scroll-area::before { top: 0; background: linear-gradient(var(--color-paper), transparent); }
+.a-scroll-area::after { bottom: 0; background: linear-gradient(transparent, var(--color-paper)); }
+.a-scroll-area[data-fade-top="true"]::before, .a-scroll-area[data-fade-bottom="true"]::after { opacity: 1; }
+@media (forced-colors: active) { .a-scroll-area::before, .a-scroll-area::after { display: none; } }
 .a-edge-fade {
   position: relative;
   isolation: isolate;

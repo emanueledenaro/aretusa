@@ -761,7 +761,7 @@ export function PreviewPage({ query }: { query: string }) {
       </U.Alert>
     );
   return (
-    <U.ScrollArea className="h-dvh" label="Component preview">
+    <U.ScrollArea className="h-dvh" label="Component preview" fade>
       <div className="preview-root">
         <Showcase view={parsed.view} />
       </div>

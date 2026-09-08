@@ -49,7 +49,7 @@ export const usage: Record<string,string> = {
   "menubar": "<Menubar menus={[{label:\"File\",items:menuItems}]} />",
   "navigation-menu": "<NavigationMenu items={[{label:\"Projects\",href:\"/projects\"},{label:\"About\",href:\"/about\"}]} />",
   "pagination": "<Pagination page={page} total={5} onChange={setPage} />",
-  "scroll-area": "<ScrollArea className=\"h-40\"><p>Your scrollable content.</p></ScrollArea>",
+  "scroll-area": "<ScrollArea fade={enabled} label=\"Project activity\" className=\"h-40\"><p>Your scrollable content.</p></ScrollArea>",
   "sidebar": "<Sidebar items={[{label:\"Projects\",href:\"/projects\"}]}><p>Workspace content.</p></Sidebar>",
   "tabs": "<Tabs items={[{value:\"overview\",label:\"Overview\",content:<p>Your overview.</p>},{value:\"settings\",label:\"Settings\",content:<p>Your settings.</p>}]} />",
   "carousel": "<Carousel slides={[{title:\"First idea\",description:\"A beginning.\"},{title:\"Next step\",description:\"Keep going.\"}]} />",

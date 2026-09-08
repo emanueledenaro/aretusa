@@ -4,8 +4,9 @@
 - Base: `6b27b5a46b71ef6ca443d6f518713280b9656774`
 - Core prerequisite: coordinator commit `a95eeea`, cherry-picked as `290ac18`
 - Worker branch: `agent/react-hook-form-88`
+- Reviewed implementation: `4f1c33f653650225f2ed73543c4821731d033af7`
 - Status: behavior-checked; integration and remaining quality gates are pending.
-- Reviewer: author checks below; independent standards/spec review and coordinator acceptance remain separate gates.
+- Reviewer: author browser checks below; independent standards and spec reviewers verified `290ac18...4f1c33f` with no blocking findings. Coordinator acceptance remains a separate gate.
 
 ## Requirements matrix
 
@@ -29,16 +30,16 @@
 
 CUA in-app browser loaded the independent Vite example at `http://127.0.0.1:4188/`. Measurements use read-only DOM geometry and screenshots were emitted and inspected in the worker conversation. Viewport widths below include the browser scrollbar; document width was 15px smaller with no page-level horizontal overflow.
 
-| Viewport       | Theme | State                                               | Observed result                                                                                        |
-| -------------- | ----- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| 320px          | light | Invalid submit, linked messages, input focus        | Focus `name`, scroll width 305px, visible messages wrap                                                |
-| 390px          | dark  | Invalid fields and focus                            | Shared dark theme visibly applied; labels and errors remain readable                                   |
-| 768px          | light | Select Space/ArrowDown/Enter, pending save, success | Chosen `Interface design`; disabled controls and status; then `Reservation saved.`; scroll width 753px |
-| 1024px         | light | Append guest                                        | Focus `guests.1.name`; scroll width 1009px; actions fit                                                |
-| 1440px         | dark  | Reorder guests                                      | Sam and Lin retain values in moved positions; scroll width 1425px                                      |
-| 240px parent   | both  | Constrained composition                             | Pending                                                                                                |
-| 200% text zoom | both  | Long content and actions                            | Pending                                                                                                |
-| Reduced motion | both  | Select, switch and pending transitions              | Pending                                                                                                |
+| Viewport       | Theme | State                                               | Observed result                                                                                                                  |
+| -------------- | ----- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 320px          | light | Invalid submit, linked messages, input focus        | Focus `name`, scroll width 305px, visible messages wrap                                                                          |
+| 390px          | dark  | Invalid fields and focus                            | Shared dark theme visibly applied; labels and errors remain readable                                                             |
+| 768px          | light | Select Space/ArrowDown/Enter, pending save, success | Chosen `Interface design`; disabled controls and status; then `Reservation saved.`; scroll width 753px                           |
+| 1024px         | light | Append guest                                        | Focus `guests.1.name`; scroll width 1009px; actions fit                                                                          |
+| 1440px         | dark  | Reorder guests                                      | Sam and Lin retain values in moved positions; scroll width 1425px                                                                |
+| 240px parent   | both  | Constrained composition                             | CUA measured form width 240px at viewport 287px, document width 272px. Labels wrap and actions stack.                            |
+| 200% text zoom | both  | Long content and actions                            | Root-font scaling from 16px to 32px checked at 390px without overflow. Native browser text-zoom remains pending.                 |
+| Reduced motion | both  | Select and switch                                   | CUA media emulation confirms switch transition and Select popup animation/transition are 0s. Selection and dismissal still work. |
 
 Before CUA verification, the worker also ran agent-browser against the same local example at 320px and 390px. Those preliminary checks are not the CUA matrix above. An initial screenshot named `dark` still used the light theme because the example toggled a CSS class instead of Aretusa's `data-theme` attribute. The example now sets `data-theme`; CUA verified the correction. The preliminary incorrectly named screenshot is not dark-theme evidence.
 
@@ -54,16 +55,17 @@ The integration intentionally leaves networking, backend persistence, schema res
 
 ## Checks
 
-- `npm test --prefix examples/react-hook-form`: focused public behavior tests pass.
+- `npm ci --prefix examples/react-hook-form`: independent lockfile installs successfully; React Hook Form resolves to 7.87.0. Example Vite deduplicates shared React/control dependencies, and its TypeScript paths use the same installed types.
+- `npm test --prefix examples/react-hook-form`: 10 focused public behavior tests pass.
 - `npm run build --prefix examples/react-hook-form`: TypeScript and production build pass.
 - `npm test`: 117 Vitest tests and 5 CLI tests pass at the worker base plus core prerequisite.
 - `npm run typecheck`: pass.
-- Full example output before final formatting: about 372kB JS / 120kB gzip. This includes React, RHF and the composed controls, not the adapter alone.
+- Full example output with the independent lockfile: 381.79kB JS / 122.88kB gzip. This includes React, RHF and the composed controls, not the adapter alone.
 - Root manifest, lockfile, catalog, exports, documentation router, shared styles, coverage and generated registry are coordinator-owned. The worker did not add integration wiring there.
 
 ## Integration handoff
 
-1. Add root dependency `react-hook-form` compatible with the example lockfile and export `HookFormField`, `HookFormFieldProps`, `HookFormControlProps` from the UI barrel.
+1. Add root dependency `react-hook-form` at `^7.87.0`, matching the example lockfile, and export `HookFormField`, `HookFormFieldProps`, `HookFormControlProps` from the UI barrel. Include `npm ci --prefix examples/react-hook-form`, its tests and its build in CI.
 2. Add catalog/registry item `react-hook-form` with source entry `packages/ui/src/react-hook-form.tsx`, export `HookFormField`, and runtime dependency `react-hook-form`. The adapter has no imports from other Aretusa source files.
 3. Add a Forms sidebar entry and route using this document and `ReactHookFormExample` from `examples/react-hook-form/example.tsx`. Keep demo code out of the distributable adapter. Include its classes in the documentation build's Tailwind scanning.
 4. Preserve `Select.triggerRef`, `Select.triggerOnBlur`, `RadioGroup.focusRef` and `NativeSelect` ref support from the core prerequisite. The complete example also imports Input, Checkbox, Switch and Button.
@@ -72,4 +74,6 @@ The integration intentionally leaves networking, backend persistence, schema res
 
 ## Decision
 
-Keep #88 open until coordinator integration, clean-consumer installation, remaining responsive/accessibility checks and independent review have evidence. This worker delivery does not establish release readiness or deployment.
+Standards review found no blocking violations. It noted a P3 duplicated layout-class string for boolean rows; this remains local example code and does not affect behavior. Spec review found no blocking functional defect or scope expansion. Both reviewers independently reproduced all 10 example tests and its TypeScript/build checks against `4f1c33f`.
+
+Keep #88 open until coordinator integration, clean-consumer installation and remaining responsive/accessibility checks have evidence. This worker delivery does not establish release readiness or deployment. Browser viewport, font-size and motion overrides were restored after inspection.

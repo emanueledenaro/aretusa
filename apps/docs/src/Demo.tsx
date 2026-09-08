@@ -270,6 +270,61 @@ function CheckboxExample() {
     </div>
   );
 }
+function RadioGroupExample() {
+  const [session, setSession] = React.useState("");
+  const [plan, setPlan] = React.useState("studio");
+  const [submitted, setSubmitted] = React.useState(false);
+  return (
+    <div className="grid w-full gap-8">
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p id="radio-session" className="mb-1 text-sm font-medium">Session</p>
+          <U.RadioGroup
+            label="Session"
+            aria-labelledby="radio-session"
+            value={session}
+            onValueChange={(next) => { setSession(next); setSubmitted(false); }}
+            description="Morning sessions include the printing room."
+            error={submitted && !session ? "Choose a session to continue." : undefined}
+            options={[
+              { value: "morning", label: "Morning", description: "09:00 to 12:30" },
+              { value: "afternoon", label: "Afternoon", description: "14:00 to 17:30" },
+              { value: "evening", label: "Evening", description: "Fully booked this month.", disabled: true },
+            ]}
+          />
+          <U.Button tone="outline" className="mt-3" onClick={() => setSubmitted(true)}>Validate</U.Button>
+        </div>
+        <div className="w-60 max-w-full">
+          <p id="radio-delivery" className="mb-1 text-sm font-medium">Delivery in a 240px parent</p>
+          <U.RadioGroup
+            label="Delivery"
+            aria-labelledby="radio-delivery"
+            defaultValue="pickup"
+            options={[
+              { value: "pickup", label: "Pick up at the studio during opening hours, Monday to Saturday" },
+              { value: "courier", label: "Courier", description: "Tracked, two to four working days across the island." },
+            ]}
+          />
+        </div>
+      </div>
+      <div>
+        <p id="radio-plan" className="mb-2 text-sm font-medium">Plan, card variant</p>
+        <U.RadioGroup
+          label="Plan"
+          aria-labelledby="radio-plan"
+          variant="cards"
+          value={plan}
+          onValueChange={setPlan}
+          options={[
+            { value: "studio", label: "Studio", description: "Shared desk, printing room by reservation, monthly meeting." },
+            { value: "resident", label: "Resident", description: "Own desk, keys to the terrace, a shelf in the archive." },
+            { value: "visitor", label: "Visitor", description: "Day passes only, no reservation rights.", disabled: true },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -541,13 +596,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "radio-group":
-      content = (
-        <U.RadioGroup
-          label="Your discipline"
-          options={choices}
-          defaultValue="design"
-        />
-      );
+      content = <RadioGroupExample />;
       break;
     case "select":
       content = <SelectExample />;

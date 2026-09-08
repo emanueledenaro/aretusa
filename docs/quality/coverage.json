@@ -473,15 +473,16 @@
       "issue": 38,
       "databaseId": 5386379137,
       "url": "https://github.com/emanueledenaro/aretusa/issues/38",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/radio-group-review.md"
     },
     {
       "id": "select",

@@ -30,7 +30,7 @@ export const usage: Record<string,string> = {
   "input-otp": "<InputOTP value={value} onChange={setValue} length={6} />",
   "label": "<><Label htmlFor=\"name\">Name</Label><input id=\"name\" /></>",
   "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} />",
-  "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" />",
+  "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" description=\"You can change this later.\" />",
   "select": "<Select label=\"Discipline\" options={options} value={value} onValueChange={setValue} />",
   "slider": "<Slider label=\"Volume\" defaultValue={[40]} min={0} max={100} />",
   "switch": "<Switch label=\"Updates\" checked={enabled} onCheckedChange={setEnabled} />",

@@ -8,6 +8,7 @@
 - Formisch integration: `FormischField` adapter over a Valibot schema with registered focus, Forms documentation route with the reservation example, registry item declaring `@formisch/react` and `valibot`.
 - TanStack Form integration: `TanStackFormField` adapter with `focusFirstInvalidField`, Forms documentation route with the visit request example, registry item declaring `@tanstack/react-form`.
 - React Hook Form integration: `HookFormField` adapter, Forms documentation route with the reservation example, registry item with the `react-hook-form` dependency.
+- Radio Group: option descriptions, group `description` and `error`, `variant="cards"`, 44px rows and first-line alignment.
 - Checkbox: `description`, `error` and indeterminate support, 44px rows and first-line alignment for multiline labels.
 - Input: read-only appearance; documentation demo covers types, autocomplete, errors, long values, disabled and narrow parents.
 - Select: list viewport uses the Aretusa scrollbar; documentation demo covers descriptions, disabled options, swatches, long lists, errors and nesting in a dialog.

@@ -175,33 +175,101 @@ export function Switch({
 }
 export function RadioGroup({
   label,
+  description,
+  error,
   options,
+  variant = "list",
   focusRef,
+  className,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid,
   ...props
 }: React.ComponentProps<typeof RG.Root> & {
   label: string;
+  /** Help text for the whole group, linked through aria-describedby. */
+  description?: React.ReactNode;
+  /** Validation message; marks the group invalid and links the text. */
+  error?: React.ReactNode;
+  /** cards wraps each option in a selectable bordered surface. */
+  variant?: "list" | "cards";
   focusRef?: React.Ref<HTMLButtonElement>;
-  options: { value: string; label: string; disabled?: boolean }[];
+  options: {
+    value: string;
+    label: React.ReactNode;
+    description?: React.ReactNode;
+    disabled?: boolean;
+  }[];
 }) {
   const uid = React.useId();
   const firstEnabled = props.disabled ? -1 : options.findIndex(option => !option.disabled);
+  const descriptionId = description ? `${uid}-description` : undefined;
+  const errorId = error ? `${uid}-error` : undefined;
+  const cards = variant === "cards";
   return (
-    <RG.Root aria-label={label} {...props} className="grid gap-3">
-      {options.map((o, i) => (
-        <div className="flex items-center gap-3" key={o.value}>
-          <RG.Item
-            ref={i === firstEnabled ? focusRef : undefined}
-            id={uid + i}
-            value={o.value}
-            disabled={o.disabled}
-            className="flex size-5 items-center justify-center rounded-full border border-line disabled:opacity-40"
-          >
-            <RG.Indicator className="size-2.5 rounded-full bg-terracotta" />
-          </RG.Item>
-          <Label htmlFor={uid + i}>{o.label}</Label>
-        </div>
-      ))}
-    </RG.Root>
+    <div className={cx("grid gap-2", className)}>
+      <RG.Root
+        aria-label={label}
+        {...props}
+        aria-invalid={error ? true : invalid}
+        aria-describedby={[describedBy, descriptionId, errorId].filter(Boolean).join(" ") || undefined}
+        className={cards ? "group grid gap-3 sm:grid-cols-2" : "group grid"}
+      >
+        {options.map((o, i) => {
+          const id = uid + i;
+          const optionDescriptionId = o.description ? `${id}-description` : undefined;
+          const item = (
+            <RG.Item
+              ref={i === firstEnabled ? focusRef : undefined}
+              id={id}
+              value={o.value}
+              disabled={o.disabled || props.disabled}
+              aria-labelledby={`${id}-label`}
+              aria-describedby={optionDescriptionId}
+              className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-control bg-card transition-colors hover:border-ink data-[state=checked]:border-terracotta group-aria-[invalid=true]:border-danger disabled:cursor-default disabled:opacity-40 disabled:hover:border-control"
+            >
+              <RG.Indicator className="size-2.5 rounded-full bg-terracotta" />
+            </RG.Item>
+          );
+          const text = (
+            <div className="grid min-w-0 gap-1">
+              <Label id={`${id}-label`} htmlFor={id} className="leading-6">{o.label}</Label>
+              {o.description && (
+                <p id={optionDescriptionId} className="text-xs leading-relaxed text-muted">
+                  {o.description}
+                </p>
+              )}
+            </div>
+          );
+          return cards ? (
+            <label
+              key={o.value}
+              htmlFor={id}
+              className={cx(
+                "flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-paper/40 p-4 transition-colors has-[[data-state=checked]]:border-ink has-[[data-state=checked]]:bg-card has-[:disabled]:cursor-default has-[:disabled]:opacity-60",
+              )}
+            >
+              {item}
+              {text}
+            </label>
+          ) : (
+            <div className="flex items-start gap-3 py-3" key={o.value}>
+              {item}
+              {text}
+            </div>
+          );
+        })}
+      </RG.Root>
+      {description && (
+        <p id={descriptionId} className="text-xs leading-relaxed text-muted">
+          {description}
+        </p>
+      )}
+      {error && (
+        <p id={errorId} role="alert" className="text-xs leading-relaxed text-danger">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }
 export function NativeSelect({

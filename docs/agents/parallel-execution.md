@@ -1,6 +1,6 @@
 # Parallel ticket execution
 
-Status: prepared, not dispatched. The maintainer requested Astra workers in isolated cloud worktrees and main-thread review. The current cloud route does not expose a verified Astra selector. Do not silently substitute a model or local execution. Resolve that execution choice before starting workers.
+Status: the maintainer approved Astra workers in isolated local worktrees, with review by the main chat before integration. Use gpt-6-astra for this batch. Record dispatch identities and branches separately; approval alone does not prove a worker started.
 
 ## First batch
 

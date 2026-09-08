@@ -329,8 +329,20 @@ export function ToggleGroup({
     </TG.Root>
   );
 }
-export function Calendar(props: React.ComponentProps<typeof DayPicker>) {
-  return <DayPicker {...props} className="a-calendar" showOutsideDays />;
+export function Calendar({
+  className,
+  showOutsideDays = true,
+  navLayout = "after",
+  ...props
+}: React.ComponentProps<typeof DayPicker>) {
+  return (
+    <DayPicker
+      {...props}
+      className={cx("a-calendar", className)}
+      showOutsideDays={showOutsideDays}
+      navLayout={navLayout}
+    />
+  );
 }
 export function DatePicker(
   props: Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">,

@@ -150,26 +150,55 @@ export function Checkbox({
 }
 export function Switch({
   label,
+  description,
+  error,
   className,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid,
   ...props
-}: React.ComponentProps<typeof RS.Root> & { label: string }) {
+}: React.ComponentProps<typeof RS.Root> & {
+  label: React.ReactNode;
+  /** Help text linked to the control through aria-describedby. */
+  description?: React.ReactNode;
+  /** Validation message; marks the control invalid and links the text. */
+  error?: React.ReactNode;
+}) {
   const generatedId = React.useId();
   const id = props.id ?? generatedId;
+  const descriptionId = description ? `${id}-description` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
   return (
-    <div className="flex min-h-11 items-center gap-3">
+    <div className="flex items-start gap-3 py-3">
       <RS.Root
         id={id}
         {...props}
+        aria-invalid={error ? true : invalid}
+        aria-describedby={
+          [describedBy, descriptionId, errorId].filter(Boolean).join(" ") ||
+          undefined
+        }
         className={cx(
-          "relative w-10 shrink-0 rounded-full border border-line bg-surface p-0.5 data-[state=checked]:bg-terracotta disabled:opacity-40",
+          "relative mt-0.5 h-5 w-9 shrink-0 rounded-full border border-control bg-surface p-0.5 transition-colors hover:border-ink data-[state=checked]:border-terracotta data-[state=checked]:bg-terracotta aria-invalid:border-danger disabled:cursor-default disabled:opacity-40 disabled:hover:border-control",
           className,
         )}
       >
-        <RS.Thumb className="relative start-0 block size-4 rounded-full bg-card transition-[inset-inline-start] data-[state=checked]:start-[calc(100%-16px)] motion-reduce:transition-none" />
+        <RS.Thumb className="relative start-0 block size-3.5 rounded-full bg-card shadow-xs transition-[inset-inline-start] data-[state=checked]:start-[calc(100%-14px)] motion-reduce:transition-none" />
       </RS.Root>
-      <label htmlFor={id} className="text-sm">
-        {label}
-      </label>
+      <div className="grid min-w-0 gap-1">
+        <label htmlFor={id} className="text-sm leading-6">
+          {label}
+        </label>
+        {description && (
+          <p id={descriptionId} className="text-xs leading-relaxed text-muted">
+            {description}
+          </p>
+        )}
+        {error && (
+          <p id={errorId} role="alert" className="text-xs leading-relaxed text-danger">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

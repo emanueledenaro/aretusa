@@ -33,7 +33,7 @@ export const usage: Record<string,string> = {
   "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" description=\"You can change this later.\" />",
   "select": "<Select label=\"Discipline\" options={options} value={value} onValueChange={setValue} />",
   "slider": "<Slider label=\"Volume\" defaultValue={[40]} min={0} max={100} />",
-  "switch": "<Switch label=\"Updates\" checked={enabled} onCheckedChange={setEnabled} />",
+  "switch": "<Switch label=\"Updates\" description=\"A weekly digest every Monday.\" checked={enabled} onCheckedChange={setEnabled} />",
   "textarea": "<Textarea aria-label=\"Notes\" placeholder=\"Your thoughts…\" />",
   "toggle": "<Toggle aria-label=\"Favorite\" pressed={enabled} onPressedChange={setEnabled}>Favorite</Toggle>",
   "toggle-group": "<ToggleGroup label=\"View\" options={[\"List\", \"Grid\"]} value={value} onValueChange={setValue} />",

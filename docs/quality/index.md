@@ -35,7 +35,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Radio Group | component | [#38](https://github.com/emanueledenaro/aretusa/issues/38) | visually-reviewed |
 | Select | component | [#39](https://github.com/emanueledenaro/aretusa/issues/39) | visually-reviewed |
 | Slider | component | [#40](https://github.com/emanueledenaro/aretusa/issues/40) | implemented |
-| Switch | component | [#41](https://github.com/emanueledenaro/aretusa/issues/41) | implemented |
+| Switch | component | [#41](https://github.com/emanueledenaro/aretusa/issues/41) | visually-reviewed |
 | Textarea | component | [#42](https://github.com/emanueledenaro/aretusa/issues/42) | implemented |
 | Toggle | component | [#43](https://github.com/emanueledenaro/aretusa/issues/43) | implemented |
 | Toggle Group | component | [#44](https://github.com/emanueledenaro/aretusa/issues/44) | implemented |

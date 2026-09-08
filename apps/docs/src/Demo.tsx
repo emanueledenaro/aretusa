@@ -325,6 +325,28 @@ function RadioGroupExample() {
     </div>
   );
 }
+function SwitchExample() {
+  const [email, setEmail] = React.useState(true);
+  const [share, setShare] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div>
+        <U.Switch label="Email notifications" description={email ? "A weekly digest every Monday." : "You will only see updates in the app."} checked={email} onCheckedChange={setEmail} />
+        <U.Switch label="Share my calendar with the studio" description="Members see busy slots, never titles." error={submitted && !share ? "Sharing is required for shared desks." : undefined} checked={share} onCheckedChange={(next) => { setShare(next); setSubmitted(false); }} />
+        <U.Button tone="outline" className="mt-2" onClick={() => setSubmitted(true)}>Validate</U.Button>
+      </div>
+      <div>
+        <U.Switch label="Reduced motion" defaultChecked />
+        <U.Switch label="Beta features" description="Managed by your workspace." disabled />
+        <U.Switch label="Two-factor sign in" disabled checked />
+      </div>
+      <div className="w-60 max-w-full sm:col-span-2">
+        <U.Switch label="Let other members see when I am at the studio and which room I am using" description="Only during opening hours." />
+      </div>
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -587,13 +609,7 @@ export function Demo({ id }: { id: string }) {
       content = <CheckboxExample />;
       break;
     case "switch":
-      content = (
-        <U.Switch
-          label="Email notifications"
-          checked={flag}
-          onCheckedChange={setFlag}
-        />
-      );
+      content = <SwitchExample />;
       break;
     case "radio-group":
       content = <RadioGroupExample />;

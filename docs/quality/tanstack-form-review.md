@@ -4,7 +4,7 @@
 - Base: `62cf4549335b25eed70ab555ee875c1c177dc0b8`
 - Worker branch: `agent/tanstack-form-89`
 - Library: `@tanstack/react-form` 1.33.5 (`latest` on npm at delivery; `@tanstack/form-core` 1.33.5)
-- Status: implemented and behavior-checked in JSDOM. Not visually reviewed: the browser pane was reserved by the coordinator, so every rendered check below is pending.
+- Status: visually-reviewed after coordinator integration on main; see the coordinator section at the end.
 - Reviewer: worker self-review against the code standards and the ticket; coordinator acceptance remains a separate gate.
 
 ## Requirements matrix
@@ -95,3 +95,17 @@ The integration leaves networking, backend persistence, Standard Schema resolver
 ## Decision
 
 Keep #89 open. Source, example, tests and documentation exist and pass their checks; catalog wiring, clean-consumer installation and all rendered checks are pending. This delivery is a review request, not a release claim.
+
+## Coordinator review and integration
+
+The three worker commits (`abfca92`, `7ef1b9b`, `480e588`) were cherry-picked onto main as `dd68fc6`, `df083d9` and `6115401`. Typecheck, the 12 example tests and the example build were reproduced in the worker worktree before integration.
+
+Wiring on main: root dependency `@tanstack/react-form ^1.33.5`, barrel export, catalog entry `tanstack-form` in the `integrations` module with a declared `dependencies` list, because the adapter is typed structurally and imports only React; the registry builder now merges declared dependencies with the ones it detects from imports, so the item declares `@tanstack/react-form`. Forms route and sidebar entry, the visit request example rendered on the documentation page, a typed usage example importing `useForm` and `Input` beside `TanStackFormField` and `focusFirstInvalidField`, interaction notes, quality coverage, ticket record, tracker index, scope table, changelog, CI steps for the standalone example and the clean-consumer install of the item with a compiled `TanStackFormField` form.
+
+Defect found by the clean consumer: `focusFirstInvalidField` iterated `NodeListOf` results directly, which does not compile for consumers whose TypeScript lib lacks `DOM.Iterable`; both loops now use `Array.from`. The example tests and build were rerun on main after the fix.
+
+Checks at integration: 151 Vitest tests, 5 CLI tests, typecheck, build, 68 usage examples typecheck, 79 registry items with gate records, clean consumer built with the item installed.
+
+Rendered checks of the documentation route in the authorized browser pane: at 390 px light the Forms group lists React Hook Form and TanStack Form, the page shows the form without overflow, and an empty submit shows four linked errors and focuses the name input with `aria-invalid="true"` and `aria-describedby` pointing at its error; at 1440 px dark the page has no overflow and invalid states use the danger token.
+
+Open: the worker's browser matrix above at 320, 768 and 1024 on the standalone example, the 240 px parent, native text zoom, forced colors, reduced motion, real touch, assistive technology, and a second review. Gates: design, responsive, interaction, code and distribution passed for the checked states. Not release-ready.

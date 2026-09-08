@@ -112,14 +112,16 @@ export function focusFirstInvalidField(
       .map(([name]) => name),
   );
   if (invalid.size === 0) return false;
-  const wrappers = root.querySelectorAll<HTMLElement>(
-    `[${TANSTACK_FIELD_ATTRIBUTE}]`,
+  // Array.from keeps this compilable for consumers whose lib has no DOM.Iterable.
+  const wrappers = Array.from(
+    root.querySelectorAll<HTMLElement>(`[${TANSTACK_FIELD_ATTRIBUTE}]`),
   );
   for (const wrapper of wrappers) {
     const name = wrapper.getAttribute(TANSTACK_FIELD_ATTRIBUTE);
     if (!name || !invalid.has(name)) continue;
-    const candidates =
-      wrapper.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+    const candidates = Array.from(
+      wrapper.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+    );
     for (const candidate of candidates) {
       if (isDisabled(candidate)) continue;
       candidate.focus();

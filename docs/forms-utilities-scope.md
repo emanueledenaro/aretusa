@@ -13,12 +13,12 @@ Known examples that need deeper work include searchable Combobox behavior, segme
 | Capability | Ticket | Current evidence |
 | --- | --- | --- |
 | React Hook Form integration | [#88](https://github.com/emanueledenaro/aretusa/issues/88) | Implemented: typed adapter, reservation example, Forms route, registry item and tests; review evidence in progress |
-| TanStack Form integration | [#89](https://github.com/emanueledenaro/aretusa/issues/89) | Planned; dedicated integration and documentation absent |
+| TanStack Form integration | [#89](https://github.com/emanueledenaro/aretusa/issues/89) | Implemented: typed adapter, visit request example, Forms route, registry item and tests; review evidence in progress |
 | Formisch integration | [#90](https://github.com/emanueledenaro/aretusa/issues/90) | Planned; dedicated integration and documentation absent |
 | Standalone scroll fade | [#91](https://github.com/emanueledenaro/aretusa/issues/91) | Implemented with hook, overlay, demo, registry and tests; ScrollArea reuses it; review evidence in progress |
 | Text shimmer | [#92](https://github.com/emanueledenaro/aretusa/issues/92) | Implemented with demo, registry and tests; full visual review pending |
 
-Shimmer, the standalone scroll fade and the React Hook Form integration are now in the registry and quality tracker. TanStack Form and Formisch remain planned scope. Add each to catalog metadata and release-quality tracking when implemented; existing coverage counts must not be used to claim this extension complete.
+Shimmer, the standalone scroll fade and the React Hook Form and TanStack Form integrations are now in the registry and quality tracker. Formisch remains planned scope. Add each to catalog metadata and release-quality tracking when implemented; existing coverage counts must not be used to claim this extension complete.
 
 ## Delivery contract
 

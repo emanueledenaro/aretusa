@@ -84,3 +84,4 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Shimmer | utility | [#92](https://github.com/emanueledenaro/aretusa/issues/92) | implemented |
 | Scroll Fade | utility | [#91](https://github.com/emanueledenaro/aretusa/issues/91) | visually-reviewed |
 | React Hook Form | integration | [#88](https://github.com/emanueledenaro/aretusa/issues/88) | visually-reviewed |
+| TanStack Form | integration | [#89](https://github.com/emanueledenaro/aretusa/issues/89) | visually-reviewed |

@@ -104,7 +104,7 @@ const program = ts.createProgram(["packages/ui/src/index.ts"], {
 });
 const checker = program.getTypeChecker();
 const relevant = new Set(
-  "control rules describedBy group invalidMessage cancelLabel label edges depth color axis mode selected onSelect numberOfMonths showOutsideDays captionLayout navLayout startMonth endMonth locale weekStartsOn excludeDisabled triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
+  "field control rules describedBy group invalidMessage cancelLabel label edges depth color axis mode selected onSelect numberOfMonths showOutsideDays captionLayout navLayout startMonth endMonth locale weekStartsOn excludeDisabled triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
     " ",
   ),
 );
@@ -148,7 +148,15 @@ for (const entry of catalog)
           ? "integration"
           : "component",
     api: apiFor(entry.source, entry.exportName),
-    ...(await itemFiles(entry.source)),
+    ...(await (async () => {
+      const files = await itemFiles(entry.source);
+      // Adapters typed structurally declare the library they target on the catalog entry.
+      const declared = entry.dependencies ?? [];
+      return {
+        ...files,
+        dependencies: [...new Set([...files.dependencies, ...declared])].sort(),
+      };
+    })()),
   });
 for (const name of [
   "HeaderBlock",

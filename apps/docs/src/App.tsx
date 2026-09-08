@@ -203,6 +203,8 @@ function Sidebar({ selected }: { selected?: string }) {
   );
 }
 const itemNotes: Record<string, string> = {
+  "tanstack-form":
+    "Create fields with form.Field or useField and pass the field to TanStackFormField, which renders the label, help text and error and returns controlProps, the readable errors and isValidating. Spread controlProps on the control and wire value, handleChange and handleBlur yourself. TanStack Form does not focus on invalid submit: call focusFirstInvalidField(formApi) from onSubmitInvalid, deferred one tick so a disabled fieldset has been re-enabled. onChange validators run on every keystroke and onChangeAsync runs after a 300ms debounce while typing and immediately on submit. Validation, submission, reset and array fields stay in the library. The full visit request example lives in examples/tanstack-form.",
   "react-hook-form":
     "HookFormField calls useController and renders the label, help text and error for one field; your render function receives field, fieldState, formState and controlProps. Spread field and controlProps on Input or NativeSelect; map value, onValueChange, triggerRef and triggerOnBlur on Select; checked and onCheckedChange on Checkbox and Switch; value, onValueChange and focusRef on RadioGroup. Invalid submit focuses the real control through the forwarded ref. Validation, submission, reset and field arrays stay in useForm and useFieldArray. The full reservation example lives in examples/react-hook-form.",
   "scroll-fade":

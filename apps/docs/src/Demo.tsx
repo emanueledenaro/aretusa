@@ -635,7 +635,7 @@ export function Demo({ id }: { id: string }) {
         <div className="w-full space-y-4">
         <U.Checkbox label="Smart edge fade" checked={flag} onCheckedChange={value => setFlag(value === true)} />
         <U.ScrollArea fade={flag} label="Example chapters" className="h-60 rounded-xl border border-line bg-paper">
-          <div className="space-y-3 pe-4">
+          <div className="px-5 pe-7">
             {Array.from({ length: 12 }, (_, i) => (
               <U.Item
                 key={i}

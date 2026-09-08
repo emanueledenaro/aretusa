@@ -143,7 +143,9 @@ export function Landing() {
             Make it yours <SettingsIcon />
           </a>
         </div>
-        <Showcase view={view} />
+        <div className="a-edge-fade" id="home-examples">
+          <Showcase view={view} />
+        </div>
         <p className="py-6 text-center text-[10px] text-muted">
           Interactive examples use fictional data. No external services are
           connected.
@@ -292,7 +294,7 @@ export function DirectoryPage() {
             {shown.map((i) => (
               <button
                 key={i.name}
-                className="registry-card"
+                className="registry-card a-surface-lift"
                 onClick={() => setSelected(i)}
               >
                 <div className="flex items-center justify-between">

@@ -8,6 +8,7 @@ test("Button installs its source without unrelated foundation components", () =>
   );
   expect(item.files.map((f: { path: string }) => f.path).sort()).toEqual([
     "button.tsx",
+    "effects.css",
     "motion.css",
     "styles.css",
     "utils.ts",

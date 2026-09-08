@@ -1,0 +1,46 @@
+/* Opt-in surface treatments. Decoration never intercepts interaction. */
+.a-edge-fade {
+  position: relative;
+  isolation: isolate;
+}
+.a-edge-fade::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-inline: 0;
+  bottom: 0;
+  height: min(var(--fade-depth, 260px), 35%);
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-paper));
+  opacity: 1;
+  transition: opacity var(--motion-normal, 220ms) var(--motion-ease, ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .a-surface-lift:hover {
+    border-color: var(--color-muted);
+    box-shadow:
+      0 2px 4px color-mix(in srgb, var(--color-ink) 4%, transparent),
+      0 12px 28px color-mix(in srgb, var(--color-ink) 6%, transparent);
+    translate: 0 -2px;
+  }
+}
+.a-surface-lift {
+  transition:
+    border-color var(--motion-normal, 220ms),
+    box-shadow var(--motion-enter, 280ms) var(--motion-ease, ease-out),
+    translate var(--motion-normal, 220ms) var(--motion-ease, ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .a-edge-fade::after,
+  .a-surface-lift {
+    transition: none;
+  }
+  .a-surface-lift:hover {
+    translate: none;
+  }
+}
+@media (forced-colors: active) {
+  .a-edge-fade::after {
+    display: none;
+  }
+}

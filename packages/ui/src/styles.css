@@ -2,6 +2,7 @@
 @import "@fontsource-variable/dm-sans";
 @import "@fontsource-variable/lora";
 @import "./motion.css";
+@import "./effects.css";
 @source "./**/*.{ts,tsx}";
 @theme {
   --default-transition-duration: 220ms;

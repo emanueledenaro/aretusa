@@ -16,9 +16,16 @@ import {
 import * as U from "../../../packages/ui/src/index";
 import { catalog } from "../../../packages/ui/src/catalog";
 import { Demo } from "./Demo";
-import {ButtonLab,AvatarLab} from './ComponentLab';
-import {Landing, ChartsPage, DirectoryPage, TypesetPage, CreatePage, PreviewPage} from './ProductPages';
-import {usageCode} from './usage';
+import { ButtonLab, AvatarLab } from "./ComponentLab";
+import {
+  Landing,
+  ChartsPage,
+  DirectoryPage,
+  TypesetPage,
+  CreatePage,
+  PreviewPage,
+} from "./ProductPages";
+import { usageCode } from "./usage";
 const github = "https://github.com/emanueledenaro/aretusa";
 function useRoute() {
   const [route, setRoute] = React.useState(location.hash.slice(1) || "/");
@@ -103,57 +110,92 @@ const categories: Record<string, string> = {
   conversation: "Conversation",
 };
 function Sidebar({ selected }: { selected?: string }) {
-  const [expanded,setExpanded]=React.useState(false);
-  React.useEffect(()=>setExpanded(false),[selected]);
+  const [expanded, setExpanded] = React.useState(false);
   const [filter, setFilter] = React.useState("");
+  React.useEffect(() => setExpanded(false), [selected]);
+  const entries = [...catalog]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .filter((entry) =>
+      entry.name.toLowerCase().includes(filter.trim().toLowerCase()),
+    );
   return (
-    <aside className="docs-sidebar"><button className="docs-tree-toggle" aria-expanded={expanded} aria-controls="docs-tree" onClick={()=>setExpanded(!expanded)}>Browse components <Menu className="size-4"/></button><div id="docs-tree" className={expanded?"docs-tree is-open":"docs-tree"}>
-      <a href="#/docs" className="mb-6 block text-sm font-medium">
-        Getting started
-      </a>
-      <U.Input
-        aria-label="Filter components"
-        placeholder="Find a component…"
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-        className="mb-6"
-      />
-      {Object.entries(categories).map(([key, label]) => {
-        const entries = catalog.filter(
-          (c) =>
-            c.module === key &&
-            c.name.toLowerCase().includes(filter.toLowerCase()),
-        );
-        return entries.length ? (
-          <div key={key} className="mb-7">
-            <h2 className="mb-2 px-2 text-[10px] uppercase tracking-widest text-muted">
-              {label}
-            </h2>
-            {entries.map((c) => (
-              <a
-                className={
-                  "block rounded-md px-2 py-1.5 text-sm " +
-                  (selected === c.id
-                    ? "bg-surface font-medium"
-                    : "text-muted hover:text-ink")
-                }
-                key={c.id}
-                href={"#/components/" + c.id}
-              >
-                {c.name}
-              </a>
-            ))}
+    <aside className="docs-sidebar" aria-label="Documentation sidebar">
+      <button
+        className="docs-tree-toggle"
+        aria-expanded={expanded}
+        aria-controls="docs-tree"
+        onClick={() => setExpanded(!expanded)}
+      >
+        Browse documentation <Menu className="size-4" />
+      </button>
+      <nav
+        id="docs-tree"
+        aria-label="Documentation"
+        className={expanded ? "docs-tree is-open" : "docs-tree"}
+      >
+        <div className="docs-nav-group">
+          <h2 className="docs-nav-heading">Sections</h2>
+          <a
+            href="#/docs"
+            className="docs-nav-link"
+            aria-current={!selected ? "page" : undefined}
+          >
+            Getting started
+          </a>
+          <a href="#/create" className="docs-nav-link">
+            Themes
+          </a>
+          <a href="#/typeset" className="docs-nav-link">
+            Typography
+          </a>
+          <a href="#/directory" className="docs-nav-link">
+            Registry
+          </a>
+          <a href="#/blocks" className="docs-nav-link">
+            Blocks
+          </a>
+        </div>
+        <div className="docs-nav-group">
+          <h2 className="docs-nav-heading">Components</h2>
+          <div className="docs-nav-filter">
+            <Search
+              className="size-3.5 shrink-0 text-muted"
+              aria-hidden="true"
+            />
+            <input
+              aria-label="Filter components"
+              placeholder="Filter…"
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+            />
           </div>
-        ) : null;
-      })}
-      {!catalog.some((c) =>
-        c.name.toLowerCase().includes(filter.toLowerCase()),
-      ) && <p className="text-sm text-muted">No components found.</p>}
-    </div></aside>
+          <ul className="docs-nav-list">
+            {entries.map((entry) => (
+              <li key={entry.id}>
+                <a
+                  className="docs-nav-link"
+                  href={"#/components/" + entry.id}
+                  aria-current={selected === entry.id ? "page" : undefined}
+                >
+                  {entry.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {!entries.length && (
+            <p className="px-3 py-3 text-xs text-muted" role="status">
+              No matching components.
+            </p>
+          )}
+        </div>
+      </nav>
+    </aside>
   );
 }
 function ComponentPage({ id }: { id: string }) {
-  const [api,setApi]=React.useState<{name:string;required:boolean;type:string}[]>([]);
+  const [api, setApi] = React.useState<
+    { name: string; required: boolean; type: string }[]
+  >([]);
   const entry = catalog.find((c) => c.id === id);
   const [source, setSource] = React.useState<
       { path: string; content: string }[]
@@ -174,7 +216,7 @@ function ComponentPage({ id }: { id: string }) {
       })
       .then((r) => {
         setSource(r.files);
-        setApi(r.api||[]);
+        setApi(r.api || []);
         setFile(r.files[0]?.path || "");
       })
       .catch((e) => {
@@ -221,16 +263,32 @@ function ComponentPage({ id }: { id: string }) {
               <button
                 key={t}
                 role="tab"
-                id={'tab-'+t}
-                aria-controls={'panel-'+t}
-                tabIndex={tab===t?0:-1}
+                id={"tab-" + t}
+                aria-controls={"panel-" + t}
+                tabIndex={tab === t ? 0 : -1}
                 aria-selected={tab === t}
                 className={
                   "rounded-lg px-4 py-2 text-sm " +
                   (tab === t ? "bg-surface font-medium" : "text-muted")
                 }
                 onClick={() => setTab(t)}
-                onKeyDown={e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?'preview':e.key==='End'?'source':t==='preview'?'source':'preview';setTab(next);document.getElementById('tab-'+next)?.focus()}}}
+                onKeyDown={(e) => {
+                  if (
+                    ["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)
+                  ) {
+                    e.preventDefault();
+                    const next =
+                      e.key === "Home"
+                        ? "preview"
+                        : e.key === "End"
+                          ? "source"
+                          : t === "preview"
+                            ? "source"
+                            : "preview";
+                    setTab(next);
+                    document.getElementById("tab-" + next)?.focus();
+                  }
+                }}
               >
                 {t === "preview" ? "Preview" : "Source"}
               </button>
@@ -247,7 +305,13 @@ function ComponentPage({ id }: { id: string }) {
               <Demo id={id} key={id} />
             </div>
           ) : (
-            <div className="p-4" role="tabpanel" id="panel-source" aria-labelledby="tab-source" aria-label="Source">
+            <div
+              className="p-4"
+              role="tabpanel"
+              id="panel-source"
+              aria-labelledby="tab-source"
+              aria-label="Source"
+            >
               {error ? (
                 <U.Alert title="Source could not be loaded" tone="error">
                   Build the registry and reload this page.
@@ -281,13 +345,30 @@ function ComponentPage({ id }: { id: string }) {
             </div>
           )}
         </div>
-        {id==='button'&&<ButtonLab/>}
-        {id==='avatar'&&<AvatarLab/>}
+        {id === "button" && <ButtonLab />}
+        {id === "avatar" && <AvatarLab />}
         <section id="installation" className="mt-12">
           <h2 className="doc-h2">Installation</h2>
           <Install id={id} />
         </section>
-        <section className="mt-12"><h2 className="doc-h2">API reference</h2><p className="mb-5 text-sm text-muted">Generated from this component's TypeScript source. Native control attributes are also forwarded where supported.</p><U.Table caption={entry.name+' properties'} columns={['Property','Type','Required']} rows={api.map(p=>[<code>{p.name}</code>,<code className="block max-w-sm whitespace-normal break-words text-[11px]">{p.type}</code>,p.required?'Yes':'No'])}/></section>
+        <section className="mt-12">
+          <h2 className="doc-h2">API reference</h2>
+          <p className="mb-5 text-sm text-muted">
+            Generated from this component's TypeScript source. Native control
+            attributes are also forwarded where supported.
+          </p>
+          <U.Table
+            caption={entry.name + " properties"}
+            columns={["Property", "Type", "Required"]}
+            rows={api.map((p) => [
+              <code>{p.name}</code>,
+              <code className="block max-w-sm whitespace-normal break-words text-[11px]">
+                {p.type}
+              </code>,
+              p.required ? "Yes" : "No",
+            ])}
+          />
+        </section>
         <section id="anatomy" className="mt-12">
           <h2 className="doc-h2">Usage & anatomy</h2>
           <p className="mb-4 text-sm leading-relaxed text-muted">
@@ -296,9 +377,7 @@ function ComponentPage({ id }: { id: string }) {
             components and dependencies. Props are forwarded where documented in
             the source.
           </p>
-          <Code>
-            {usageCode(id,entry.exportName,entry.source)}
-          </Code>
+          <Code>{usageCode(id, entry.exportName, entry.source)}</Code>
         </section>
         <section className="mt-12">
           <h2 className="doc-h2">Interaction notes</h2>
@@ -476,16 +555,273 @@ function Blocks() {
     </div>
   );
 }
-const navigation=[['Home','/'],['Docs','/docs'],['Components','/components/button'],['Blocks','/blocks'],['Charts','/charts/area'],['Directory','/directory'],['Typeset','/typeset'],['Create','/create']];
-export function App(){
-const route=useRoute(),[path,query='']=route.split('?');
-const [theme,setTheme]=React.useState(()=>{try{return localStorage.getItem('aretusa-theme')||'light'}catch{return 'light'}}),[search,setSearch]=React.useState(false),[q,setQ]=React.useState(''),[mobile,setMobile]=React.useState(false),[active,setActive]=React.useState(0);
-React.useEffect(()=>{if(path==='/preview')return;document.documentElement.dataset.theme=theme;try{localStorage.setItem('aretusa-theme',theme)}catch{}},[theme,path]);
-React.useEffect(()=>{const handler=(e:KeyboardEvent)=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();setSearch(v=>!v)}};addEventListener('keydown',handler);return()=>removeEventListener('keydown',handler)},[]);
-React.useEffect(()=>{setSearch(false);setMobile(false);document.title=(path.startsWith('/components/')?(catalog.find(c=>c.id===path.split('/')[2])?.name||'Components')+' / ':'')+'Aretusa by TrinacriaLabs'},[path]);
-const results=[...navigation.map(([name,href])=>({name,href,group:'Pages'})),...catalog.map(c=>({name:c.name,href:'/components/'+c.id,group:categories[c.module]}))].filter(c=>(c.name+' '+c.group).toLowerCase().includes(q.toLowerCase()));
-if(path==='/preview')return <PreviewPage query={query}/>;
-return <><a className="skip-link" href="#content" onClick={e=>{e.preventDefault();document.getElementById('content')?.focus();document.getElementById('content')?.scrollIntoView()}}>Skip to content</a><header className="site-header"><div className="site-header-inner"><a href="#/" className="brand" aria-label="Aretusa home">aretusa<span>.</span></a><nav className="desktop-nav" aria-label="Main">{navigation.map(([name,href])=><a key={href} href={'#'+href} aria-current={path===href?'page':undefined}>{name}</a>)}</nav><div className="header-actions"><U.Button tone="secondary" size="sm" aria-label="Search documentation" onClick={()=>setSearch(true)}><Search className="size-3.5"/><span className="search-label">Search documentation…</span><kbd className="search-shortcut">⌘ K</kbd></U.Button><a href={github} className="github-link">GitHub<ArrowUpRight className="size-3"/></a><U.Button tone="quiet" size="sm" aria-label={theme==='light'?'Switch to dark theme':'Switch to light theme'} onClick={()=>setTheme(theme==='light'?'dark':'light')}>{theme==='light'?<Moon className="size-3.5"/>:<Sun className="size-3.5"/>}</U.Button><U.Button size="sm" className="new-project" onClick={()=>location.hash='/create'}>+ New</U.Button><U.Button tone="quiet" size="sm" className="mobile-menu" aria-label="Open navigation" aria-expanded={mobile} onClick={()=>setMobile(!mobile)}><Menu className="size-4"/></U.Button></div></div>{mobile&&<nav className="mobile-nav" aria-label="Mobile">{navigation.map(([n,p])=><a key={p} href={'#'+p}>{n}</a>)}</nav>}</header>
-<main id="content" tabIndex={-1}>{path.startsWith('/components/')?<ComponentPage id={path.split('/')[2]}/>:path==='/docs'?<Docs/>:path==='/create'||path==='/themes'?<CreatePage/>:path==='/typeset'?<TypesetPage/>:path==='/directory'?<DirectoryPage/>:path.startsWith('/charts')?<ChartsPage kind={path.split('/')[2]}/>:path==='/blocks'?<Blocks/>:path==='/'?<Landing/>:<div className="shell py-20"><U.Empty title="This page could not be found." action={<a href="#/docs">Back to documentation</a>}/></div>}</main>
-{path!=='/create'&&<footer className="border-t border-line"><div className="gallery-shell flex flex-wrap items-center justify-between gap-5 py-7 text-[11px] text-muted"><p>Built by <a href="https://github.com/emanueledenaro" className="text-ink underline underline-offset-4">TrinacriaLabs</a>. The source is yours to explore.</p><div className="flex gap-4"><a href={github+'/blob/main/LICENSE'}>MIT License</a><a href={github+'/releases'}>Releases</a><a href={github+'/issues'}>Feedback</a></div></div></footer>}
-<U.Modal open={search} onOpenChange={setSearch} title="Search Aretusa" description="Find a component, a section or your next starting point."><U.Input role="combobox" aria-expanded="true" aria-controls="site-search-results" aria-activedescendant={results[active]?'site-search-'+active:undefined} aria-label="Search components" value={q} onChange={e=>{setQ(e.target.value);setActive(0)}} onKeyDown={e=>{if(e.key==='ArrowDown'){e.preventDefault();setActive(i=>Math.max(0,Math.min(i+1,results.length-1)))}if(e.key==='ArrowUp'){e.preventDefault();setActive(i=>Math.max(0,i-1))}if(e.key==='Enter'&&results[active]){location.hash=results[active].href;setSearch(false)}}} placeholder="Dialog, input, card…"/><div id="site-search-results" role="listbox" aria-label="Search results" className="mt-4 max-h-72 overflow-auto">{results.map((c,i)=><a role="option" aria-selected={i===active} id={'site-search-'+i} key={c.href+c.group} className={'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm '+(active===i?'bg-surface':'hover:bg-surface')} href={'#'+c.href} onClick={()=>setSearch(false)}>{c.name}<span className="text-[10px] text-muted">{c.group}</span></a>)}{!results.length&&<p role="status" className="py-6 text-center text-sm text-muted">No results. Try another name.</p>}</div><div className="mt-5 border-t border-line pt-4 text-[10px] text-muted">Arrow keys to explore · Enter to open · Escape to close</div></U.Modal></>}
+const navigation = [
+  ["Home", "/"],
+  ["Docs", "/docs"],
+  ["Components", "/components/button"],
+  ["Blocks", "/blocks"],
+  ["Charts", "/charts/area"],
+  ["Directory", "/directory"],
+  ["Typeset", "/typeset"],
+  ["Create", "/create"],
+];
+export function App() {
+  const route = useRoute(),
+    [path, query = ""] = route.split("?");
+  const [theme, setTheme] = React.useState(() => {
+      try {
+        return localStorage.getItem("aretusa-theme") || "light";
+      } catch {
+        return "light";
+      }
+    }),
+    [search, setSearch] = React.useState(false),
+    [q, setQ] = React.useState(""),
+    [mobile, setMobile] = React.useState(false),
+    [active, setActive] = React.useState(0);
+  React.useEffect(() => {
+    if (path === "/preview") return;
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem("aretusa-theme", theme);
+    } catch {}
+  }, [theme, path]);
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearch((v) => !v);
+      }
+    };
+    addEventListener("keydown", handler);
+    return () => removeEventListener("keydown", handler);
+  }, []);
+  React.useEffect(() => {
+    setSearch(false);
+    setMobile(false);
+    document.title =
+      (path.startsWith("/components/")
+        ? (catalog.find((c) => c.id === path.split("/")[2])?.name ||
+            "Components") + " / "
+        : "") + "Aretusa by TrinacriaLabs";
+  }, [path]);
+  const results = [
+    ...navigation.map(([name, href]) => ({ name, href, group: "Pages" })),
+    ...catalog.map((c) => ({
+      name: c.name,
+      href: "/components/" + c.id,
+      group: categories[c.module],
+    })),
+  ].filter((c) =>
+    (c.name + " " + c.group).toLowerCase().includes(q.toLowerCase()),
+  );
+  if (path === "/preview") return <PreviewPage query={query} />;
+  return (
+    <>
+      <a
+        className="skip-link"
+        href="#content"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById("content")?.focus();
+          document.getElementById("content")?.scrollIntoView();
+        }}
+      >
+        Skip to content
+      </a>
+      <header className="site-header">
+        <div className="site-header-inner">
+          <a href="#/" className="brand" aria-label="Aretusa home">
+            aretusa<span>.</span>
+          </a>
+          <nav className="desktop-nav" aria-label="Main">
+            {navigation.map(([name, href]) => (
+              <a
+                key={href}
+                href={"#" + href}
+                aria-current={path === href ? "page" : undefined}
+              >
+                {name}
+              </a>
+            ))}
+          </nav>
+          <div className="header-actions">
+            <U.Button
+              tone="secondary"
+              size="sm"
+              aria-label="Search documentation"
+              onClick={() => setSearch(true)}
+            >
+              <Search className="size-3.5" />
+              <span className="search-label">Search documentation…</span>
+              <kbd className="search-shortcut">⌘ K</kbd>
+            </U.Button>
+            <a href={github} className="github-link">
+              GitHub
+              <ArrowUpRight className="size-3" />
+            </a>
+            <U.Button
+              tone="quiet"
+              size="sm"
+              aria-label={
+                theme === "light"
+                  ? "Switch to dark theme"
+                  : "Switch to light theme"
+              }
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              {theme === "light" ? (
+                <Moon className="size-3.5" />
+              ) : (
+                <Sun className="size-3.5" />
+              )}
+            </U.Button>
+            <U.Button
+              size="sm"
+              className="new-project"
+              onClick={() => (location.hash = "/create")}
+            >
+              + New
+            </U.Button>
+            <U.Button
+              tone="quiet"
+              size="sm"
+              className="mobile-menu"
+              aria-label="Open navigation"
+              aria-expanded={mobile}
+              onClick={() => setMobile(!mobile)}
+            >
+              <Menu className="size-4" />
+            </U.Button>
+          </div>
+        </div>
+        {mobile && (
+          <nav className="mobile-nav" aria-label="Mobile">
+            {navigation.map(([n, p]) => (
+              <a key={p} href={"#" + p}>
+                {n}
+              </a>
+            ))}
+          </nav>
+        )}
+      </header>
+      <main id="content" tabIndex={-1}>
+        {path.startsWith("/components/") ? (
+          <ComponentPage id={path.split("/")[2]} />
+        ) : path === "/docs" ? (
+          <Docs />
+        ) : path === "/create" || path === "/themes" ? (
+          <CreatePage />
+        ) : path === "/typeset" ? (
+          <TypesetPage />
+        ) : path === "/directory" ? (
+          <DirectoryPage />
+        ) : path.startsWith("/charts") ? (
+          <ChartsPage kind={path.split("/")[2]} />
+        ) : path === "/blocks" ? (
+          <Blocks />
+        ) : path === "/" ? (
+          <Landing />
+        ) : (
+          <div className="shell py-20">
+            <U.Empty
+              title="This page could not be found."
+              action={<a href="#/docs">Back to documentation</a>}
+            />
+          </div>
+        )}
+      </main>
+      {path !== "/create" && (
+        <footer className="border-t border-line">
+          <div className="gallery-shell flex flex-wrap items-center justify-between gap-5 py-7 text-[11px] text-muted">
+            <p>
+              Built by{" "}
+              <a
+                href="https://github.com/emanueledenaro"
+                className="text-ink underline underline-offset-4"
+              >
+                TrinacriaLabs
+              </a>
+              . The source is yours to explore.
+            </p>
+            <div className="flex gap-4">
+              <a href={github + "/blob/main/LICENSE"}>MIT License</a>
+              <a href={github + "/releases"}>Releases</a>
+              <a href={github + "/issues"}>Feedback</a>
+            </div>
+          </div>
+        </footer>
+      )}
+      <U.Modal
+        open={search}
+        onOpenChange={setSearch}
+        title="Search Aretusa"
+        description="Find a component, a section or your next starting point."
+      >
+        <U.Input
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="site-search-results"
+          aria-activedescendant={
+            results[active] ? "site-search-" + active : undefined
+          }
+          aria-label="Search components"
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setActive(0);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              setActive((i) =>
+                Math.max(0, Math.min(i + 1, results.length - 1)),
+              );
+            }
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              setActive((i) => Math.max(0, i - 1));
+            }
+            if (e.key === "Enter" && results[active]) {
+              location.hash = results[active].href;
+              setSearch(false);
+            }
+          }}
+          placeholder="Dialog, input, card…"
+        />
+        <div
+          id="site-search-results"
+          role="listbox"
+          aria-label="Search results"
+          className="mt-4 max-h-72 overflow-auto"
+        >
+          {results.map((c, i) => (
+            <a
+              role="option"
+              aria-selected={i === active}
+              id={"site-search-" + i}
+              key={c.href + c.group}
+              className={
+                "flex items-center justify-between rounded-lg px-3 py-2.5 text-sm " +
+                (active === i ? "bg-surface" : "hover:bg-surface")
+              }
+              href={"#" + c.href}
+              onClick={() => setSearch(false)}
+            >
+              {c.name}
+              <span className="text-[10px] text-muted">{c.group}</span>
+            </a>
+          ))}
+          {!results.length && (
+            <p role="status" className="py-6 text-center text-sm text-muted">
+              No results. Try another name.
+            </p>
+          )}
+        </div>
+        <div className="mt-5 border-t border-line pt-4 text-[10px] text-muted">
+          Arrow keys to explore · Enter to open · Escape to close
+        </div>
+      </U.Modal>
+    </>
+  );
+}

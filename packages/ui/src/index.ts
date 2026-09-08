@@ -6,3 +6,4 @@ export * from "./data";
 export * from "./conversation";
 export * from "./blocks";
 export * from "./catalog";
+export * from "./shimmer";

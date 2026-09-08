@@ -108,6 +108,7 @@ const categories: Record<string, string> = {
   navigation: "Navigation",
   data: "Data & media",
   conversation: "Conversation",
+  utilities: "Utilities",
 };
 function Sidebar({ selected }: { selected?: string }) {
   const [expanded, setExpanded] = React.useState(false);
@@ -170,7 +171,7 @@ function Sidebar({ selected }: { selected?: string }) {
             />
           </div>
           <ul className="docs-nav-list">
-            {entries.map((entry) => (
+            {entries.filter(entry => entry.module !== "utilities").map((entry) => (
               <li key={entry.id}>
                 <a
                   className="docs-nav-link"
@@ -187,6 +188,10 @@ function Sidebar({ selected }: { selected?: string }) {
               No matching components.
             </p>
           )}
+        </div>
+        <div className="docs-nav-group">
+          <h2 className="docs-nav-heading">Utilities</h2>
+          {entries.filter(entry => entry.module === "utilities").map(entry => <a key={entry.id} className="docs-nav-link" href={"#/utils/" + entry.id} aria-current={selected === entry.id ? "page" : undefined}>{entry.name}</a>)}
         </div>
       </nav>
     </aside>
@@ -600,7 +605,7 @@ export function App() {
     setSearch(false);
     setMobile(false);
     document.title =
-      (path.startsWith("/components/")
+      ((path.startsWith("/components/") || path.startsWith("/utils/"))
         ? (catalog.find((c) => c.id === path.split("/")[2])?.name ||
             "Components") + " / "
         : "") + "Aretusa by TrinacriaLabs";
@@ -710,7 +715,7 @@ export function App() {
         )}
       </header>
       <main id="content" tabIndex={-1}>
-        {path.startsWith("/components/") ? (
+        {(path.startsWith("/components/") || path.startsWith("/utils/")) ? (
           <ComponentPage id={path.split("/")[2]} />
         ) : path === "/docs" ? (
           <Docs />

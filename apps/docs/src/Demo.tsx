@@ -542,6 +542,9 @@ export function Demo({ id }: { id: string }) {
     case "pagination":
       content = <U.Pagination page={page} total={5} onChange={setPage} />;
       break;
+    case "shimmer":
+      content = <div className="w-full space-y-6"><U.Switch label="Pause shimmer" checked={flag} onCheckedChange={setFlag} /><p className="text-lg"><U.Shimmer enabled={!flag}>Preparing your next idea.</U.Shimmer></p><p className="max-w-64 font-editorial text-2xl"><U.Shimmer enabled={!flag} speed={4}>A little light across words that have room to breathe.</U.Shimmer></p><U.Marker><U.Shimmer enabled={!flag}>Reading project notes</U.Shimmer></U.Marker></div>;
+      break;
     case "scroll-area":
       content = (
         <div className="w-full space-y-4">

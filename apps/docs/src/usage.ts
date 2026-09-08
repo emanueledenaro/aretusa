@@ -1,4 +1,5 @@
 export const usage: Record<string,string> = {
+  "shimmer": "<Shimmer enabled speed={2.8}>Preparing your next idea.</Shimmer>",
   "button": "<Button onClick={() => alert(\"Hello\")}>Create project</Button>",
   "button-group": "<ButtonGroup label=\"Actions\"><button>Save</button><button>Publish</button></ButtonGroup>",
   "aspect-ratio": "<AspectRatio ratio={16 / 9}><img src=\"/your-image.jpg\" alt=\"Your description\" /></AspectRatio>",

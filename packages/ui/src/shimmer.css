@@ -1,0 +1,22 @@
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .a-shimmer[data-enabled="true"] {
+    background-image: linear-gradient(105deg, currentColor 38%, var(--shimmer-highlight, var(--color-paper)) 50%, currentColor 62%);
+    background-size: 240% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: a-text-shimmer var(--shimmer-duration, 2.8s) linear infinite;
+  }
+}
+@keyframes a-text-shimmer {
+  from { background-position: 140% 0; }
+  to { background-position: -100% 0; }
+}
+[data-theme="dark"] .a-shimmer { --shimmer-highlight: #ffffff; }
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .a-shimmer[data-enabled="true"] {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+  }
+}

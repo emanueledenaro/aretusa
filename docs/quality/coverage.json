@@ -3,6 +3,7 @@
   "epic": 11,
   "contract": "docs/quality-contract.md",
   "items": [
+    {"id":"shimmer","name":"Shimmer","type":"utility","issue":92,"databaseId":5388131348,"url":"https://github.com/emanueledenaro/aretusa/issues/92","status":"implemented","gates":{"design":"pending","responsive":"pending","interaction":"pending","code":"pending","distribution":"pending"},"dependencies":[]},
     {
       "id": "aspect-ratio",
       "name": "Aspect Ratio",

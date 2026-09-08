@@ -1,4 +1,5 @@
 export const catalog = [
+  { "id": "shimmer", "name": "Shimmer", "module": "utilities", "exportName": "Shimmer", "description": "A configurable text highlight with static accessibility fallbacks.", "source": "shimmer" },
   {
     "id": "aspect-ratio",
     "name": "Aspect Ratio",

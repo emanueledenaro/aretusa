@@ -19,6 +19,7 @@ const cli = path.join(root, "packages/cli/src/cli.mjs");
 run(process.execPath, [cli, "init", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "dialog", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "field", "--cwd", consumer]);
+run(process.execPath, [cli, "add", "shimmer", "--cwd", consumer]);
 const registry = JSON.parse(
   await readFile(path.join(root, "packages/cli/registry/index.json"), "utf8"),
 );
@@ -29,7 +30,7 @@ const required = new Set([
   "react",
   "react-dom",
   ...registry.items
-    .filter((item) => ["dialog", "field"].includes(item.name))
+    .filter((item) => ["dialog", "field", "shimmer"].includes(item.name))
     .flatMap((item) => item.dependencies),
 ]);
 const dependencies = Object.fromEntries(
@@ -87,7 +88,7 @@ await writeFile(
 );
 await writeFile(
   path.join(consumer, "src/main.tsx"),
-  "import React from 'react';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Field label='Name'><Input/></Field></Modal>);",
+  "import React from 'react';import {Shimmer} from './components/aretusa/shimmer';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Shimmer>Loading preview</Shimmer><Field label='Name'><Input/></Field></Modal>);",
 );
 console.log("Clean consumer: " + consumer);
 console.log(run("npm", ["install", "--no-audit", "--no-fund"]));

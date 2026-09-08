@@ -104,7 +104,7 @@ const program = ts.createProgram(["packages/ui/src/index.ts"], {
 });
 const checker = program.getTypeChecker();
 const relevant = new Set(
-  "fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
+  "enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
     " ",
   ),
 );
@@ -141,7 +141,7 @@ function apiFor(module, name) {
 for (const entry of catalog)
   items.push({
     ...entry,
-    type: "component",
+    type: entry.module === "utilities" ? "utility" : "component",
     api: apiFor(entry.source, entry.exportName),
     ...(await itemFiles(entry.source)),
   });
@@ -184,6 +184,6 @@ console.log(
   "Built " +
     registry.items.length +
     " original registry items (" +
-    catalog.length +
-    " components).",
+    registry.items.filter(item => item.type === "component").length +
+    " components, " + registry.items.filter(item => item.type === "utility").length + " utilities).",
 );

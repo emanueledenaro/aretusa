@@ -16,9 +16,9 @@ Known examples that need deeper work include searchable Combobox behavior, segme
 | TanStack Form integration | [#89](https://github.com/emanueledenaro/aretusa/issues/89) | Planned; dedicated integration and documentation absent |
 | Formisch integration | [#90](https://github.com/emanueledenaro/aretusa/issues/90) | Planned; dedicated integration and documentation absent |
 | Standalone scroll fade | [#91](https://github.com/emanueledenaro/aretusa/issues/91) | Partial: vertical ScrollArea flag exists; arbitrary-container utility absent |
-| Text shimmer | [#92](https://github.com/emanueledenaro/aretusa/issues/92) | Planned; implementation absent |
+| Text shimmer | [#92](https://github.com/emanueledenaro/aretusa/issues/92) | Implemented with demo, registry and tests; full visual review pending |
 
-These five items are planned scope, not installed registry entries. Add each to catalog metadata and release-quality tracking when implemented; existing coverage counts must not be used to claim this extension complete.
+Shimmer is now in the registry and quality tracker. The other four extensions remain planned scope. Add each to catalog metadata and release-quality tracking when implemented; existing coverage counts must not be used to claim this extension complete.
 
 ## Delivery contract
 

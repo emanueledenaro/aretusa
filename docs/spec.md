@@ -62,4 +62,6 @@ Community admission backend and private candidate data are outside Aretusa. Paid
 
 ## Further notes
 
+The maintainer expanded the explicit catalog requirement to components, form-library integrations and utilities. See [the extension scope](forms-utilities-scope.md). Existing component tickets must verify the complete feature contract, not just the existence of a similarly named preview.
+
 The maintainer authorized autonomous ordinary implementation, ticket management and public open-source repository setup. The delivery target is today; progress is measured by verified capabilities rather than a claim of complete equivalence with an evolving external product.

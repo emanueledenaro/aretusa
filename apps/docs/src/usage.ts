@@ -21,7 +21,7 @@ export const usage: Record<string,string> = {
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
   "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
   "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",
-  "checkbox": "<Checkbox label=\"Accept terms\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
+  "checkbox": "<Checkbox label=\"Accept terms\" description=\"You can cancel up to two days before.\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",
   "date-picker": "<DatePicker aria-label=\"Start date\" />",
   "field": "<Field label=\"Email\" error={undefined}><input type=\"email\" required /></Field>",

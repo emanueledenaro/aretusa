@@ -239,6 +239,37 @@ function SelectExample() {
     </div>
   );
 }
+function CheckboxExample() {
+  const [terms, setTerms] = React.useState(false);
+  const [rooms, setRooms] = React.useState({ print: true, terrace: false, library: false });
+  const [submitted, setSubmitted] = React.useState(false);
+  const chosen = Object.values(rooms).filter(Boolean).length;
+  const all: boolean | "indeterminate" = chosen === 3 ? true : chosen === 0 ? false : "indeterminate";
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div>
+        <U.Checkbox label="I accept the booking terms" description="You can cancel up to two days before the visit." error={submitted && !terms ? "Accept the booking terms to continue." : undefined} checked={terms} onCheckedChange={(value) => { setTerms(value === true); setSubmitted(false); }} />
+        <U.Button tone="outline" className="mt-2" onClick={() => setSubmitted(true)}>Validate</U.Button>
+      </div>
+      <fieldset className="min-w-0">
+        <legend className="text-sm font-medium">Rooms to reserve</legend>
+        <U.Checkbox label="All rooms" checked={all} onCheckedChange={(value) => setRooms({ print: value === true, terrace: value === true, library: value === true })} />
+        <div className="ms-6 border-s border-line ps-4">
+          <U.Checkbox label="Printing room" checked={rooms.print} onCheckedChange={(value) => setRooms({ ...rooms, print: value === true })} />
+          <U.Checkbox label="Terrace" checked={rooms.terrace} onCheckedChange={(value) => setRooms({ ...rooms, terrace: value === true })} />
+          <U.Checkbox label="Library" description="Quiet hours only, after 18:00 on weekdays." checked={rooms.library} onCheckedChange={(value) => setRooms({ ...rooms, library: value === true })} />
+        </div>
+      </fieldset>
+      <div>
+        <U.Checkbox label="Unavailable option" disabled />
+        <U.Checkbox label="Included with your plan" disabled checked />
+      </div>
+      <div className="w-60 max-w-full">
+        <U.Checkbox label="Send me the monthly letter about workshops, open studios and new prints from the archive" description="One message a month, no tracking." defaultChecked />
+      </div>
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -498,16 +529,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "checkbox":
-      content = (
-        <div className="space-y-4">
-          <U.Checkbox
-            label="I agree to the terms"
-            checked={flag}
-            onCheckedChange={(v) => setFlag(v === true)}
-          />
-          <U.Checkbox label="Unavailable option" disabled />
-        </div>
-      );
+      content = <CheckboxExample />;
       break;
     case "switch":
       content = (

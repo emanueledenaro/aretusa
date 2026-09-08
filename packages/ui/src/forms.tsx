@@ -8,7 +8,7 @@ import {
   Toggle as TO,
   ToggleGroup as TG,
 } from "radix-ui";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, Minus, ChevronDown } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { cx } from "./utils";
 export const Input = React.forwardRef<
@@ -92,24 +92,59 @@ export function InputGroup({
 }
 export function Checkbox({
   label,
+  description,
+  error,
+  className,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid,
   ...props
-}: React.ComponentProps<typeof RC.Root> & { label: string }) {
+}: React.ComponentProps<typeof RC.Root> & {
+  label: React.ReactNode;
+  /** Help text linked to the control through aria-describedby. */
+  description?: React.ReactNode;
+  /** Validation message; marks the control invalid and links the text. */
+  error?: React.ReactNode;
+}) {
   const generatedId = React.useId();
   const id = props.id ?? generatedId;
+  const descriptionId = description ? `${id}-description` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const indeterminate = props.checked === "indeterminate";
   return (
-    <div className="flex items-center gap-3">
+    <div className={cx("flex items-start gap-3 py-3", className)}>
       <RC.Root
         id={id}
         {...props}
-        className="flex size-5 shrink-0 items-center justify-center rounded border border-line bg-card data-[state=checked]:border-ink data-[state=checked]:bg-ink data-[state=checked]:text-paper disabled:opacity-40"
+        aria-invalid={error ? true : invalid}
+        aria-describedby={
+          [describedBy, descriptionId, errorId].filter(Boolean).join(" ") ||
+          undefined
+        }
+        className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border border-control bg-card transition-colors hover:border-ink data-[state=checked]:border-ink data-[state=checked]:bg-ink data-[state=checked]:text-paper data-[state=indeterminate]:border-ink data-[state=indeterminate]:bg-ink data-[state=indeterminate]:text-paper aria-invalid:border-danger disabled:cursor-default disabled:opacity-40 disabled:hover:border-control"
       >
         <RC.Indicator>
-          <Check className="size-3.5" />
+          {indeterminate ? (
+            <Minus className="size-3.5" strokeWidth={2.5} />
+          ) : (
+            <Check className="size-3.5" strokeWidth={2.5} />
+          )}
         </RC.Indicator>
       </RC.Root>
-      <label htmlFor={id} className="text-sm">
-        {label}
-      </label>
+      <div className="grid min-w-0 gap-1">
+        <label htmlFor={id} className="text-sm leading-6">
+          {label}
+        </label>
+        {description && (
+          <p id={descriptionId} className="text-xs leading-relaxed text-muted">
+            {description}
+          </p>
+        )}
+        {error && (
+          <p id={errorId} role="alert" className="text-xs leading-relaxed text-danger">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

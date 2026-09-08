@@ -54,7 +54,7 @@ export function Modal({
               ? "left-1/2 top-1/2 w-[min(560px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 rounded-2xl"
               : placement === "right"
                 ? "right-0 top-0 h-dvh max-h-dvh w-[min(460px,100%)]"
-                : "bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-2xl",
+                : "bottom-0 left-1/2 w-full max-w-3xl -translate-x-1/2 max-h-[85dvh] rounded-t-2xl",
           )}
         >
           <div className="border-b border-line px-6 pb-5 pt-6 pe-16 sm:px-7 sm:pt-7">

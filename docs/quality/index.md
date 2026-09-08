@@ -41,10 +41,10 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Toggle Group | component | [#44](https://github.com/emanueledenaro/aretusa/issues/44) | implemented |
 | Alert Dialog | component | [#45](https://github.com/emanueledenaro/aretusa/issues/45) | visually-reviewed |
 | Dialog | component | [#46](https://github.com/emanueledenaro/aretusa/issues/46) | visually-reviewed |
-| Drawer | component | [#47](https://github.com/emanueledenaro/aretusa/issues/47) | implemented |
+| Drawer | component | [#47](https://github.com/emanueledenaro/aretusa/issues/47) | visually-reviewed |
 | Hover Card | component | [#48](https://github.com/emanueledenaro/aretusa/issues/48) | implemented |
 | Popover | component | [#49](https://github.com/emanueledenaro/aretusa/issues/49) | implemented |
-| Sheet | component | [#50](https://github.com/emanueledenaro/aretusa/issues/50) | implemented |
+| Sheet | component | [#50](https://github.com/emanueledenaro/aretusa/issues/50) | visually-reviewed |
 | Toast | component | [#51](https://github.com/emanueledenaro/aretusa/issues/51) | implemented |
 | Tooltip | component | [#52](https://github.com/emanueledenaro/aretusa/issues/52) | implemented |
 | Accordion | component | [#53](https://github.com/emanueledenaro/aretusa/issues/53) | implemented |

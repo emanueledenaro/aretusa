@@ -654,6 +654,7 @@
         "distribution": "passed"
       },
       "dependencies": [],
+      "evidence": "docs/quality/drawer-review.md",
       "evidence": "docs/quality/dialog-review.md",
       "evidence": "docs/quality/alert-dialog-review.md"
     },
@@ -683,13 +684,13 @@
       "issue": 50,
       "databaseId": 5386380650,
       "url": "https://github.com/emanueledenaro/aretusa/issues/50",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "dialog"
@@ -702,15 +703,16 @@
       "issue": 51,
       "databaseId": 5386380767,
       "url": "https://github.com/emanueledenaro/aretusa/issues/51",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/sheet-review.md"
     },
     {
       "id": "tooltip",

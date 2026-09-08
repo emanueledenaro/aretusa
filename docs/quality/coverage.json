@@ -61,14 +61,15 @@
       "issue": 15,
       "databaseId": 5386375972,
       "url": "https://github.com/emanueledenaro/aretusa/issues/15",
-      "status": "implemented",
+      "status": "behavior-checked",
       "gates": {
         "design": "pending",
         "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
+        "interaction": "passed",
+        "code": "passed",
         "distribution": "pending"
       },
+      "evidence": {"record":"docs/quality/button-review.md","commit":"79accd9","note":"Persistent visual artifacts and final release-consumer verification remain pending."},
       "dependencies": []
     },
     {

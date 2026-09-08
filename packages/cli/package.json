@@ -1,0 +1,22 @@
+{
+  "name": "@trinacrialabs/aretusa-cli",
+  "version": "0.1.0",
+  "description": "Install original Aretusa component sources.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "aretusa": "./src/cli.mjs"
+  },
+  "files": [
+    "src",
+    "registry"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emanueledenaro/aretusa.git",
+    "directory": "packages/cli"
+  }
+}

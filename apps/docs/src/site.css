@@ -1,0 +1,130 @@
+@source "./**/*.{ts,tsx}";
+.shell {
+  width: min(1360px, calc(100% - 64px));
+  margin-inline: auto;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-paper);
+}
+.brand {
+  font-family: var(--font-editorial);
+  font-size: 29px;
+  letter-spacing: -1.5px;
+}
+.brand span {
+  color: var(--color-terracotta);
+}
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 20px;
+}
+.docs-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 760px) 140px;
+  gap: 48px;
+  justify-content: center;
+}
+.docs-sidebar {
+  position: sticky;
+  top: 80px;
+  height: calc(100dvh - 80px);
+  overflow-y: auto;
+  padding: 35px 12px 35px 0;
+}
+.doc-h2 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  background: var(--color-card);
+  padding: 12px;
+}
+.skip-link:focus {
+  top: 12px;
+}
+.a-calendar {
+  font-size: 13px;
+  --rdp-accent-color: var(--color-terracotta);
+  --rdp-accent-background-color: var(--color-surface);
+  max-width: 100%;
+}
+.a-calendar table {
+  border-collapse: collapse;
+}
+.a-calendar th {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.a-calendar button {
+  padding: 7px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 7px;
+}
+.a-calendar button:hover {
+  background: var(--color-surface);
+}
+.a-calendar [aria-selected="true"] button {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.a-calendar nav {
+  display: flex;
+  justify-content: space-between;
+}
+.a-calendar svg {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 1200px) {
+  .docs-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 32px;
+  }
+  .home-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .home-grid > div:last-child {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 767px) {
+  .shell {
+    width: calc(100% - 40px);
+  }
+  .docs-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .docs-sidebar {
+    position: static;
+    height: auto;
+    max-height: 230px;
+    margin-top: 20px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-grid > div:last-child {
+    display: block;
+    grid-column: auto;
+  }
+  .brand {
+    font-size: 26px;
+  }
+}

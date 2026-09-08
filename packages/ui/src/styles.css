@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@source "./**/*.{ts,tsx}";
+@theme {
+  --color-paper: #f4f1e9;
+  --color-ink: #20201d;
+  --color-muted: #656158;
+  --color-line: #d2ccc0;
+  --color-surface: #e8e3d8;
+  --color-card: #faf8f2;
+  --color-terracotta: #ac4333;
+  --color-gold: #edbd52;
+  --color-danger: #a32925;
+  --color-success: #326145;
+  --font-sans: "DM Sans Variable", Arial, sans-serif;
+  --font-editorial: "Lora Variable", Georgia, serif;
+}
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-terracotta);
+    outline-offset: 4px;
+  }
+}
+@layer components {
+  .a-button {
+    @apply inline-flex shrink-0 items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-2 focus-visible:outline-offset-4;
+  }
+  .a-input {
+    @apply min-h-11 w-full rounded-lg border border-line bg-card px-3 py-2 text-sm text-ink placeholder:text-muted disabled:opacity-50 aria-invalid:border-danger;
+  }
+  .a-overlay {
+    @apply fixed inset-0 z-50 bg-black/40 backdrop-blur-xs;
+  }
+  .a-popup {
+    @apply z-50 rounded-xl border border-line bg-card p-2 text-ink shadow-xl;
+  }
+}
+[data-theme="dark"] {
+  --color-paper: #191a18;
+  --color-ink: #eeeade;
+  --color-muted: #b8b3a8;
+  --color-line: #45463f;
+  --color-surface: #30312c;
+  --color-card: #22241f;
+  --color-terracotta: #e69477;
+  --color-danger: #f2938c;
+  --color-success: #8fc8a4;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

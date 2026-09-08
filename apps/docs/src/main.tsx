@@ -1,7 +1,5 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import "@fontsource-variable/dm-sans";
-import "@fontsource-variable/lora";
 import "../../../packages/ui/src/styles.css";
 import "./site.css";
 import "./product.css";

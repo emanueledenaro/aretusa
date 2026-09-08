@@ -291,13 +291,13 @@ function ComponentPage({ id }: { id: string }) {
         <section id="anatomy" className="mt-12">
           <h2 className="doc-h2">Usage & anatomy</h2>
           <p className="mb-4 text-sm leading-relaxed text-muted">
-            Import {entry.exportName} from the installed {entry.module} module.
+            Import {entry.exportName} from the installed {entry.source} module.
             The source tab includes the complete TypeScript contract, supporting
             components and dependencies. Props are forwarded where documented in
             the source.
           </p>
           <Code>
-            {usageCode(id,entry.exportName,entry.module)}
+            {usageCode(id,entry.exportName,entry.source)}
           </Code>
         </section>
         <section className="mt-12">
@@ -363,11 +363,11 @@ function Docs() {
           Use React 19 and Tailwind v4. Import the installed styles.css from
           your app entry and let Tailwind scan that directory. The default font
           stacks gracefully fall back to Arial and Georgia. For the full theme,
-          self-host DM Sans and Lora.
+          install the Fontsource dependencies printed by the CLI.
         </p>
         <Code>
           {
-            'import "./components/aretusa/styles.css"\nimport { Button } from "./components/aretusa/basic"\n\n<Button onClick={() => console.log("Hello")}>Start here</Button>'
+            'import "./components/aretusa/styles.css"\nimport { Button } from "./components/aretusa/button"\n\n<Button onClick={() => console.log("Hello")}>Start here</Button>'
           }
         </Code>
         <h2 className="doc-h2 mt-12">4. Make it yours</h2>

@@ -115,18 +115,22 @@ export function Checkbox({
 }
 export function Switch({
   label,
+  className,
   ...props
 }: React.ComponentProps<typeof RS.Root> & { label: string }) {
   const generatedId = React.useId();
   const id = props.id ?? generatedId;
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex min-h-11 items-center gap-3">
       <RS.Root
         id={id}
         {...props}
-        className="w-10 rounded-full border border-line bg-surface p-0.5 data-[state=checked]:bg-terracotta disabled:opacity-40"
+        className={cx(
+          "relative w-10 shrink-0 rounded-full border border-line bg-surface p-0.5 data-[state=checked]:bg-terracotta disabled:opacity-40",
+          className,
+        )}
       >
-        <RS.Thumb className="block size-4 rounded-full bg-card transition-transform data-[state=checked]:translate-x-4 motion-reduce:transition-none" />
+        <RS.Thumb className="relative start-0 block size-4 rounded-full bg-card transition-[inset-inline-start] data-[state=checked]:start-[calc(100%-16px)] motion-reduce:transition-none" />
       </RS.Root>
       <label htmlFor={id} className="text-sm">
         {label}
@@ -182,16 +186,22 @@ export function Select({
   options,
   placeholder = "Choose an option",
   id,
-  'aria-invalid': invalid,
-  'aria-describedby': describedBy,
+  "aria-invalid": invalid,
+  "aria-describedby": describedBy,
   ...props
 }: React.ComponentProps<typeof SE.Root> & {
   id?: string;
-  'aria-invalid'?: React.AriaAttributes['aria-invalid'];
-  'aria-describedby'?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+  "aria-describedby"?: string;
   label: string;
   placeholder?: string;
-  options: { value: string; label: string; disabled?: boolean }[];
+  options: {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    description?: string;
+    swatch?: string;
+  }[];
 }) {
   return (
     <SE.Root {...props}>
@@ -200,31 +210,49 @@ export function Select({
         aria-invalid={invalid}
         aria-describedby={describedBy}
         aria-label={label}
-        className="a-input flex items-center justify-between gap-3"
+        className="a-input flex items-center justify-between gap-3 text-start data-[state=open]:border-terracotta [&>span:first-child]:min-w-0 [&>span:first-child]:truncate"
       >
         <SE.Value placeholder={placeholder} />
         <SE.Icon>
-          <ChevronDown className="size-4" />
+          <ChevronDown className="size-4 shrink-0 text-muted" />
         </SE.Icon>
       </SE.Trigger>
       <SE.Portal>
         <SE.Content
-          className="a-popup min-w-[var(--radix-select-trigger-width)]"
+          className="a-popup w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-24px)] overflow-hidden"
           position="popper"
           sideOffset={6}
+          collisionPadding={12}
         >
-          <SE.Viewport>
+          <SE.Viewport className="max-h-[min(320px,var(--radix-select-content-available-height))] p-1">
             {options.map((o) => (
               <SE.Item
                 key={o.value}
                 value={o.value}
                 disabled={o.disabled}
-                className="relative flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm outline-none data-[highlighted]:bg-surface data-[disabled]:opacity-40"
+                textValue={o.label}
+                className="relative flex min-h-11 cursor-default items-center gap-3 rounded-md px-3 py-2.5 text-sm outline-none data-[state=checked]:bg-surface data-[highlighted]:ring-1 data-[highlighted]:ring-inset data-[highlighted]:ring-terracotta data-[disabled]:pointer-events-none data-[disabled]:opacity-40"
               >
-                <SE.ItemText>{o.label}</SE.ItemText>
-                <SE.ItemIndicator>
-                  <Check className="size-3.5" />
-                </SE.ItemIndicator>
+                {o.swatch && (
+                  <span
+                    aria-hidden="true"
+                    className="size-5 shrink-0 rounded-full border border-line"
+                    style={{ backgroundColor: o.swatch }}
+                  />
+                )}
+                <span className="min-w-0 flex-1 break-words">
+                  <SE.ItemText>{o.label}</SE.ItemText>
+                  {o.description && (
+                    <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                      {o.description}
+                    </span>
+                  )}
+                </span>
+                <span className="flex size-4 shrink-0 items-center justify-center">
+                  <SE.ItemIndicator>
+                    <Check className="size-4" />
+                  </SE.ItemIndicator>
+                </span>
               </SE.Item>
             ))}
           </SE.Viewport>

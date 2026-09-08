@@ -10,7 +10,7 @@ import {
   ScrollArea as SA,
 } from "radix-ui";
 import { Search, Menu, ChevronRight } from "lucide-react";
-import { Button } from "./basic";
+import { Button } from "./button";
 import { Modal } from "./overlays";
 export function Tabs({
   items,
@@ -36,7 +36,7 @@ export function Tabs({
         ))}
       </TB.List>
       {items.map((i) => (
-        <TB.Content key={i.value} value={i.value}>
+        <TB.Content key={i.value} value={i.value} className="a-tabs-content">
           {i.content}
         </TB.Content>
       ))}
@@ -53,13 +53,13 @@ export function Accordion({
       {items.map((i, n) => (
         <AC.Item key={n} value={String(n)} className="border-b border-line">
           <AC.Header>
-            <AC.Trigger className="flex w-full items-center justify-between py-5 text-start text-sm font-medium">
+            <AC.Trigger className="a-accordion-trigger flex w-full items-center justify-between gap-3 py-5 text-start text-sm font-medium">
               {i.title}
               <ChevronRight className="size-4 shrink-0" />
             </AC.Trigger>
           </AC.Header>
-          <AC.Content className="pb-5 text-sm leading-relaxed text-muted">
-            {i.content}
+          <AC.Content className="a-accordion-content text-sm leading-relaxed text-muted">
+            <div className="pb-5">{i.content}</div>
           </AC.Content>
         </AC.Item>
       ))}
@@ -78,7 +78,7 @@ export function Collapsible({
       <CO.Trigger asChild>
         <Button tone="outline">{title}</Button>
       </CO.Trigger>
-      <CO.Content className="mt-4 rounded-lg bg-surface p-4 text-sm">
+      <CO.Content className="a-collapsible mt-4 rounded-lg bg-surface p-4 text-sm">
         {children}
       </CO.Content>
     </CO.Root>

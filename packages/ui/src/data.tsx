@@ -10,7 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button, Empty } from "./basic";
+import { Button } from "./button";
+import { Empty } from "./empty";
 import { Input } from "./forms";
 import { Pagination } from "./navigation";
 export function Table({

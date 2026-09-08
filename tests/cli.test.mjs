@@ -31,7 +31,7 @@ test("add installs source and refuses to replace a consumer edit", async () => {
   try {
     assert.equal(run("init").status, 0);
     assert.equal(run("add", "button").status, 0);
-    const file = path.join(cwd, "src/components/aretusa/basic.tsx");
+    const file = path.join(cwd, "src/components/aretusa/button.tsx");
     assert.match(await readFile(file, "utf8"), /export const Button/);
     await writeFile(file, "local edit");
     const result = run("add", "button");

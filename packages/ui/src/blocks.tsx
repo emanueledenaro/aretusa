@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, Card, CardTitle, CardDescription } from "./basic";
+import { Button } from "./button";
+import { Card, CardTitle, CardDescription } from "./card";
 import { Accordion, NavigationMenu } from "./navigation";
 import { Input, Field } from "./forms";
 export function HeaderBlock({
@@ -136,7 +137,7 @@ export function FormBlock({
 }) {
   return (
     <form
-      className="max-w-sm space-y-5"
+      className="w-full min-w-0 space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
         const d = new FormData(e.currentTarget);
@@ -152,7 +153,9 @@ export function FormBlock({
       <Field label="Email" hint="Used only for this example.">
         <Input type="email" name="email" autoComplete="email" required />
       </Field>
-      <Button type="submit">Continue</Button>
+      <div className="flex justify-end border-t border-line pt-5">
+        <Button type="submit" className="w-full sm:w-auto">Continue</Button>
+      </div>
     </form>
   );
 }

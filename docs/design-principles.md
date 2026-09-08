@@ -28,9 +28,10 @@ Motion communicates a transition, direction or state change. It should not delay
 
 Hover must never be the only route to important content. Keyboard and touch have equal priority.
 
+Use the shared motion tokens in `packages/ui/src/motion.css`: 140ms for brief feedback, 220ms for state changes, 280ms for entrances and 180ms for exits. Keep travel within 6px for small surfaces and scale changes within 1%. Use decelerating curves without bounce. Input values and action callbacks update immediately. Focus rings remain immediate. Animate expansion only where it communicates disclosure; avoid generic `transition: all`, page entrance cascades and movement on every rerender. Reduced motion removes nonessential animation, including loading rotation, while labels retain status information. Check interrupted transitions, repeated activation and overlay focus restoration before marking each component reviewed.
+
 ## Review
 
 Compare rendered variants at the same viewport, theme, zoom and state. Inspect optical alignment, touch geometry, text wrapping, borders, radius, color pairing and interaction feedback. Fix P0/P1/P2 findings before release-ready. Record P3 refinements with a reason if deferred.
 
 A green build, a component count or a screenshot alone does not prove design quality. See [the quality contract](quality-contract.md).
-

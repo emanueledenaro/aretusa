@@ -1,0 +1,131 @@
+/* Shared motion travels with installed components. */
+:root {
+  --motion-fast: 140ms;
+  --motion-normal: 220ms;
+  --motion-enter: 280ms;
+  --motion-exit: 180ms;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@layer components {
+  :where(
+    .a-button,
+    .a-input,
+    .a-close,
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [role="tab"],
+    [role="menuitem"],
+    [role="option"],
+    .a-calendar button
+  ) {
+    transition-duration: var(--motion-normal);
+    transition-timing-function: var(--motion-settle);
+    transition-property:
+      background-color, color, border-color, box-shadow, opacity;
+  }
+  [role="switch"] > span {
+    transition-duration: var(--motion-normal);
+    transition-timing-function: var(--motion-ease);
+  }
+  .a-overlay[data-state="open"] {
+    animation: a-fade-in var(--motion-enter) var(--motion-ease);
+  }
+  .a-overlay[data-state="closed"] {
+    animation: a-fade-out var(--motion-exit) ease-in;
+  }
+  :where(.a-modal-content, .a-popup, .a-tooltip, .a-toast)[data-state="open"],
+  .a-tooltip[data-state="delayed-open"] {
+    animation: a-enter var(--motion-enter) var(--motion-ease);
+  }
+  :where(
+    .a-modal-content,
+    .a-popup,
+    .a-tooltip,
+    .a-toast
+  )[data-state="closed"] {
+    animation: a-exit var(--motion-exit) ease-in;
+  }
+  .a-accordion-content {
+    overflow: hidden;
+  }
+  .a-accordion-content[data-state="open"] {
+    animation: a-expand var(--motion-enter) var(--motion-ease);
+  }
+  .a-accordion-content[data-state="closed"] {
+    animation: a-collapse var(--motion-exit) var(--motion-settle);
+  }
+  .a-accordion-trigger svg {
+    transition: rotate var(--motion-normal) var(--motion-ease);
+  }
+  .a-accordion-trigger[data-state="open"] svg {
+    rotate: 90deg;
+  }
+  .a-collapsible[data-state="open"],
+  .a-tabs-content[data-state="active"] {
+    animation: a-fade-in var(--motion-normal) var(--motion-ease);
+  }
+  .animate-pulse {
+    animation-duration: 2.8s;
+  }
+  .animate-spin {
+    animation-duration: 1.2s;
+  }
+}
+/* Transform leaves positional translate utilities intact on centered dialogs. */
+@keyframes a-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes a-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(3px) scale(0.995);
+  }
+}
+@keyframes a-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes a-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes a-expand {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes a-collapse {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}

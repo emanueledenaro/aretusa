@@ -1,21 +1,98 @@
-import {mkdtemp,writeFile,readFile,mkdir} from 'node:fs/promises';
-import {spawnSync} from 'node:child_process';
-import path from 'node:path';
-import os from 'node:os';
-const root=process.cwd();
-const consumer=await mkdtemp(path.join(os.tmpdir(),'aretusa-real-consumer-'));
-function run(bin,args){const r=spawnSync(bin,args,{cwd:consumer,encoding:'utf8',timeout:180000});if(r.status!==0)throw Error(r.stderr||r.stdout||String(r.error));return r.stdout}
-const cli=path.join(root,'packages/cli/src/cli.mjs');
-run(process.execPath,[cli,'init','--cwd',consumer]);
-run(process.execPath,[cli,'add','dialog','--cwd',consumer]);
-run(process.execPath,[cli,'add','field','--cwd',consumer]);
-const dependencies={react:'^19.2.0','react-dom':'^19.2.0','radix-ui':'^1.6.7','lucide-react':'^0.577.0',clsx:'^2.1.1','tailwind-merge':'^3.6.0','react-day-picker':'^9.7.0','date-fns':'^4.1.0',tailwindcss:'^4.1.0'};
-await writeFile(path.join(consumer,'package.json'),JSON.stringify({type:'module',scripts:{build:'tsc --noEmit && vite build'},dependencies,devDependencies:{typescript:'^5.9.3',vite:'^6.4.2','@vitejs/plugin-react':'^5.0.4','@tailwindcss/vite':'^4.1.0','@types/react':'^19.2.0','@types/react-dom':'^19.2.0'}},null,2));
-await writeFile(path.join(consumer,'index.html'),'<!doctype html><html lang="en"><head><title>Aretusa consumer</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>');
-await writeFile(path.join(consumer,'tsconfig.json'),JSON.stringify({compilerOptions:{target:'ES2022',lib:['ES2022','DOM'],module:'ESNext',moduleResolution:'Bundler',jsx:'react-jsx',strict:true,skipLibCheck:true,esModuleInterop:true,noEmit:true},include:['src']}));
-await writeFile(path.join(consumer,'vite.config.js'),"import {defineConfig} from 'vite';import react from '@vitejs/plugin-react';import tailwind from '@tailwindcss/vite';export default defineConfig({plugins:[react(),tailwind()]});");
-await writeFile(path.join(consumer,'src/main.tsx'),"import React from 'react';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/basic';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Field label='Name'><Input/></Field></Modal>);");
-console.log('Clean consumer: '+consumer);
-console.log(run('npm',['install','--no-audit','--no-fund']));
-console.log(run('npm',['run','build']));
-console.log('Consumer typecheck and production build passed. Fixture retained for inspection: '+consumer);
+import { mkdtemp, writeFile, readFile, mkdir } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
+import path from "node:path";
+import os from "node:os";
+const root = process.cwd();
+const consumer = await mkdtemp(
+  path.join(os.tmpdir(), "aretusa-real-consumer-"),
+);
+function run(bin, args) {
+  const r = spawnSync(bin, args, {
+    cwd: consumer,
+    encoding: "utf8",
+    timeout: 180000,
+  });
+  if (r.status !== 0) throw Error(r.stderr || r.stdout || String(r.error));
+  return r.stdout;
+}
+const cli = path.join(root, "packages/cli/src/cli.mjs");
+run(process.execPath, [cli, "init", "--cwd", consumer]);
+run(process.execPath, [cli, "add", "dialog", "--cwd", consumer]);
+run(process.execPath, [cli, "add", "field", "--cwd", consumer]);
+const registry = JSON.parse(
+  await readFile(path.join(root, "packages/cli/registry/index.json"), "utf8"),
+);
+const manifest = JSON.parse(
+  await readFile(path.join(root, "package.json"), "utf8"),
+);
+const required = new Set([
+  "react",
+  "react-dom",
+  ...registry.items
+    .filter((item) => ["dialog", "field"].includes(item.name))
+    .flatMap((item) => item.dependencies),
+]);
+const dependencies = Object.fromEntries(
+  [...required].map((name) => {
+    const version = manifest.dependencies[name] ?? manifest.devDependencies[name];
+    if (!version)
+      throw Error("Registry dependency has no verified version: " + name);
+    return [name, version];
+  }),
+);
+await writeFile(
+  path.join(consumer, "package.json"),
+  JSON.stringify(
+    {
+      type: "module",
+      scripts: { build: "tsc --noEmit && vite build" },
+      dependencies,
+      devDependencies: {
+        typescript: "^5.9.3",
+        vite: "^6.4.2",
+        "@vitejs/plugin-react": "^5.0.4",
+        "@tailwindcss/vite": "^4.1.0",
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+      },
+    },
+    null,
+    2,
+  ),
+);
+await writeFile(
+  path.join(consumer, "index.html"),
+  '<!doctype html><html lang="en"><head><title>Aretusa consumer</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>',
+);
+await writeFile(
+  path.join(consumer, "tsconfig.json"),
+  JSON.stringify({
+    compilerOptions: {
+      target: "ES2022",
+      lib: ["ES2022", "DOM"],
+      module: "ESNext",
+      moduleResolution: "Bundler",
+      jsx: "react-jsx",
+      strict: true,
+      skipLibCheck: true,
+      esModuleInterop: true,
+      noEmit: true,
+    },
+    include: ["src"],
+  }),
+);
+await writeFile(
+  path.join(consumer, "vite.config.js"),
+  "import {defineConfig} from 'vite';import react from '@vitejs/plugin-react';import tailwind from '@tailwindcss/vite';export default defineConfig({plugins:[react(),tailwind()]});",
+);
+await writeFile(
+  path.join(consumer, "src/main.tsx"),
+  "import React from 'react';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Field label='Name'><Input/></Field></Modal>);",
+);
+console.log("Clean consumer: " + consumer);
+console.log(run("npm", ["install", "--no-audit", "--no-fund"]));
+console.log(run("npm", ["run", "build"]));
+console.log(
+  "Consumer typecheck and production build passed. Fixture retained for inspection: " +
+    consumer,
+);

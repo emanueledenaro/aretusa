@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Paperclip, X } from "lucide-react";
-import { Button, Progress } from "./basic";
+import { Button } from "./button";
+import { Progress } from "./progress";
 import { Input, RadioGroup } from "./forms";
 export function Attachment({
   name,

@@ -7,7 +7,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Item | Type | Issue | Status |
 | --- | --- | --- | --- |
 | Aspect Ratio | component | [#12](https://github.com/emanueledenaro/aretusa/issues/12) | implemented |
-| Avatar | component | [#13](https://github.com/emanueledenaro/aretusa/issues/13) | implemented |
+| Avatar | component | [#13](https://github.com/emanueledenaro/aretusa/issues/13) | behavior-checked |
 | Badge | component | [#14](https://github.com/emanueledenaro/aretusa/issues/14) | implemented |
 | Button | component | [#15](https://github.com/emanueledenaro/aretusa/issues/15) | behavior-checked |
 | Button Group | component | [#16](https://github.com/emanueledenaro/aretusa/issues/16) | implemented |

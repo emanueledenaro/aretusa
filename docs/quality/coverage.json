@@ -27,14 +27,15 @@
       "issue": 13,
       "databaseId": 5386375734,
       "url": "https://github.com/emanueledenaro/aretusa/issues/13",
-      "status": "implemented",
+      "status": "behavior-checked",
       "gates": {
         "design": "pending",
         "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
+        "interaction": "passed",
+        "code": "passed",
         "distribution": "pending"
       },
+      "evidence":{"record":"docs/quality/avatar-review.md","note":"Six focused behavior tests passed; visual and release-consumer checks remain pending."},
       "dependencies": []
     },
     {

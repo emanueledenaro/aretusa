@@ -24,7 +24,7 @@
 .showcase-panel [role=switch]{width:32px}
 .showcase-panel [role=switch] span{height:13px;width:13px}
 .showcase-panel [role=switch] span[data-state=checked]{transform:translateX(13px)}
-.showcase-panel [role=img]{width:30px;height:30px;font-size:10px;border:2px solid var(--color-card)}
+.showcase-panel .a-avatar{border:2px solid var(--color-card)}
 .icon-tile{width:34px;height:34px;flex-shrink:0;border:1px solid var(--color-line);border-radius:10px;background:var(--color-paper);display:inline-flex;align-items:center;justify-content:center}
 .choice-card{display:flex;width:100%;align-items:center;gap:11px;border:1px solid var(--color-line);padding:14px 12px;border-radius:12px;text-align:start;transition:background 160ms,border-color 160ms}
 .choice-card-selected{border-color:var(--color-ink);background:var(--color-paper)}

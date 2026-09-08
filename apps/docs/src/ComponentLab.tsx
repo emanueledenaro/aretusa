@@ -1,6 +1,8 @@
 import * as React from "react";
 import { ArrowRight, Plus, Heart } from "lucide-react";
 import { Button, type ButtonProps } from "../../../packages/ui/src/basic";
+import { Avatar } from "../../../packages/ui/src/basic";
+import { Input, Field } from "../../../packages/ui/src/forms";
 const tones: NonNullable<ButtonProps["tone"]>[] = [
   "primary",
   "secondary",
@@ -9,6 +11,86 @@ const tones: NonNullable<ButtonProps["tone"]>[] = [
   "danger",
   "accent",
 ];
+export function AvatarLab() {
+  const [source, setSource] = React.useState(""),
+    [draft, setDraft] = React.useState("");
+  return (
+    <section className="mt-12 space-y-7" aria-label="Avatar state examples">
+      <div>
+        <h2 className="doc-h2">Scale, shape & fallback</h2>
+        <p className="text-sm leading-relaxed text-muted">
+          A quiet identity element that keeps its footprint while an image loads
+          or fails.
+        </p>
+      </div>
+      <div className="rounded-xl border border-line p-5">
+        <h3 className="mb-5 text-sm font-medium">A consistent scale</h3>
+        <div className="flex flex-wrap items-end gap-6">
+          {(["sm", "md", "lg", "xl"] as const).map((size) => (
+            <div key={size} className="space-y-3 text-center">
+              <Avatar name="Alex Rivers" size={size} />
+              <p className="text-[10px] text-muted">{size}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-xl border border-line p-5">
+        <h3 className="mb-5 text-sm font-medium">Shape and missing names</h3>
+        <div className="flex flex-wrap items-center gap-5">
+          <Avatar name="Sam Chen" shape="rounded" size="lg" />
+          <Avatar name="  " />
+          <Avatar name="  Alex   Rivers " />
+        </div>
+      </div>
+      <div className="rounded-xl border border-line p-5">
+        <h3 className="mb-5 text-sm font-medium">Alongside a visible name</h3>
+        <div className="flex items-center gap-3">
+          <Avatar name="Alex Rivers" decorative />
+          <div>
+            <p className="text-sm font-medium">Alex Rivers</p>
+            <p className="text-xs text-muted">
+              The avatar is decorative in this composition.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="rounded-xl border border-line p-5">
+        <h3 className="mb-5 text-sm font-medium">Try an image source</h3>
+        <div className="mb-5">
+          <Avatar name="Your profile" src={source || undefined} size="lg" />
+        </div>
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSource(draft);
+          }}
+        >
+          <Field label="Image URL" hint="The URL is used only by this preview.">
+            <Input
+              type="url"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="https://…"
+            />
+          </Field>
+          <div className="flex flex-wrap gap-3">
+            <Button type="submit">Load image</Button>
+            <Button
+              tone="outline"
+              onClick={() => {
+                setDraft("");
+                setSource("");
+              }}
+            >
+              Reset
+            </Button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
 export function ButtonLab() {
   const [pending, setPending] = React.useState(false),
     [zoom, setZoom] = React.useState(false),

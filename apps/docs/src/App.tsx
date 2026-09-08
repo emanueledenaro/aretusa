@@ -16,7 +16,7 @@ import {
 import * as U from "../../../packages/ui/src/index";
 import { catalog } from "../../../packages/ui/src/catalog";
 import { Demo } from "./Demo";
-import {ButtonLab} from './ComponentLab';
+import {ButtonLab,AvatarLab} from './ComponentLab';
 import {Landing, ChartsPage, DirectoryPage, TypesetPage, CreatePage, PreviewPage} from './ProductPages';
 import {usageCode} from './usage';
 const github = "https://github.com/emanueledenaro/aretusa";
@@ -282,6 +282,7 @@ function ComponentPage({ id }: { id: string }) {
           )}
         </div>
         {id==='button'&&<ButtonLab/>}
+        {id==='avatar'&&<AvatarLab/>}
         <section id="installation" className="mt-12">
           <h2 className="doc-h2">Installation</h2>
           <Install id={id} />

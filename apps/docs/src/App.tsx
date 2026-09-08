@@ -796,12 +796,14 @@ export function App() {
         <div
           id="site-search-results"
           role="listbox"
+          tabIndex={-1}
           aria-label="Search results"
           className="mt-4 max-h-72 overflow-auto"
         >
           {results.map((c, i) => (
             <a
               role="option"
+              tabIndex={-1}
               aria-selected={i === active}
               id={"site-search-" + i}
               key={c.href + c.group}

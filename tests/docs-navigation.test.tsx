@@ -48,6 +48,14 @@ test('search Escape returns focus to the search button', async () => {
   expect(trigger).toHaveFocus();
 });
 
+test('search results do not create a separate Tab stop for every option', async () => {
+  history.replaceState(null, '', '#/docs');
+  render(<App />);
+  await userEvent.click(screen.getByRole('button', {name:'Search documentation'}));
+  await userEvent.tab();
+  expect(screen.getByRole('button', {name:'Close dialog'})).toHaveFocus();
+});
+
 test('keyboard search keeps the active result visible and handles empty results', async () => {
   const original = HTMLElement.prototype.scrollIntoView;
   const scrolled: string[] = [];

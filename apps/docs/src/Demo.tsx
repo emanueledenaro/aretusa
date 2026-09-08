@@ -188,6 +188,55 @@ function AlertDialogExample({ onNotice }: { onNotice: (text: string) => void }) 
     </div>
   );
 }
+const disciplines = [
+  { value: "design", label: "Design", description: "Identity, editorial and product work." },
+  { value: "engineering", label: "Engineering", description: "Front end, tooling and infrastructure." },
+  { value: "product", label: "Product", description: "Research, strategy and roadmaps." },
+  { value: "writing", label: "Writing", description: "Documentation and long form.", disabled: true },
+];
+const palette = [
+  { value: "paper", label: "Paper", swatch: "#f4f1e9" },
+  { value: "terracotta", label: "Terracotta", swatch: "#ac4333" },
+  { value: "gold", label: "Gold", swatch: "#edbd52" },
+  { value: "ink", label: "Ink", swatch: "#20201d" },
+];
+const regions = ["Agrigento", "Caltanissetta", "Catania", "Enna", "Messina", "Palermo", "Ragusa", "Siracusa", "Trapani", "Lampedusa e Linosa", "Pantelleria", "Isole Eolie"].map((name) => ({ value: name.toLowerCase().replace(/\s+/g, "-"), label: name }));
+function SelectExample() {
+  const [discipline, setDiscipline] = React.useState("");
+  const [color, setColor] = React.useState("terracotta");
+  const [region, setRegion] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
+  const regionError = submitted && !region ? "Choose the region where you work." : undefined;
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <U.Field label="Discipline" hint="Options can carry a second line.">
+        <U.Select label="Discipline" options={disciplines} value={discipline} onValueChange={setDiscipline} />
+      </U.Field>
+      <U.Field label="Accent">
+        <U.Select label="Accent" options={palette} value={color} onValueChange={setColor} />
+      </U.Field>
+      <U.Field label="Region" error={regionError}>
+        <U.Select label="Region" options={regions} value={region} onValueChange={(next) => { setRegion(next); setSubmitted(false); }} placeholder="Twelve places to scroll" />
+      </U.Field>
+      <U.Field label="Plan" hint="Managed by your workspace.">
+        <U.Select label="Plan" options={[{ value: "studio", label: "Studio, yearly" }]} value="studio" disabled />
+      </U.Field>
+      <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+        <U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate region</U.Button>
+        <U.Modal
+          title="Choose a meeting room"
+          description="A select inside a dialog keeps its list within the dialog's stacking context."
+          trigger={<U.Button tone="quiet">Select inside a dialog</U.Button>}
+          footer={<U.ModalClose><U.Button>Done</U.Button></U.ModalClose>}
+        >
+          <U.Field label="Room">
+            <U.Select label="Room" options={[{ value: "print", label: "Printing room" }, { value: "terrace", label: "Terrace" }, { value: "library", label: "Library, quiet hours only", description: "Booked after 18:00 on weekdays." }]} />
+          </U.Field>
+        </U.Modal>
+      </div>
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -456,14 +505,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "select":
-      content = (
-        <U.Select
-          label="Your discipline"
-          options={choices}
-          value={value}
-          onValueChange={setValue}
-        />
-      );
+      content = <SelectExample />;
       break;
     case "native-select":
       content = (

@@ -33,7 +33,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Label | component | [#36](https://github.com/emanueledenaro/aretusa/issues/36) | implemented |
 | Native Select | component | [#37](https://github.com/emanueledenaro/aretusa/issues/37) | implemented |
 | Radio Group | component | [#38](https://github.com/emanueledenaro/aretusa/issues/38) | implemented |
-| Select | component | [#39](https://github.com/emanueledenaro/aretusa/issues/39) | implemented |
+| Select | component | [#39](https://github.com/emanueledenaro/aretusa/issues/39) | visually-reviewed |
 | Slider | component | [#40](https://github.com/emanueledenaro/aretusa/issues/40) | implemented |
 | Switch | component | [#41](https://github.com/emanueledenaro/aretusa/issues/41) | implemented |
 | Textarea | component | [#42](https://github.com/emanueledenaro/aretusa/issues/42) | implemented |

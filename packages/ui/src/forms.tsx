@@ -234,7 +234,7 @@ export function Select({
           sideOffset={6}
           collisionPadding={12}
         >
-          <SE.Viewport className="max-h-[min(320px,var(--radix-select-content-available-height))] space-y-1 p-0.5">
+          <SE.Viewport className="a-scrollbar max-h-[min(320px,var(--radix-select-content-available-height))] space-y-1 p-0.5">
             {options.map((o) => (
               <SE.Item
                 key={o.value}

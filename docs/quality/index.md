@@ -22,7 +22,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Spinner | component | [#25](https://github.com/emanueledenaro/aretusa/issues/25) | implemented |
 | Typography | component | [#26](https://github.com/emanueledenaro/aretusa/issues/26) | implemented |
 | Alert | component | [#27](https://github.com/emanueledenaro/aretusa/issues/27) | implemented |
-| Calendar | component | [#28](https://github.com/emanueledenaro/aretusa/issues/28) | implemented |
+| Calendar | component | [#28](https://github.com/emanueledenaro/aretusa/issues/28) | visually-reviewed |
 | Checkbox | component | [#29](https://github.com/emanueledenaro/aretusa/issues/29) | implemented |
 | Combobox | component | [#30](https://github.com/emanueledenaro/aretusa/issues/30) | implemented |
 | Date Picker | component | [#31](https://github.com/emanueledenaro/aretusa/issues/31) | implemented |

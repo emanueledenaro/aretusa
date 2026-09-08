@@ -17,7 +17,7 @@ export const usage: Record<string,string> = {
   "spinner": "<Spinner label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
   "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
-  "calendar": "<Calendar mode=\"single\" selected={date} onSelect={setDate} />",
+  "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",
   "checkbox": "<Checkbox label=\"Accept terms\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",
   "date-picker": "<DatePicker aria-label=\"Start date\" />",
@@ -72,7 +72,8 @@ export const usageImports: Record<string,string[]> = {
   "scroll-fade": ["useScrollFade"]
 };
 export const usageSetup: Record<string,string> = {
-  "scroll-fade": "const { ref, edges } = useScrollFade();"
+  "scroll-fade": "const { ref, edges } = useScrollFade();",
+  "calendar": "const [range, setRange] = useState<{ from: Date | undefined; to?: Date }>();"
 };
 
 export function usageCode(id:string,name:string,module:string){const names=[name,...(usageImports[id]??[])].join(", ");const setup=usageSetup[id]?`  ${usageSetup[id]}\n`:"";return `import { useState } from "react";\nimport { ${names} } from "./components/aretusa/${module}";\n\nexport function Example() {\n  const [value, setValue] = useState("");\n  const [enabled, setEnabled] = useState(false);\n  const [page, setPage] = useState(1);\n  const [date, setDate] = useState<Date | undefined>();\n  const options = [{value: "design", label: "Design"}, {value: "engineering", label: "Engineering"}];\n  const menuItems = [{label: "Rename", onSelect: () => setEnabled(true)}];\n${setup}  return (${usage[id]});\n}`}

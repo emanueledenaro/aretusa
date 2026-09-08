@@ -1,6 +1,8 @@
 import * as React from "react";
 import * as U from "../../../packages/ui/src/index";
 import { Heart, Plus, ArrowUpRight } from "lucide-react";
+import { fr } from "react-day-picker/locale";
+import type { DateRange } from "react-day-picker";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -91,6 +93,56 @@ function ScrollFadeExample() {
             </div>
           </div>
           <U.ScrollFade edges={both.edges} depth={28} />
+        </div>
+      </div>
+    </div>
+  );
+}
+const september = new Date(2026, 8, 1);
+function CalendarExample() {
+  const [single, setSingle] = React.useState<Date | undefined>(new Date(2026, 8, 8));
+  const [range, setRange] = React.useState<DateRange | undefined>({ from: new Date(2026, 8, 24), to: new Date(2026, 9, 2) });
+  const unavailable = [new Date(2026, 8, 10), new Date(2026, 8, 11), new Date(2026, 9, 8)];
+  const [dates, setDates] = React.useState<Date[] | undefined>([new Date(2026, 8, 3), new Date(2026, 8, 10)]);
+  const label = (date?: Date) => date?.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  return (
+    <div className="w-full space-y-8">
+      <div>
+        <h3 id="calendar-range" className="mb-2 text-sm font-medium">Stay dates across two months, three nights unavailable</h3>
+        <div className="rounded-xl border border-line bg-card p-4" role="group" aria-labelledby="calendar-range">
+          <U.Calendar mode="range" defaultMonth={september} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={unavailable} excludeDisabled footer={range?.to ? `From ${label(range.from)} to ${label(range.to)}` : "Choose a start and end date"} />
+        </div>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="min-w-0">
+          <h3 id="calendar-single" className="mb-2 text-sm font-medium">Single date with today marked</h3>
+          <div className="rounded-xl border border-line bg-card p-4" role="group" aria-labelledby="calendar-single">
+            <U.Calendar mode="single" defaultMonth={september} selected={single} onSelect={setSingle} footer={single ? `Selected ${label(single)}` : "No date selected"} />
+          </div>
+        </div>
+        <div className="min-w-0">
+          <h3 id="calendar-multiple" className="mb-2 text-sm font-medium">Up to three workshop days</h3>
+          <div className="rounded-xl border border-line bg-card p-4" role="group" aria-labelledby="calendar-multiple">
+            <U.Calendar mode="multiple" defaultMonth={september} selected={dates} onSelect={setDates} min={1} max={3} footer={`${dates?.length ?? 0} of 3 days chosen`} />
+          </div>
+        </div>
+        <div className="min-w-0">
+          <h3 id="calendar-dropdown" className="mb-2 text-sm font-medium">Month and year menus within bounds</h3>
+          <div className="rounded-xl border border-line bg-card p-4" role="group" aria-labelledby="calendar-dropdown">
+            <U.Calendar mode="single" defaultMonth={september} captionLayout="dropdown" startMonth={new Date(2025, 0)} endMonth={new Date(2027, 11)} />
+          </div>
+        </div>
+        <div className="min-w-0">
+          <h3 id="calendar-locale" className="mb-2 text-sm font-medium">French locale, Monday first, in a 240px parent</h3>
+          <div className="w-60 max-w-full rounded-xl border border-line bg-card p-3" role="group" aria-labelledby="calendar-locale">
+            <U.Calendar mode="single" defaultMonth={september} locale={fr} weekStartsOn={1} showWeekNumber />
+          </div>
+        </div>
+      </div>
+      <div className="max-w-sm">
+        <h3 id="calendar-past" className="mb-2 text-sm font-medium">Earlier dates unavailable</h3>
+        <div className="rounded-xl border border-line bg-card p-4" role="group" aria-labelledby="calendar-past">
+          <U.Calendar mode="single" defaultMonth={september} disabled={{ before: new Date(2026, 8, 8) }} footer="Dates before today cannot be chosen. Validation, loading and error messages belong to the surrounding field." />
         </div>
       </div>
     </div>
@@ -398,7 +450,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "calendar":
-      content = <U.Calendar mode="single" selected={date} onSelect={setDate} />;
+      content = <CalendarExample />;
       break;
     case "date-picker":
       content = (

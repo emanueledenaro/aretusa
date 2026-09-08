@@ -6,7 +6,7 @@
 - Author: Calendar Astra worker
 - Reviewed source commit: `f473ded1d4d67eb442f7d428762694d2ac646b6f`
 - Independent reviewers: `/root/calendar_28/standards_review` and `/root/calendar_28/spec_review`
-- Status: behavior-checked. Shared style, catalog and consumer integration remain open.
+- Status: visually-reviewed after coordinator integration on main; see the coordinator section at the end.
 
 ## Public contract
 
@@ -307,3 +307,32 @@ Shared styling and documentation are coordinator-owned. Their proposed changes a
 
 - Installed DayPicker 9.14.0 declarations and implementation: `dist/esm/types/props.d.ts`, `dist/esm/DayPicker.js`, `dist/esm/selection/useSingle.js`, `useMulti.js`, `useRange.js`, `dist/esm/components/Weekdays.js`.
 - [DayPicker selection modes](https://daypicker.dev/docs/selection-modes/) and [customization](https://daypicker.dev/docs/customization/).
+
+## Coordinator review and integration
+
+Diff reviewed from the real checkout against base `6b27b5a`; the worker's 18 tests and typecheck were reproduced in its worktree. The source change was accepted as delivered: caller `className` preserved through `cx`, `showOutsideDays` and `navLayout` overridable, no dependency added.
+
+The proposed stylesheet was integrated and then redesigned after the maintainer rejected the first rendering as generic. The shipped `.a-calendar` rules in `packages/ui/src/styles.css` now define: month title in the editorial serif, pill navigation buttons with a hairline border, uppercase letter-spaced weekday labels, tabular numerals, 44px rows with 10px radius targets, today marked by a terracotta dot under the numeral, selected dates as filled ink pills, a continuous surface band for ranges with rounded row ends and hidden cells excluded, outside and disabled dates in muted tones, a hairline above the footer, native month and year selects styled like the Aretusa input with a drawn chevron, and 140ms color transitions removed under reduced motion. Months are flex items that share the container width; the caption, dropdowns and navigation wrap onto a second line in narrow parents instead of clipping. The table uses automatic layout with a minimum cell width so zoomed text scrolls inside the bounded month region instead of overlapping.
+
+Two coordinator-owned defects were found and fixed during integration: the docs app carried its own `.a-calendar` overrides in `apps/docs/src/site.css` (32px targets and a second selected rule) that defeated the shared stylesheet, removed; and the first demo range crossed disabled weekends while `excludeDisabled` was set, replaced with three unavailable nights. The `min-width: 2.25em` cells clipped the week-number calendar in a 240px parent; the dense-grid exception now uses `1.75em` cells and a `1.5em` week-number column.
+
+Demo: five examples on the Calendar page (two-month range with unavailable nights and footer feedback, single date with today, multiple dates with min and max, month and year menus within 2025 to 2027, French locale with Monday start and week numbers in a 240px parent, and past dates unavailable). Typed usage is the range example with `showOutsideDays={false}`, `excludeDisabled` and a footer.
+
+### Rendered evidence (local dev server, Chromium in the Claude browser pane)
+
+| Check | Result |
+| --- | --- |
+| 320 px | scrollWidth 320, no page overflow; months stack; days 28 by 44 px (dense-grid exception below 44 px width); captions do not overflow |
+| 390 px light and dark | scrollWidth 390; today border and dot use the terracotta token; selected fill uses ink on paper in light and paper on ink in dark; range middle uses the surface token; disabled opacity 0.45 |
+| 768 px | scrollWidth 753 beside the sidebar; the two range months stack; single calendars 341 px |
+| 1024 px | no overflow; grid columns 313 px |
+| 1440 px light | scrollWidth 1425; the two range months share the 797 px card at 365 px each with 52 by 44 px days; single calendars 352 px |
+| 200% text zoom proxy at 390 px | the calendar itself does not widen the page; each month scrolls horizontally inside its bounded region (about 255 px of overflow) with 63 by 44 px days and nowrap weekday labels; the page-level overflow at this zoom comes from the version badge and the API table, recorded on the site ticket |
+| 240 px parent | week-number calendar fits with 27 by 44 px days and no clipped navigation after the month row wraps |
+| Keyboard | ArrowRight and ArrowDown moved focus from 8 to 16 September with full date names announced; Enter and Space activation could not be exercised by the pane's key injection (it also failed on a plain button), so selection by keyboard relies on the worker's jsdom tests |
+| Dropdowns | month and year selects 158 by 40 and 96 by 40 px at 390 px, side by side, navigation wraps under them; bounded to 3 years |
+| Range | hidden outside cells no longer carry the band; no disabled cell inside the initial range |
+
+Open items: forced-colors and reduced-motion emulation, real touch, assistive-technology speech, and the long-locale native select option text, which the native control truncates in its closed face.
+
+Gates: design passed for the reviewed states, responsive passed, interaction passed with the keyboard activation caveat, code passed, distribution passed after the registry rebuild and clean-consumer build. Status: visually-reviewed. Not release-ready until an independent second review confirms the redesign.

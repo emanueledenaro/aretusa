@@ -288,15 +288,16 @@
       "issue": 28,
       "databaseId": 5386377711,
       "url": "https://github.com/emanueledenaro/aretusa/issues/28",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/calendar-review.md"
     },
     {
       "id": "checkbox",

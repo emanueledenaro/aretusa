@@ -131,41 +131,6 @@
 .skip-link:focus {
   top: 12px;
 }
-.a-calendar {
-  font-size: 13px;
-  --rdp-accent-color: var(--color-terracotta);
-  --rdp-accent-background-color: var(--color-surface);
-  max-width: 100%;
-}
-.a-calendar table {
-  border-collapse: collapse;
-}
-.a-calendar th {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--color-muted);
-}
-.a-calendar button {
-  padding: 7px;
-  min-width: 32px;
-  min-height: 32px;
-  border-radius: 7px;
-}
-.a-calendar button:hover {
-  background: var(--color-surface);
-}
-.a-calendar [aria-selected="true"] button {
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-.a-calendar nav {
-  display: flex;
-  justify-content: space-between;
-}
-.a-calendar svg {
-  width: 16px;
-  height: 16px;
-}
 @media (max-width: 1200px) {
   .docs-layout {
     grid-template-columns: 240px minmax(0, 1fr);

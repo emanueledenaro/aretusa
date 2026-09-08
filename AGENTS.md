@@ -35,3 +35,5 @@ Use the repository-local skills:
 Track every catalog item in docs/quality/coverage.json. Keep a separate issue and evidence record per component/block. All applicable gates must pass before release-ready. Claims of high design quality require inspection of actual states, not catalog count or generic praise.
 
 Work one vertical slice at a time. Read its issue and blockers, verify changed behavior, review the diff and commit a small coherent change. Record evidence in the issue. Public documentation is English; coordination may be Italian. Do not use em or en dash punctuation.
+
+For each ticket or standalone change, run the relevant checks, create a dedicated commit and push it before moving to the next unit of work. Verify the push and CI separately from local tests. A pushed implementation does not by itself authorize closing an incomplete quality ticket.

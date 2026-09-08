@@ -248,19 +248,29 @@ type Item = {
   dependencies: string[];
 };
 export function DirectoryPage() {
+  const [attempt, setAttempt] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
   const [items, setItems] = React.useState<Item[]>([]),
     [q, setQ] = React.useState(""),
     [error, setError] = React.useState(false),
     [selected, setSelected] = React.useState<Item | null>(null);
   React.useEffect(() => {
-    fetch("./r/index.json")
+    const controller = new AbortController();
+    setLoading(true);
+    setError(false);
+    fetch("./r/index.json", {signal: controller.signal})
       .then((r) => {
         if (!r.ok) throw Error();
         return r.json();
       })
-      .then((r) => setItems(r.items))
-      .catch(() => setError(true));
-  }, []);
+      .then((r) => {
+        if (!Array.isArray(r.items) || !r.items.every((item: Item) => item && typeof item.name === "string" && typeof item.description === "string" && typeof item.type === "string" && Array.isArray(item.files) && Array.isArray(item.dependencies))) throw Error("Invalid registry");
+        if (!controller.signal.aborted) setItems(r.items);
+      })
+      .catch(() => { if (!controller.signal.aborted) setError(true); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [attempt]);
   const shown = items.filter((i) =>
     (i.name + " " + i.description).toLowerCase().includes(q.toLowerCase()),
   );
@@ -282,8 +292,11 @@ export function DirectoryPage() {
       </div>
       {error ? (
         <U.Alert title="Registry unavailable" tone="error">
-          Reload after building the registry.
+          <p>We could not load the registry. Check your connection and try again.</p>
+          <U.Button tone="outline" className="mt-4" onClick={() => setAttempt(value => value + 1)}>Try again</U.Button>
         </U.Alert>
+      ) : loading ? (
+        <div className="flex justify-center py-12"><U.Spinner label="Loading registry" /></div>
       ) : (
         <>
           <div className="mb-5 flex justify-between text-xs text-muted">

@@ -17,6 +17,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm run quality:check
       - run: node scripts/check-usage.mjs
       - run: node scripts/verify-consumer.mjs
       - uses: actions/upload-pages-artifact@v3

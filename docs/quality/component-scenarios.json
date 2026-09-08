@@ -1,0 +1,322 @@
+{
+  "button": [
+    "Balance optical padding and icon alignment across tones and sizes; preserve width when loading.",
+    "Verify Enter/Space, disabled/loading suppression, focus visibility and non-submitting default inside a form.",
+    "Exercise long and multiline labels, icon-only names and full-width mobile actions."
+  ],
+  "button-group": [
+    "Define shared edges, separators and spacing for mixed action lengths.",
+    "Keep grouping semantics without changing the native behavior of its buttons.",
+    "Wrap or stack on narrow containers without splitting labels or hiding actions."
+  ],
+  "aspect-ratio": [
+    "Keep the requested ratio without stretching media or shifting nearby layout.",
+    "Define object-fit, image loading/error and meaningful alt behavior in documented compositions.",
+    "Test portrait, landscape, very narrow parents and content with intrinsic minimum width."
+  ],
+  "avatar": [
+    "Review crop, initials, optical centering and size variants in groups.",
+    "Verify image failure and source changes restore the correct fallback.",
+    "Ensure an accessible name without duplicate announcements in labeled compositions."
+  ],
+  "badge": [
+    "Tune compact typography, inset spacing and icon/text alignment.",
+    "Verify semantic state labels and light/dark contrast without color-only meaning.",
+    "Test long status labels, wrapping and placement beside controls."
+  ],
+  "card": [
+    "Define anatomy for header, description, body, footer and action alignment.",
+    "Test interactive content without turning unrelated areas into accidental click targets.",
+    "Review single-column and grid compositions with mixed content lengths."
+  ],
+  "direction": [
+    "Propagate text direction and logical spacing into nested components.",
+    "Verify portaled overlays and navigation use the intended RTL direction.",
+    "Test mixed LTR/RTL text, icons and controls in constrained layouts."
+  ],
+  "empty": [
+    "Make absence understandable with a useful next step and measured visual hierarchy.",
+    "Distinguish no data, no search results, permission limits and error recovery.",
+    "Test long explanations and primary actions on mobile."
+  ],
+  "item": [
+    "Align leading content, title, description and trailing actions consistently.",
+    "Avoid nested interactive conflicts and give trailing actions explicit names.",
+    "Stack metadata and actions when the available width becomes insufficient."
+  ],
+  "kbd": [
+    "Balance keycap typography, border and baseline within text and controls.",
+    "Use real keyboard semantics and document platform-specific shortcut labels.",
+    "Test multiline shortcut hints and high contrast."
+  ],
+  "progress": [
+    "Make value, label and track visually consistent; handle zero and completion.",
+    "Clamp invalid values and expose determinate or indeterminate status correctly.",
+    "Test long labels, reduced motion and updates without disruptive announcements."
+  ],
+  "separator": [
+    "Use spacing and contrast appropriate to horizontal and vertical grouping.",
+    "Distinguish decorative separators from meaningful semantic separators.",
+    "Verify flexible layouts and bounded vertical sizing."
+  ],
+  "skeleton": [
+    "Match realistic final-content proportions and avoid distracting layout shifts.",
+    "Keep loading shapes out of the accessibility tree while the parent announces loading.",
+    "Test reduced motion, different content lengths and dark surfaces."
+  ],
+  "spinner": [
+    "Balance stroke, size and baseline with nearby text and buttons.",
+    "Expose a concise loading status without repeated announcements.",
+    "Provide equivalent static feedback with reduced motion."
+  ],
+  "typography": [
+    "Review optical weight, tracking, line height and heading/body hierarchy.",
+    "Preserve semantic heading levels and readable link/focus treatments.",
+    "Test 200% text zoom, long words, narrow measure and font fallback."
+  ],
+  "alert": [
+    "Distinguish informative, successful, warning and error states through text and structure.",
+    "Use appropriate announcement urgency and avoid duplicate live-region messages.",
+    "Test long content, links and recovery actions on mobile."
+  ],
+  "calendar": [
+    "Refine month header, weekday alignment, day grid, selection and range states.",
+    "Verify keyboard navigation, disabled dates, today, month boundaries and accessible date names.",
+    "Test dense touch targets, narrow containers, locale-length text and dark mode."
+  ],
+  "checkbox": [
+    "Align box, label, help text and indeterminate/checked/disabled states.",
+    "Preserve explicit IDs, label activation, form value and caller event behavior.",
+    "Test multiline labels, Field errors, keyboard and touch."
+  ],
+  "combobox": [
+    "Provide clear query, selected value, active option, empty and loading states.",
+    "Verify typing, arrow keys, Enter, Escape, pointer selection and announced active option.",
+    "Constrain the popup to viewport/container and retain usability in a modal."
+  ],
+  "date-picker": [
+    "Design input, selected date, clear action and calendar surface as one control.",
+    "Verify manual entry, invalid dates, locale presentation and keyboard selection.",
+    "Test mobile keyboard, narrow popover placement and Field error association."
+  ],
+  "field": [
+    "Make label, description, required marker, control and error a consistent anatomy.",
+    "Associate IDs and descriptions with the actual control across Input, Select and custom controls.",
+    "Test asynchronous errors, multiline hints and 200% text zoom."
+  ],
+  "input": [
+    "Review text, placeholder, caret, border, focus and invalid state without excessive decoration.",
+    "Preserve native type, autocomplete, form submission, refs and caller handlers.",
+    "Test long values, autofill, mobile keyboard, disabled and readonly."
+  ],
+  "input-group": [
+    "Align prefix, suffix, icon and action content without shrinking the input excessively.",
+    "Preserve input labeling and ensure addon actions do not submit accidentally.",
+    "Test narrow containers, long prefixes, error focus and touch controls."
+  ],
+  "input-otp": [
+    "Design readable digit entry, selection, focus and invalid state.",
+    "Verify paste, deletion, arrows, autofill, numeric constraints and completion events.",
+    "Test screen-reader naming, mobile keyboard and long codes without overflow."
+  ],
+  "label": [
+    "Keep label typography and spacing consistent with required/help indicators.",
+    "Preserve association to native and compound controls, including explicit IDs.",
+    "Test activation, multiline text, disabled context and narrow layouts."
+  ],
+  "native-select": [
+    "Refine spacing and alignment while respecting platform control behavior.",
+    "Preserve selected, disabled, required and invalid semantics in forms.",
+    "Test long options, mobile picker behavior and Field descriptions."
+  ],
+  "radio-group": [
+    "Balance control, label and supporting text in vertical and card variants.",
+    "Verify one selection, form values, explicit labels and arrow-key navigation.",
+    "Test disabled choices, long descriptions and touch targets."
+  ],
+  "select": [
+    "Design trigger, placeholder, selected text, list, active and disabled options.",
+    "Forward Field IDs and error attributes to the trigger; verify keyboard and typeahead.",
+    "Check collision handling, long lists, scroll and nesting inside overlays."
+  ],
+  "slider": [
+    "Align track, thumb, labels and value feedback across orientations.",
+    "Verify keyboard steps, bounds, range thumbs and pointer interaction.",
+    "Test touch alternatives, label announcements, disabled state and narrow layouts."
+  ],
+  "switch": [
+    "Define clear on/off visual states with stable label alignment.",
+    "Preserve controlled/uncontrolled values, IDs, form semantics and keyboard activation.",
+    "Test multiline labels and adequate touch area without oversized visual geometry."
+  ],
+  "textarea": [
+    "Review text rhythm, placeholder, resize affordance and error placement.",
+    "Preserve native input/form behavior and support controlled values.",
+    "Test long content, mobile keyboard, resizing and minimum/maximum height."
+  ],
+  "toggle": [
+    "Give pressed and unpressed states equal clarity without relying on color alone.",
+    "Verify aria-pressed, keyboard activation and disabled behavior.",
+    "Test icon-only labels and touch sizing in toolbar compositions."
+  ],
+  "toggle-group": [
+    "Define spacing and selected appearance for single and multiple selection where supported.",
+    "Document selection mode and verify arrow navigation and state changes.",
+    "Wrap or scroll intentionally on narrow containers without losing selected context."
+  ],
+  "alert-dialog": [
+    "Make consequence, cancel action and confirmation hierarchy unmistakable.",
+    "Verify safe initial focus, focus containment, Escape/cancel and explicit confirmation.",
+    "Test long descriptions, loading confirmation and short mobile viewports."
+  ],
+  "dialog": [
+    "Refine title, description, body, close action and optional persistent footer.",
+    "Verify initial focus, focus trap, Escape, outside interaction and return focus.",
+    "Test nested controls, long scrolling content, mobile keyboard and safe areas."
+  ],
+  "drawer": [
+    "Define mobile sheet anatomy, handle/close affordance and action placement.",
+    "Verify dismissal, focus management and non-drag alternatives for any gestures.",
+    "Test tall content, keyboard appearance, orientation changes and nested controls."
+  ],
+  "hover-card": [
+    "Make supporting information legible with stable placement and restrained motion.",
+    "Keep essential actions/content available without hover.",
+    "Verify pointer transition, focus alternatives, collisions and narrow screens."
+  ],
+  "popover": [
+    "Align trigger and content with predictable padding and dismissal.",
+    "Verify focus behavior, Escape, outside press and interactive child controls.",
+    "Test viewport collisions, long content and nesting inside a dialog."
+  ],
+  "sheet": [
+    "Define edge placement, header, body and footer across sizes.",
+    "Verify document scroll handling, Escape and focus restoration.",
+    "Test safe areas, keyboard, small heights and nested popups."
+  ],
+  "toast": [
+    "Design title, description, action, dismissal and multiple-notification placement.",
+    "Expose reusable data/state rather than fixed demo copy; verify announcement timing.",
+    "Test pause/dismiss, repeated messages, reduced motion and mobile safe areas."
+  ],
+  "tooltip": [
+    "Tune delay, placement, contrast and concise content.",
+    "Verify keyboard/focus availability and dismiss behavior; keep essential content outside tooltips.",
+    "Test viewport edges, touch expectations, disabled triggers and long labels."
+  ],
+  "accordion": [
+    "Align headings, indicators and expanded content with consistent rhythm.",
+    "Verify keyboard controls, expanded state and the selected expansion mode.",
+    "Test long headings, nested forms and reduced motion."
+  ],
+  "breadcrumb": [
+    "Distinguish current page, ancestors and separators without visual noise.",
+    "Preserve ordered navigation semantics and meaningful link names.",
+    "Collapse or wrap long hierarchies intentionally on mobile."
+  ],
+  "collapsible": [
+    "Provide a clear trigger and measured reveal spacing.",
+    "Verify expanded state, keyboard and focus when content disappears.",
+    "Test long hidden content and reduced motion without layout breakage."
+  ],
+  "command": [
+    "Design query, result groups, active item, shortcut hints and empty state.",
+    "Use unique IDs; verify arrow keys, Enter, Escape, disabled results and focus return.",
+    "Test large result lists, no results, mobile keyboard and scroll-to-active behavior."
+  ],
+  "context-menu": [
+    "Design grouped actions, separators, destructive and disabled entries.",
+    "Support keyboard context-menu invocation and predictable focus restoration.",
+    "Provide an accessible touch alternative and verify viewport-edge collision."
+  ],
+  "dropdown-menu": [
+    "Define grouped actions, icons, shortcuts, submenus and destructive states where supported.",
+    "Verify keyboard navigation, disabled items, selection and focus return.",
+    "Test long labels, scroll, touch and trigger/menu placement inside overlays."
+  ],
+  "menubar": [
+    "Align top-level menus and nested action lists.",
+    "Verify horizontal/vertical arrow navigation, Escape and disabled actions.",
+    "Handle narrow widths without inaccessible hidden commands."
+  ],
+  "navigation-menu": [
+    "Design active links, grouped content and responsive navigation.",
+    "Preserve link semantics and predictable keyboard behavior.",
+    "Test mobile disclosure, long labels, nested content and real destinations."
+  ],
+  "pagination": [
+    "Make position, total, previous/next and edge-disabled states clear.",
+    "Handle zero/one/many pages, page changes and announced position.",
+    "Test large page counts and mobile layout without squeezing controls."
+  ],
+  "scroll-area": [
+    "Provide clear scroll affordances without obscuring content.",
+    "Verify keyboard scrolling, focusable descendants and nested scroll behavior.",
+    "Test both axes, long content, touch and bounded dimensions."
+  ],
+  "sidebar": [
+    "Design active item, groups, collapsed mode and content alignment.",
+    "Preserve navigation semantics, focus and state across expansion.",
+    "Use a mobile-first drawer/disclosure pattern without hiding essential destinations."
+  ],
+  "tabs": [
+    "Balance active indicator, labels and panel spacing across densities.",
+    "Verify roving focus, arrow keys, Home/End and panel association.",
+    "Test overflow, long labels, controlled state and mobile access."
+  ],
+  "carousel": [
+    "Design media/content, indicators and navigation as a coherent composition.",
+    "Verify keyboard, previous/next bounds and accessible slide announcements.",
+    "Support touch where declared and avoid inaccessible autoplay or page overflow."
+  ],
+  "chart": [
+    "Tune axes, palette, legends, tooltips and chart-area rhythm across supported types.",
+    "Provide accessible data alternatives and interaction without mouse-only information.",
+    "Test empty/small/large series, narrow widths, dark mode and reduced motion."
+  ],
+  "data-table": [
+    "Design toolbar, header, cells, selection, status and pagination consistently.",
+    "Verify filtering, sorting, selection and actions with accessible state.",
+    "Handle empty results, long cells and mobile columns or bounded horizontal scrolling."
+  ],
+  "resizable": [
+    "Make the handle visible and preserve useful minimum pane sizes.",
+    "Verify pointer resizing and keyboard/non-drag alternatives with announced values.",
+    "Test touch, narrow parents, orientation and content overflow."
+  ],
+  "table": [
+    "Refine caption, headers, row rhythm and numeric alignment.",
+    "Preserve table semantics and clarify interactive row actions.",
+    "Test long cells, empty data, zoom and bounded horizontal scrolling."
+  ],
+  "attachment": [
+    "Design filename, type, size/status and remove/download actions where supported.",
+    "Give actions explicit names and avoid accidental parent form submission.",
+    "Test long filenames, upload/error states and mobile target sizing."
+  ],
+  "bubble": [
+    "Define incoming/outgoing alignment, readable measure and content spacing.",
+    "Keep author and message meaning available without color-only distinction.",
+    "Test long words, links, code and narrow containers."
+  ],
+  "marker": [
+    "Separate time or state boundaries with quiet but legible hierarchy.",
+    "Use appropriate semantics without repetitive live announcements.",
+    "Test long labels and narrow conversation widths."
+  ],
+  "message": [
+    "Align author, metadata, content and actions without visual clutter.",
+    "Preserve meaningful timestamps, action labels and message semantics.",
+    "Test long content, attachments and narrow layouts."
+  ],
+  "message-scroller": [
+    "Maintain readable spacing and intentional scrolling in conversation history.",
+    "Respect user scroll position while new content arrives; avoid forced jumps.",
+    "Verify keyboard access, live-region behavior and short mobile viewports."
+  ],
+  "questionnaire": [
+    "Design progress, question, choice, help and navigation as one task.",
+    "Verify required/optional/conditional steps, backward navigation and preserved answers.",
+    "Test validation, long choices, mobile keyboard, final submission and error recovery."
+  ]
+}

@@ -52,6 +52,8 @@ Aretusa is an open-source product by TrinacriaLabs: React/TypeScript components 
 
 ## Testing decisions
 
+The component quality contract in docs/quality-contract.md is a release gate. Every component is mobile-first and requires individual visual, responsive, interaction and installation evidence.
+
 Test at public component interaction, CLI process/file output and browser navigation boundaries. Focus on observable behavior rather than implementation snapshots. Use clean temporary consumer projects, keyboard/focus tests, registry validation, build/type checks and browser checks at desktop/mobile sizes. No prior tests exist in this new repository.
 
 ## Out of scope
@@ -61,4 +63,3 @@ Community admission backend and private candidate data are outside Aretusa. Paid
 ## Further notes
 
 The maintainer authorized autonomous ordinary implementation, ticket management and public open-source repository setup. The delivery target is today; progress is measured by verified capabilities rather than a claim of complete equivalence with an evolving external product.
-

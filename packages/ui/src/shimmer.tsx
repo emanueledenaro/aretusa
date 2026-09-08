@@ -6,6 +6,7 @@ export type ShimmerProps = React.ComponentPropsWithRef<"span"> & {
   enabled?: boolean;
   /** Seconds per sweep. Invalid values fall back to 2.8 seconds. */
   speed?: number;
+  /** Custom highlight color. Check its contrast against the actual surface. */
   highlight?: string;
 };
 

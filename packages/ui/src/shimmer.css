@@ -1,6 +1,6 @@
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   .a-shimmer[data-enabled="true"] {
-    background-image: linear-gradient(105deg, currentColor 38%, var(--shimmer-highlight, var(--color-paper)) 50%, currentColor 62%);
+    background-image: linear-gradient(105deg, currentColor 38%, var(--shimmer-highlight, color-mix(in srgb, currentColor 60%, #000000)) 50%, currentColor 62%);
     background-size: 240% 100%;
     background-clip: text;
     -webkit-background-clip: text;

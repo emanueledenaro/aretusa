@@ -218,6 +218,15 @@
   background: var(--color-card);
   text-align: start;
 }
+.showcase-panel-action {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  max-width: 45%;
+}
+.showcase-panel-action:has([role="combobox"]) {
+  width: 112px;
+}
 .builder-layout {
   display: grid;
   grid-template-columns: 250px minmax(0, 1fr);

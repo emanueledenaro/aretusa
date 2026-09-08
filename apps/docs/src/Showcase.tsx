@@ -65,7 +65,7 @@ function Panel({
               </p>
             )}
           </div>
-          {action && <div className="w-28 max-w-[45%] shrink-0">{action}</div>}
+          {action && <div className="showcase-panel-action">{action}</div>}
         </div>
       )}
       {children}

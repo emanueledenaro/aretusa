@@ -57,23 +57,27 @@ export function Modal({
                 : "bottom-0 left-0 right-0 max-h-[85dvh] rounded-t-2xl",
           )}
         >
-          <div className="border-b border-line px-6 py-5 pe-14">
-            <D.Title className="font-editorial text-2xl">{title}</D.Title>
-            <D.Description className="mt-2 text-sm text-muted">
+          <div className="border-b border-line px-6 pb-5 pt-6 pe-16 sm:px-7 sm:pt-7">
+            <D.Title className="font-editorial text-[1.625rem] leading-tight tracking-tight sm:text-[1.75rem]">
+              {title}
+            </D.Title>
+            <D.Description className="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
               {description}
             </D.Description>
           </div>
-          <div className="min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6">{children}</div>
+          <div className="a-scrollbar min-h-0 overflow-y-auto overscroll-contain px-6 py-6 sm:px-7">
+            {children}
+          </div>
           {footer && (
-            <div className="flex flex-wrap justify-end gap-3 border-t border-line p-5">
+            <div className="mt-auto flex flex-col-reverse gap-2 border-t border-line px-6 py-5 sm:flex-row sm:flex-wrap sm:justify-end sm:gap-3 sm:px-7 [&>.a-button]:w-full sm:[&>.a-button]:w-auto">
               {footer}
             </div>
           )}
           <D.Close
             aria-label="Close dialog"
-            className="a-close absolute end-3 top-3 flex size-11 items-center justify-center rounded-md hover:bg-surface"
+            className="a-close absolute end-4 top-4 flex size-10 items-center justify-center rounded-full border border-transparent text-muted transition-colors hover:border-line hover:bg-surface hover:text-ink sm:end-5 sm:top-5"
           >
-            <X className="size-4" />
+            <X className="size-4" strokeWidth={1.75} />
           </D.Close>
         </D.Content>
       </D.Portal>
@@ -81,6 +85,10 @@ export function Modal({
   );
 }
 export const Dialog = Modal;
+/** Wraps a footer action so activating it closes the surrounding Modal, Sheet or Drawer. */
+export function ModalClose({ children }: { children: React.ReactElement }) {
+  return <D.Close asChild>{children}</D.Close>;
+}
 export function Sheet(props: Omit<ModalProps, "placement">) {
   return <Modal {...props} placement="right" />;
 }

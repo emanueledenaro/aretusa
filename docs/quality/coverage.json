@@ -654,6 +654,7 @@
         "distribution": "passed"
       },
       "dependencies": [],
+      "evidence": "docs/quality/dialog-review.md",
       "evidence": "docs/quality/alert-dialog-review.md"
     },
     {

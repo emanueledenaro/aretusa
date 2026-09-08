@@ -537,23 +537,57 @@ export function Demo({ id }: { id: string }) {
       const Component =
         id === "dialog" ? U.Modal : id === "sheet" ? U.Sheet : U.Drawer;
       content = (
-        <Component
-          title="Make it yours."
-          description="A focused space for a small change."
-          trigger={<U.Button>Open {id}</U.Button>}
-        >
-          <div className="space-y-5">
-            <U.Field label="Display name">
-              <U.Input placeholder="Alex Rivers" />
-            </U.Field>
-            <U.Field label="About you">
-              <U.Textarea placeholder="A few words…" />
-            </U.Field>
-            <U.Button onClick={() => setNotice("Changes saved in the example")}>
-              Save changes
-            </U.Button>
-          </div>
-        </Component>
+        <div className="flex flex-wrap gap-3">
+          <Component
+            title="Make it yours."
+            description="A focused space for a small change. Your profile updates as soon as you save."
+            trigger={<U.Button>Open {id}</U.Button>}
+            footer={
+              <>
+                <U.ModalClose>
+                  <U.Button tone="outline">Cancel</U.Button>
+                </U.ModalClose>
+                <U.ModalClose>
+                  <U.Button onClick={() => setNotice("Changes saved in the example")}>Save changes</U.Button>
+                </U.ModalClose>
+              </>
+            }
+          >
+            <div className="space-y-5">
+              <U.Field label="Display name" hint="Shown on your public page.">
+                <U.Input placeholder="Alex Rivers" />
+              </U.Field>
+              <U.Field label="About you">
+                <U.Textarea placeholder="A few words…" />
+              </U.Field>
+              <U.Switch label="Show my workshops publicly" defaultChecked />
+            </div>
+          </Component>
+          <Component
+            title="Studio agreement"
+            description="Read the terms before joining the shared studio. The body scrolls; the actions stay in view."
+            trigger={<U.Button tone="outline">Long content</U.Button>}
+            footer={
+              <>
+                <U.ModalClose>
+                  <U.Button tone="outline">Not now</U.Button>
+                </U.ModalClose>
+                <U.ModalClose>
+                  <U.Button onClick={() => setNotice("Agreement accepted in the example")}>Accept and continue</U.Button>
+                </U.ModalClose>
+              </>
+            }
+          >
+            <div className="space-y-4 text-sm leading-relaxed">
+              {Array.from({ length: 8 }, (_, index) => (
+                <p key={index}>
+                  <strong className="font-medium">{index + 1}. </strong>
+                  Members share the printing room by reservation and leave tools clean for the next person. Materials bought with the studio account are logged in the notebook by the door, and larger purchases are agreed in the monthly meeting before anyone commits the group.
+                </p>
+              ))}
+            </div>
+          </Component>
+        </div>
       );
       break;
     }

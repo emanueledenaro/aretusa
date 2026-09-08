@@ -40,7 +40,7 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Toggle | component | [#43](https://github.com/emanueledenaro/aretusa/issues/43) | implemented |
 | Toggle Group | component | [#44](https://github.com/emanueledenaro/aretusa/issues/44) | implemented |
 | Alert Dialog | component | [#45](https://github.com/emanueledenaro/aretusa/issues/45) | visually-reviewed |
-| Dialog | component | [#46](https://github.com/emanueledenaro/aretusa/issues/46) | implemented |
+| Dialog | component | [#46](https://github.com/emanueledenaro/aretusa/issues/46) | visually-reviewed |
 | Drawer | component | [#47](https://github.com/emanueledenaro/aretusa/issues/47) | implemented |
 | Hover Card | component | [#48](https://github.com/emanueledenaro/aretusa/issues/48) | implemented |
 | Popover | component | [#49](https://github.com/emanueledenaro/aretusa/issues/49) | implemented |

@@ -22,10 +22,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     return (
       <button
+        {...props}
         ref={ref}
         type={type}
         disabled={disabled || loading}
-        aria-busy={loading || undefined}
+        aria-busy={loading ? true : props["aria-busy"]}
         className={cx(
           "a-button relative",
           {
@@ -37,17 +38,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "bg-gold text-[#181818]": tone === "accent",
           },
           {
-            "min-h-11 sm:min-h-9 px-3 text-xs": size === "sm",
-            "min-h-11 px-4 text-sm": size === "md",
-            "min-h-13 px-6 text-base": size === "lg",
+            "min-h-11 sm:min-h-9 px-3 py-2 text-xs": size === "sm",
+            "min-h-11 px-4 py-2 text-sm": size === "md",
+            "min-h-13 px-6 py-3 text-base": size === "lg",
           },
           loading && "disabled:opacity-100",
           className,
         )}
-        {...props}
       >
         <span
-          className="inline-flex min-w-0 items-center justify-center gap-2"
+          className="inline-flex min-w-0 items-center justify-center gap-2 [&_svg]:shrink-0"
           style={{ opacity: loading ? 0 : undefined }}
         >
           {children}

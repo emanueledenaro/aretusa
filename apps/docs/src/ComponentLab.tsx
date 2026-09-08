@@ -24,7 +24,11 @@ export function ButtonLab() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {tones.map((tone) => (
-          <div key={tone} className="rounded-xl border border-line p-5">
+          <div
+            key={tone}
+            data-tone={tone}
+            className="rounded-xl border border-line p-5"
+          >
             <h3 className="mb-4 text-xs font-medium capitalize">{tone}</h3>
             <div className="flex flex-wrap gap-3">
               <Button tone={tone}>
@@ -108,6 +112,15 @@ export function ButtonLab() {
             style={{ fontSize: zoom ? "28px" : "14px", lineHeight: 1.4 }}
           >
             ContinueWithAnUnbrokenVeryLongLabel
+          </Button>
+          <Button
+            data-testid="long-icon-button"
+            tone="secondary"
+            className="w-full"
+            style={{ fontSize: zoom ? "28px" : "14px", lineHeight: 1.4 }}
+          >
+            Continue to the next stage of the project{" "}
+            <ArrowRight className="size-4" />
           </Button>
         </div>
       </div>

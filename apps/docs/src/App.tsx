@@ -281,8 +281,8 @@ function ComponentPage({ id }: { id: string }) {
             </div>
           )}
         </div>
-        <section id="installation">
-          {id==='button'&&<ButtonLab/>}
+        {id==='button'&&<ButtonLab/>}
+        <section id="installation" className="mt-12">
           <h2 className="doc-h2">Installation</h2>
           <Install id={id} />
         </section>

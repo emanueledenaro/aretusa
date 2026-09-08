@@ -3,6 +3,41 @@ import { test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "../packages/ui/src/basic";
+test("loading owns the busy state while preserving caller descriptions", () => {
+  render(
+    <Button loading aria-busy={false} aria-describedby="save-help">
+      Save
+    </Button>,
+  );
+  expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute(
+    "aria-describedby",
+    "save-help",
+  );
+});
+test("keyboard navigation skips unavailable and pending actions", async () => {
+  const blocked = vi.fn(),
+    ready = vi.fn();
+  render(
+    <>
+      <Button disabled onClick={blocked}>
+        Unavailable
+      </Button>
+      <Button loading onClick={blocked}>
+        Pending
+      </Button>
+      <Button onClick={ready}>Ready</Button>
+    </>,
+  );
+  await userEvent.tab();
+  expect(screen.getByRole("button", { name: "Ready" })).toHaveFocus();
+  await userEvent.keyboard("{Enter}");
+  expect(ready).toHaveBeenCalledOnce();
+  expect(blocked).not.toHaveBeenCalled();
+});
 test("button defaults to a non-submitting action", async () => {
   const submit = vi.fn();
   const action = vi.fn();

@@ -109,6 +109,7 @@ const categories: Record<string, string> = {
   data: "Data & media",
   conversation: "Conversation",
   utilities: "Utilities",
+  integrations: "Forms",
 };
 function Sidebar({ selected }: { selected?: string }) {
   const [expanded, setExpanded] = React.useState(false);
@@ -171,7 +172,7 @@ function Sidebar({ selected }: { selected?: string }) {
             />
           </div>
           <ul className="docs-nav-list">
-            {entries.filter(entry => entry.module !== "utilities").map((entry) => (
+            {entries.filter(entry => entry.module !== "utilities" && entry.module !== "integrations").map((entry) => (
               <li key={entry.id}>
                 <a
                   className="docs-nav-link"
@@ -190,6 +191,10 @@ function Sidebar({ selected }: { selected?: string }) {
           )}
         </div>
         <div className="docs-nav-group">
+          <h2 className="docs-nav-heading">Forms</h2>
+          {entries.filter(entry => entry.module === "integrations").map(entry => <a key={entry.id} className="docs-nav-link" href={"#/forms/" + entry.id} aria-current={selected === entry.id ? "page" : undefined}>{entry.name}</a>)}
+        </div>
+        <div className="docs-nav-group">
           <h2 className="docs-nav-heading">Utilities</h2>
           {entries.filter(entry => entry.module === "utilities").map(entry => <a key={entry.id} className="docs-nav-link" href={"#/utils/" + entry.id} aria-current={selected === entry.id ? "page" : undefined}>{entry.name}</a>)}
         </div>
@@ -198,6 +203,8 @@ function Sidebar({ selected }: { selected?: string }) {
   );
 }
 const itemNotes: Record<string, string> = {
+  "react-hook-form":
+    "HookFormField calls useController and renders the label, help text and error for one field; your render function receives field, fieldState, formState and controlProps. Spread field and controlProps on Input or NativeSelect; map value, onValueChange, triggerRef and triggerOnBlur on Select; checked and onCheckedChange on Checkbox and Switch; value, onValueChange and focusRef on RadioGroup. Invalid submit focuses the real control through the forwarded ref. Validation, submission, reset and field arrays stay in useForm and useFieldArray. The full reservation example lives in examples/react-hook-form.",
   "scroll-fade":
     "Call useScrollFade({ axis, enabled }) in the component that owns the scroll container and attach its ref to the element that actually scrolls. Render ScrollFade as a sibling inside a positioned parent of the same size; it is aria-hidden and ignores pointer input. The hook returns physical top, bottom, left and right edges plus refresh() for layout changes it cannot observe. Keep the region focusable with an accessible name so keyboard users can scroll it.",
 };
@@ -249,7 +256,9 @@ function ComponentPage({ id }: { id: string }) {
           items={[
             entry.module === "utilities"
               ? { label: "Utilities", href: "#/utils/scroll-fade" }
-              : { label: "Components", href: "#/components/button" },
+              : entry.module === "integrations"
+                ? { label: "Forms", href: "#/forms/react-hook-form" }
+                : { label: "Components", href: "#/components/button" },
             { label: entry.name },
           ]}
         />
@@ -611,7 +620,7 @@ export function App() {
     setSearch(false);
     setMobile(false);
     document.title =
-      ((path.startsWith("/components/") || path.startsWith("/utils/"))
+      ((path.startsWith("/components/") || path.startsWith("/utils/") || path.startsWith("/forms/"))
         ? (catalog.find((c) => c.id === path.split("/")[2])?.name ||
             "Components") + " / "
         : "") + "Aretusa by TrinacriaLabs";
@@ -721,7 +730,7 @@ export function App() {
         )}
       </header>
       <main id="content" tabIndex={-1}>
-        {(path.startsWith("/components/") || path.startsWith("/utils/")) ? (
+        {(path.startsWith("/components/") || path.startsWith("/utils/") || path.startsWith("/forms/")) ? (
           <ComponentPage id={path.split("/")[2]} />
         ) : path === "/docs" ? (
           <Docs />

@@ -20,6 +20,9 @@ jobs:
       - run: npm run quality:check
       - run: node scripts/check-usage.mjs
       - run: node scripts/verify-consumer.mjs
+      - run: npm ci --prefix examples/react-hook-form
+      - run: npm test --prefix examples/react-hook-form
+      - run: npm run build --prefix examples/react-hook-form
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main'
         with:

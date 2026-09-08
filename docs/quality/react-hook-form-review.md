@@ -5,7 +5,7 @@
 - Core prerequisite: coordinator commit `a95eeea`, cherry-picked as `290ac18`
 - Worker branch: `agent/react-hook-form-88`
 - Reviewed implementation: `4f1c33f653650225f2ed73543c4821731d033af7`
-- Status: behavior-checked; integration and remaining quality gates are pending.
+- Status: visually-reviewed after coordinator integration on main; see the coordinator section at the end.
 - Reviewer: author browser checks below; independent standards and spec reviewers verified `290ac18...4f1c33f` with no blocking findings. Coordinator acceptance remains a separate gate.
 
 ## Requirements matrix
@@ -77,3 +77,15 @@ The integration intentionally leaves networking, backend persistence, schema res
 Standards review found no blocking violations. It noted a P3 duplicated layout-class string for boolean rows; this remains local example code and does not affect behavior. Spec review found no blocking functional defect or scope expansion. Both reviewers independently reproduced all 10 example tests and its TypeScript/build checks against `4f1c33f`.
 
 Keep #88 open until coordinator integration, clean-consumer installation and remaining responsive/accessibility checks have evidence. This worker delivery does not establish release readiness or deployment. Browser viewport, font-size and motion overrides were restored after inspection.
+
+## Coordinator review and integration
+
+Only the two worker commits were integrated (`4f1c33f` as `8544d06`, `5aefa03` as `faa769d`); the branch's `290ac18` duplicated the main commit `a95eeea` and was not merged. The worker's typecheck, the 10 example tests and the example build were reproduced in its worktree before integration.
+
+Wiring on main: root dependency `react-hook-form ^7.87.0` (the example lockfile already resolved 7.87.0), barrel export, catalog entry `react-hook-form` in the new `integrations` module with a Forms group in the sidebar and the `#/forms/` route, registry item typed `integration` with `react-hook-form.tsx`, the shared stylesheets and the `react-hook-form` runtime dependency, the reservation example rendered on the documentation page, a typed usage example importing `useForm` and `Input` beside `HookFormField`, interaction notes, quality coverage, ticket record, tracker index, changelog and CI steps that install, test and build the standalone example. The clean-consumer check now installs `react-hook-form` and compiles a `HookFormField` form. The documentation's temporary manual-install wording was replaced by the CLI command. The usage checker replaced only the first import path; it now replaces all of them.
+
+Checks at integration: 148 Vitest tests, 5 CLI tests, typecheck, build, 67 usage examples typecheck, 78 registry items with gate records, clean consumer built with dialog, field, shimmer, scroll-fade and react-hook-form.
+
+Rendered checks of the documentation route in the authorized browser pane: at 390 px light the Forms group, breadcrumb and page title are present, the form fills the preview without page overflow; an empty submit shows four linked errors and focuses the name input with `aria-invalid="true"` and `aria-describedby` pointing at its error; at 1440 px dark the page has no overflow and the invalid states use the danger token. The worker's own matrix above covers 320 to 1440, the 240 px parent, the zoom proxy and reduced motion on the standalone example.
+
+Open: native browser text zoom, forced colors, real touch, assistive technology, and a second review of the documentation route at 320, 768 and 1024. Gates: design, responsive, interaction, code and distribution passed for the checked states. Not release-ready.

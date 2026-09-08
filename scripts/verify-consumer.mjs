@@ -21,6 +21,7 @@ run(process.execPath, [cli, "add", "dialog", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "field", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "shimmer", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "scroll-fade", "--cwd", consumer]);
+run(process.execPath, [cli, "add", "react-hook-form", "--cwd", consumer]);
 const registry = JSON.parse(
   await readFile(path.join(root, "packages/cli/registry/index.json"), "utf8"),
 );
@@ -31,7 +32,7 @@ const required = new Set([
   "react",
   "react-dom",
   ...registry.items
-    .filter((item) => ["dialog", "field", "shimmer", "scroll-fade"].includes(item.name))
+    .filter((item) => ["dialog", "field", "shimmer", "scroll-fade", "react-hook-form"].includes(item.name))
     .flatMap((item) => item.dependencies),
 ]);
 const dependencies = Object.fromEntries(
@@ -89,7 +90,7 @@ await writeFile(
 );
 await writeFile(
   path.join(consumer, "src/main.tsx"),
-  "import React from 'react';import {Shimmer} from './components/aretusa/shimmer';import {ScrollFade,useScrollFade} from './components/aretusa/scroll-fade';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';function Activity(){const {ref,edges}=useScrollFade({axis:'both'});return <div className='relative'><div ref={ref} role='region' aria-label='Activity' tabIndex={0} className='h-20 overflow-auto'><p>Installed scroll fade</p></div><ScrollFade edges={edges} depth={24}/></div>;}createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Shimmer>Loading preview</Shimmer><Activity/><Field label='Name'><Input/></Field></Modal>);",
+  "import React from 'react';import {Shimmer} from './components/aretusa/shimmer';import {ScrollFade,useScrollFade} from './components/aretusa/scroll-fade';import {useForm} from 'react-hook-form';import {HookFormField} from './components/aretusa/react-hook-form';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';function Profile(){const form=useForm<{name:string}>({defaultValues:{name:''}});return <form noValidate onSubmit={form.handleSubmit(()=>{})}><HookFormField control={form.control} name='name' label='Name' rules={{required:'Enter your name.'}}>{({field,controlProps})=><Input {...field} {...controlProps}/>}</HookFormField></form>;}function Activity(){const {ref,edges}=useScrollFade({axis:'both'});return <div className='relative'><div ref={ref} role='region' aria-label='Activity' tabIndex={0} className='h-20 overflow-auto'><p>Installed scroll fade</p></div><ScrollFade edges={edges} depth={24}/></div>;}createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Shimmer>Loading preview</Shimmer><Activity/><Profile/><Field label='Name'><Input/></Field></Modal>);",
 );
 console.log("Clean consumer: " + consumer);
 console.log(run("npm", ["install", "--no-audit", "--no-fund"]));

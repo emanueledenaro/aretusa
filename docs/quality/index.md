@@ -83,3 +83,4 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | application-shell | block | [#86](https://github.com/emanueledenaro/aretusa/issues/86) | implemented |
 | Shimmer | utility | [#92](https://github.com/emanueledenaro/aretusa/issues/92) | implemented |
 | Scroll Fade | utility | [#91](https://github.com/emanueledenaro/aretusa/issues/91) | visually-reviewed |
+| React Hook Form | integration | [#88](https://github.com/emanueledenaro/aretusa/issues/88) | visually-reviewed |

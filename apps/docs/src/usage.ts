@@ -1,5 +1,6 @@
 export const usage: Record<string,string> = {
   "shimmer": "<Shimmer enabled speed={2.8}>Preparing your next idea.</Shimmer>",
+  "react-hook-form": "<form noValidate onSubmit={form.handleSubmit((values) => console.log(values))}><HookFormField control={form.control} name=\"name\" label=\"Name\" description=\"Shown to your team.\" rules={{ required: \"Enter your name.\" }}>{({ field, controlProps }) => <Input {...field} {...controlProps} />}</HookFormField><button type=\"submit\">Save</button></form>",
   "scroll-fade": "<div className=\"relative overflow-hidden rounded-xl bg-paper\"><div ref={ref} role=\"region\" aria-label=\"Activity\" tabIndex={0} className=\"h-40 overflow-auto p-4\"><p>Your scrollable content.</p></div><ScrollFade edges={edges} depth={32} /></div>",
   "button": "<Button onClick={() => alert(\"Hello\")}>Create project</Button>",
   "button-group": "<ButtonGroup label=\"Actions\"><button>Save</button><button>Publish</button></ButtonGroup>",
@@ -71,9 +72,14 @@ export const usage: Record<string,string> = {
 export const usageImports: Record<string,string[]> = {
   "scroll-fade": ["useScrollFade"]
 };
+/** Whole import lines for examples that need another module. */
+export const usageExtraImports: Record<string,string[]> = {
+  "react-hook-form": ['import { useForm } from "react-hook-form";', 'import { Input } from "./components/aretusa/forms";']
+};
 export const usageSetup: Record<string,string> = {
+  "react-hook-form": "const form = useForm<{ name: string }>({ defaultValues: { name: \"\" } });",
   "scroll-fade": "const { ref, edges } = useScrollFade();",
   "calendar": "const [range, setRange] = useState<{ from: Date | undefined; to?: Date }>();"
 };
 
-export function usageCode(id:string,name:string,module:string){const names=[name,...(usageImports[id]??[])].join(", ");const setup=usageSetup[id]?`  ${usageSetup[id]}\n`:"";return `import { useState } from "react";\nimport { ${names} } from "./components/aretusa/${module}";\n\nexport function Example() {\n  const [value, setValue] = useState("");\n  const [enabled, setEnabled] = useState(false);\n  const [page, setPage] = useState(1);\n  const [date, setDate] = useState<Date | undefined>();\n  const options = [{value: "design", label: "Design"}, {value: "engineering", label: "Engineering"}];\n  const menuItems = [{label: "Rename", onSelect: () => setEnabled(true)}];\n${setup}  return (${usage[id]});\n}`}
+export function usageCode(id:string,name:string,module:string){const names=[name,...(usageImports[id]??[])].join(", ");const setup=usageSetup[id]?`  ${usageSetup[id]}\n`:"";const extra=(usageExtraImports[id]??[]).map(line=>line+"\n").join("");return `import { useState } from "react";\n${extra}import { ${names} } from "./components/aretusa/${module}";\n\nexport function Example() {\n  const [value, setValue] = useState("");\n  const [enabled, setEnabled] = useState(false);\n  const [page, setPage] = useState(1);\n  const [date, setDate] = useState<Date | undefined>();\n  const options = [{value: "design", label: "Design"}, {value: "engineering", label: "Engineering"}];\n  const menuItems = [{label: "Rename", onSelect: () => setEnabled(true)}];\n${setup}  return (${usage[id]});\n}`}

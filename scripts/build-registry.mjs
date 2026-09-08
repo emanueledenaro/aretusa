@@ -104,7 +104,7 @@ const program = ts.createProgram(["packages/ui/src/index.ts"], {
 });
 const checker = program.getTypeChecker();
 const relevant = new Set(
-  "cancelLabel label edges depth color axis mode selected onSelect numberOfMonths showOutsideDays captionLayout navLayout startMonth endMonth locale weekStartsOn excludeDisabled triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
+  "control rules describedBy group invalidMessage cancelLabel label edges depth color axis mode selected onSelect numberOfMonths showOutsideDays captionLayout navLayout startMonth endMonth locale weekStartsOn excludeDisabled triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
     " ",
   ),
 );
@@ -141,7 +141,12 @@ function apiFor(module, name) {
 for (const entry of catalog)
   items.push({
     ...entry,
-    type: entry.module === "utilities" ? "utility" : "component",
+    type:
+      entry.module === "utilities"
+        ? "utility"
+        : entry.module === "integrations"
+          ? "integration"
+          : "component",
     api: apiFor(entry.source, entry.exportName),
     ...(await itemFiles(entry.source)),
   });
@@ -185,5 +190,5 @@ console.log(
     registry.items.length +
     " original registry items (" +
     registry.items.filter(item => item.type === "component").length +
-    " components, " + registry.items.filter(item => item.type === "utility").length + " utilities).",
+    " components, " + registry.items.filter(item => item.type === "utility").length + " utilities, " + registry.items.filter(item => item.type === "integration").length + " integrations).",
 );

@@ -6,15 +6,17 @@ The [complete reservation example](../../examples/react-hook-form/example.tsx) u
 
 ## Installation
 
-The registry entry and Forms sidebar route are integration gates tracked in [the review record](../quality/react-hook-form-review.md). Until that wiring is complete, copy [`react-hook-form.tsx`](../../packages/ui/src/react-hook-form.tsx) into your Aretusa source directory and install:
+The `react-hook-form` registry item installs `react-hook-form.tsx` with the shared stylesheet and declares `react-hook-form` as its runtime dependency. From a local checkout of this repository:
 
 ```sh
-npm install react-hook-form@^7.62.0
+node packages/cli/src/cli.mjs init --cwd /path/to/your-app
+node packages/cli/src/cli.mjs add react-hook-form --cwd /path/to/your-app
+npm install react-hook-form@^7.87.0
 ```
 
-Keep the Aretusa theme stylesheet in your application. The field adapter imports only React and React Hook Form; controls have their own source and dependency graphs. The full example also needs Aretusa form controls and Button. React Hook Form uses the MIT license; preserve its package license when redistributing dependencies.
+Install the controls you compose with it the same way, for example `input`, `select`, `checkbox`, `radio-group` and `switch`. Keep the Aretusa theme stylesheet in your application. The field adapter imports only React and React Hook Form. React Hook Form uses the MIT license; preserve its package license when redistributing dependencies.
 
-In this repository, run the example with:
+In this repository, run the standalone example with:
 
 ```sh
 npm ci
@@ -24,7 +26,7 @@ npm test --prefix examples/react-hook-form
 npm run build --prefix examples/react-hook-form
 ```
 
-The example uses the actual UI source in this checkout. It is a reproducible development example, not proof of registry installation into a clean consumer.
+The example uses the actual UI source in this checkout and is also rendered on the documentation site under Forms. The clean-consumer check in CI installs the registry item into a fresh Vite project and compiles it.
 
 ## Basic use
 

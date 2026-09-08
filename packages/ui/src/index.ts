@@ -8,3 +8,4 @@ export * from "./blocks";
 export * from "./catalog";
 export * from "./shimmer";
 export * from "./scroll-fade";
+export * from "./react-hook-form";

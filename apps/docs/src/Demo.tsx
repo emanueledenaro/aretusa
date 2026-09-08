@@ -3,6 +3,7 @@ import * as U from "../../../packages/ui/src/index";
 import { Heart, Plus, ArrowUpRight } from "lucide-react";
 import { fr } from "react-day-picker/locale";
 import type { DateRange } from "react-day-picker";
+import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -712,6 +713,9 @@ export function Demo({ id }: { id: string }) {
       break;
     case "scroll-fade":
       content = <ScrollFadeExample />;
+      break;
+    case "react-hook-form":
+      content = <ReactHookFormExample />;
       break;
     case "scroll-area":
       content = (

@@ -5,6 +5,7 @@
 - Shimmer utility: an original text highlight with enabled, speed and highlight options.
 - Scroll Fade utility: `useScrollFade` and `ScrollFade` bring edge fades to any scroll container on both axes, with RTL, resize and mutation tracking, enable/disable and cleanup. ScrollArea now uses the same hook.
 - Form controls expose `triggerRef`, `triggerOnBlur` and `focusRef` for form-library integrations.
+- React Hook Form integration: `HookFormField` adapter, Forms documentation route with the reservation example, registry item with the `react-hook-form` dependency.
 - Alert Dialog: editorial layout with a tone eyebrow, stacked mobile actions, `tone`, `label`, `cancelLabel`, `children`, controlled `open`, and asynchronous `onConfirm` with pending, error and retry handling.
 - Calendar: caller `className`, `showOutsideDays` and `navLayout` are respected; redesigned editorial styling with 44px targets, today marker, continuous range band, styled month and year menus and narrow-container wrapping; five documented examples.
 

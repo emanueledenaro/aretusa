@@ -6,7 +6,7 @@ async function load(file){const source=await readFile(file,'utf8');return import
 const {catalog}=await load('packages/ui/src/catalog.ts');
 const {usageCode}=await load('apps/docs/src/usage.ts');
 await mkdir('.usage-check',{recursive:true});
-for(const item of catalog){const code=usageCode(item.id,item.exportName,item.source).replace('./components/aretusa/','../packages/ui/src/');await writeFile('.usage-check/'+item.id+'.tsx',code);}
+for(const item of catalog){const code=usageCode(item.id,item.exportName,item.source).replaceAll('./components/aretusa/','../packages/ui/src/');await writeFile('.usage-check/'+item.id+'.tsx',code);}
 await writeFile('.usage-check/tsconfig.json',JSON.stringify({extends:'../tsconfig.json',include:['./*.tsx'],compilerOptions:{types:['react']}}));
 const result=spawnSync(process.execPath,['node_modules/typescript/bin/tsc','--project','.usage-check/tsconfig.json'],{encoding:'utf8'});
 process.stdout.write(result.stdout);process.stderr.write(result.stderr);

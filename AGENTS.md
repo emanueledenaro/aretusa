@@ -37,3 +37,5 @@ Track every catalog item in docs/quality/coverage.json. Keep a separate issue an
 Work one vertical slice at a time. Read its issue and blockers, verify changed behavior, review the diff and commit a small coherent change. Record evidence in the issue. Public documentation is English; coordination may be Italian. Do not use em or en dash punctuation.
 
 For each ticket or standalone change, run the relevant checks, create a dedicated commit and push it before moving to the next unit of work. Verify the push and CI separately from local tests. A pushed implementation does not by itself authorize closing an incomplete quality ticket.
+
+When parallel ticket work is requested, follow docs/agents/parallel-execution.md for file ownership, isolated branches and main-thread review before integration.

@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 const cli = path.resolve("packages/cli/src/cli.mjs");
+test('init preserves a valid theme preset for installation',async()=>{const cwd=await mkdtemp(path.join(os.tmpdir(),'aretusa-theme-'));try{const preset=Buffer.from(JSON.stringify({accent:'olive',radius:16})).toString('base64url');const r=spawnSync(process.execPath,[cli,'init','--preset',preset,'--cwd',cwd],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);const config=JSON.parse(await readFile(path.join(cwd,'aretusa.json'),'utf8'));assert.equal(config.preset.accent,'olive');const added=spawnSync(process.execPath,[cli,'add','button','--cwd',cwd],{encoding:'utf8'});assert.equal(added.status,0,added.stderr);const css=await readFile(path.join(cwd,'src/components/aretusa/styles.css'),'utf8');assert.match(css,/#536b42/)}finally{await rm(cwd,{recursive:true,force:true})}});
 test("init creates a consumer config without replacing package scripts", async () => {
   const cwd = await mkdtemp(path.join(os.tmpdir(), "aretusa-consumer-"));
   try {

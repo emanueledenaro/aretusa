@@ -9,6 +9,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {validateTheme,themeCSS} from './theme.mjs';
 const args = process.argv.slice(2),
   command = args[0] || "help";
 function flag(name, fallback) {
@@ -98,6 +99,8 @@ async function run() {
   }
   await mkdir(cwd, { recursive: true });
   if (command === "init") {
+    const presetArg=flag('--preset',null);
+    const preset=presetArg?validateTheme(JSON.parse(Buffer.from(presetArg,'base64url').toString('utf8'))):undefined;
     const file = path.join(cwd, "aretusa.json");
     if (await exists(file)) {
       console.log("aretusa.json already exists; preserved.");
@@ -106,7 +109,7 @@ async function run() {
     await writeFile(
       file,
       JSON.stringify(
-        { version: 1, directory: "src/components/aretusa" },
+        { version: 1, directory: "src/components/aretusa", ...(preset?{preset}:{}) },
         null,
         2,
       ) + "\n",
@@ -168,6 +171,7 @@ async function run() {
     }
   }
   const pending = [];
+  if(config.preset){const stylePath=within(base,'styles.css');if(files.has(stylePath))files.set(stylePath,files.get(stylePath)+'\n'+themeCSS(validateTheme(config.preset))+'\n')}
   for (const [dest, content] of files) {
     await safeParents(dest);
     if (await exists(dest)) {

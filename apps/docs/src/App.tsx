@@ -16,6 +16,7 @@ import {
 import * as U from "../../../packages/ui/src/index";
 import { catalog } from "../../../packages/ui/src/catalog";
 import { Demo } from "./Demo";
+import {Landing, ChartsPage, DirectoryPage, TypesetPage, CreatePage, PreviewPage} from './ProductPages';
 import {usageCode} from './usage';
 const github = "https://github.com/emanueledenaro/aretusa";
 function useRoute() {
@@ -101,9 +102,11 @@ const categories: Record<string, string> = {
   conversation: "Conversation",
 };
 function Sidebar({ selected }: { selected?: string }) {
+  const [expanded,setExpanded]=React.useState(false);
+  React.useEffect(()=>setExpanded(false),[selected]);
   const [filter, setFilter] = React.useState("");
   return (
-    <aside className="docs-sidebar">
+    <aside className="docs-sidebar"><button className="docs-tree-toggle" aria-expanded={expanded} aria-controls="docs-tree" onClick={()=>setExpanded(!expanded)}>Browse components <Menu className="size-4"/></button><div id="docs-tree" className={expanded?"docs-tree is-open":"docs-tree"}>
       <a href="#/docs" className="mb-6 block text-sm font-medium">
         Getting started
       </a>
@@ -145,10 +148,11 @@ function Sidebar({ selected }: { selected?: string }) {
       {!catalog.some((c) =>
         c.name.toLowerCase().includes(filter.toLowerCase()),
       ) && <p className="text-sm text-muted">No components found.</p>}
-    </aside>
+    </div></aside>
   );
 }
 function ComponentPage({ id }: { id: string }) {
+  const [api,setApi]=React.useState<{name:string;required:boolean;type:string}[]>([]);
   const entry = catalog.find((c) => c.id === id);
   const [source, setSource] = React.useState<
       { path: string; content: string }[]
@@ -169,6 +173,7 @@ function ComponentPage({ id }: { id: string }) {
       })
       .then((r) => {
         setSource(r.files);
+        setApi(r.api||[]);
         setFile(r.files[0]?.path || "");
       })
       .catch((e) => {
@@ -279,6 +284,7 @@ function ComponentPage({ id }: { id: string }) {
           <h2 className="doc-h2">Installation</h2>
           <Install id={id} />
         </section>
+        <section className="mt-12"><h2 className="doc-h2">API reference</h2><p className="mb-5 text-sm text-muted">Generated from this component's TypeScript source. Native control attributes are also forwarded where supported.</p><U.Table caption={entry.name+' properties'} columns={['Property','Type','Required']} rows={api.map(p=>[<code>{p.name}</code>,<code className="block max-w-sm whitespace-normal break-words text-[11px]">{p.type}</code>,p.required?'Yes':'No'])}/></section>
         <section id="anatomy" className="mt-12">
           <h2 className="doc-h2">Usage & anatomy</h2>
           <p className="mb-4 text-sm leading-relaxed text-muted">
@@ -326,130 +332,6 @@ function ComponentPage({ id }: { id: string }) {
         <p className="mt-3">Interaction notes</p>
       </aside>
     </div>
-  );
-}
-function Home() {
-  return (
-    <>
-      <section className="shell py-14 text-center md:py-16">
-        <a
-          href="#/docs"
-          className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-xs text-muted"
-        >
-          An open beginning. Aretusa v0.1 <ArrowRight className="size-3" />
-        </a>
-        <h1 className="mx-auto mt-8 max-w-4xl font-editorial text-5xl leading-[1.08] tracking-[-.045em] md:text-7xl">
-          Thoughtful interfaces.
-          <br />
-          <span className="text-terracotta">Yours to build.</span>
-        </h1>
-        <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-          Original React components, considered defaults, and source code you
-          can shape into something of your own.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <U.Button onClick={() => (location.hash = "/docs")}>
-            Start building <ArrowUpRight className="size-4" />
-          </U.Button>
-          <U.Button
-            tone="outline"
-            onClick={() => (location.hash = "/components/button")}
-          >
-            Explore components
-          </U.Button>
-        </div>
-        <p className="mt-7 text-xs text-muted">
-          Open source. Built with Tailwind. By TrinacriaLabs.
-        </p>
-      </section>
-      <section className="shell pb-24">
-        <div className="home-grid">
-          <U.Card className="space-y-6">
-            <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-widest text-muted">
-                A place to begin
-              </p>
-              <U.Badge tone="success">Available</U.Badge>
-            </div>
-            <h2 className="font-editorial text-3xl">
-              Make room
-              <br />
-              for your next idea.
-            </h2>
-            <Demo id="input" />
-            <Demo id="button-group" />
-            <U.Separator />
-            <Demo id="switch" />
-          </U.Card>
-          <div className="space-y-5">
-            <U.Card>
-              <Demo id="chart" />
-            </U.Card>
-            <U.Card>
-              <Demo id="bubble" />
-            </U.Card>
-          </div>
-          <div className="space-y-5">
-            <U.Card>
-              <p className="mb-5 text-sm font-medium">Your preferences</p>
-              <Demo id="radio-group" />
-              <U.Separator />
-              <Demo id="progress" />
-            </U.Card>
-            <U.Card className="bg-surface">
-              <p className="mb-4 font-editorial text-2xl">A moment of focus.</p>
-              <p className="mb-5 text-sm text-muted">
-                Small details make a coherent experience.
-              </p>
-              <Demo id="dialog" />
-            </U.Card>
-          </div>
-        </div>
-      </section>
-      <section className="border-y border-line bg-surface/40">
-        <div className="shell grid gap-12 py-20 md:grid-cols-2">
-          <h2 className="font-editorial text-4xl leading-tight">
-            A system to work with.
-            <br />
-            And make your own.
-          </h2>
-          <div className="space-y-6">
-            <p className="leading-relaxed text-muted">
-              Start with a component. Read the source. Change the details.
-              Aretusa gives you a coherent foundation while leaving the final
-              decisions in your hands.
-            </p>
-            <a
-              href="#/docs"
-              className="inline-flex items-center gap-2 text-sm underline underline-offset-4"
-            >
-              How Aretusa works <ArrowRight className="size-4" />
-            </a>
-          </div>
-        </div>
-      </section>
-      <section className="shell py-20">
-        <U.FeatureGrid
-          items={[
-            {
-              title: "Clear by default",
-              description:
-                "Warm neutrals, soft typography and a consistent visual rhythm.",
-            },
-            {
-              title: "Composed with care",
-              description:
-                "Inputs, overlays and complete sections designed to work together.",
-            },
-            {
-              title: "Source you own",
-              description:
-                "Install editable TypeScript and keep control of your interface.",
-            },
-          ]}
-        />
-      </section>
-    </>
   );
 }
 function Docs() {
@@ -505,105 +387,6 @@ function Docs() {
           <a href={github + "/blob/main/LICENSE"}>MIT license</a>
         </div>
       </article>
-    </div>
-  );
-}
-function Themes() {
-  const [accent, setAccent] = React.useState("#ac4333"),
-    [radius, setRadius] = React.useState("8"),
-    [font, setFont] = React.useState("editorial");
-  const css =
-    ":root {\n  --color-terracotta: " +
-    accent +
-    ";\n  --radius-lg: " +
-    radius +
-    "px;\n  --font-editorial: " +
-    (font === "editorial" ? "'Lora Variable', Georgia, serif" : "'DM Sans Variable', Arial, sans-serif") +
-    ";\n}";
-  return (
-    <div className="shell py-16">
-      <p className="text-xs uppercase tracking-widest text-muted">
-        Make it your own
-      </p>
-      <h1 className="mt-4 font-editorial text-5xl">
-        A little change.
-        <br />A different feeling.
-      </h1>
-      <div className="mt-12 grid gap-8 lg:grid-cols-[280px_1fr]">
-        <U.Card className="space-y-6">
-          <U.Field label="Accent">
-            <U.Input
-              type="color"
-              value={accent}
-              onChange={(e) => setAccent(e.target.value)}
-            />
-          </U.Field>
-          <U.Field label="Control radius">
-            <U.Input
-              type="range"
-              min="0"
-              max="24"
-              value={radius}
-              onChange={(e) => setRadius(e.target.value)}
-            />
-          </U.Field>
-          <U.Field label="Heading style">
-            <U.NativeSelect
-              value={font}
-              onChange={(e) => setFont(e.target.value)}
-              options={[
-                { value: "editorial", label: "Editorial serif" },
-                { value: "sans", label: "Soft sans serif" },
-              ]}
-            />
-          </U.Field>
-          <U.Button
-            tone="outline"
-            onClick={() => {
-              setAccent("#ac4333");
-              setRadius("8");
-              setFont("editorial");
-            }}
-          >
-            Reset theme
-          </U.Button>
-        </U.Card>
-        <div
-          className="rounded-2xl border border-line p-8"
-          style={
-            {
-              "--color-terracotta": accent,
-              "--radius-lg": radius + "px",
-            } as React.CSSProperties
-          }
-        >
-          <h2
-            className={
-              "mb-5 text-4xl " +
-              (font === "editorial" ? "font-editorial" : "font-sans")
-            }
-          >
-            A considered beginning.
-          </h2>
-          <p className="mb-8 max-w-lg text-muted">
-            Preview your choices before bringing them into a project.
-          </p>
-          <div className="grid gap-8 md:grid-cols-2">
-            <Demo id="switch" />
-            <Demo id="slider" />
-            <Demo id="button" />
-            <Demo id="progress" />
-          </div>
-        </div>
-      </div>
-      <div className="mt-8 max-w-xl">
-        <Code>{css}</Code>
-        <p className="mt-3 text-xs text-muted">
-          Custom colors require a contrast check before production use. Heading
-          font preview is an editorial choice; use font-editorial or font-sans
-          in your composition.
-        </p>
-      </div>
     </div>
   );
 }
@@ -690,195 +473,16 @@ function Blocks() {
     </div>
   );
 }
-export function App() {
-  const route = useRoute();
-  const [theme, setTheme] = React.useState("light"),
-    [search, setSearch] = React.useState(false),
-    [q, setQ] = React.useState(""),
-    [mobile, setMobile] = React.useState(false);
-  React.useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-  React.useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearch((v) => !v);
-      }
-    };
-    addEventListener("keydown", handler);
-    return () => removeEventListener("keydown", handler);
-  }, []);
-  React.useEffect(() => {
-    setMobile(false);
-    setSearch(false);
-    document.title =
-      (route.startsWith("/components/")
-        ? (catalog.find((c) => c.id === route.split("/")[2])?.name ||
-            "Components") + " | "
-        : "") + "Aretusa by TrinacriaLabs";
-  }, [route]);
-  return (
-    <>
-      <a
-        className="skip-link"
-        href="#content"
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById("content")?.focus();
-          document.getElementById("content")?.scrollIntoView();
-        }}
-      >
-        Skip to content
-      </a>
-      <header className="site-header">
-        <div className="shell flex h-20 items-center gap-7">
-          <a href="#/" className="brand">
-            aretusa<span>.</span>
-          </a>
-          <nav
-            className="hidden items-center gap-6 text-sm md:flex"
-            aria-label="Main"
-          >
-            <a href="#/docs">Docs</a>
-            <a href="#/components/button">Components</a>
-            <a href="#/blocks">Blocks</a>
-            <a href="#/themes">Themes</a>
-          </nav>
-          <div className="ms-auto flex items-center gap-2">
-            <U.Button
-              tone="outline"
-              size="sm"
-              onClick={() => setSearch(true)}
-              aria-label="Search documentation"
-            >
-              <Search className="size-4" />
-              <span className="hidden lg:inline">Search documentation</span>
-              <span className="hidden text-muted lg:inline">⌘ K</span>
-            </U.Button>
-            <U.Button
-              tone="quiet"
-              size="sm"
-              aria-label={
-                theme === "light"
-                  ? "Switch to dark theme"
-                  : "Switch to light theme"
-              }
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            >
-              {theme === "light" ? (
-                <Moon className="size-4" />
-              ) : (
-                <Sun className="size-4" />
-              )}
-            </U.Button>
-            <a href={github} className="hidden text-sm sm:block">
-              GitHub
-            </a>
-            <U.Button
-              tone="quiet"
-              size="sm"
-              className="md:hidden"
-              aria-label="Open navigation"
-              aria-expanded={mobile}
-              onClick={() => setMobile(!mobile)}
-            >
-              <Menu className="size-4" />
-            </U.Button>
-          </div>
-        </div>
-        {mobile && (
-          <nav className="shell grid gap-4 pb-6 text-sm" aria-label="Mobile">
-            {["Docs", "Components", "Blocks", "Themes"].map((l) => (
-              <a
-                key={l}
-                href={
-                  "#/" +
-                  (l === "Components" ? "components/button" : l.toLowerCase())
-                }
-              >
-                {l}
-              </a>
-            ))}
-            <a href={github}>GitHub</a>
-          </nav>
-        )}
-      </header>
-      <main id="content" tabIndex={-1}>
-        {route.startsWith("/components/") ? (
-          <ComponentPage id={route.split("/")[2]} />
-        ) : route === "/docs" ? (
-          <Docs />
-        ) : route === "/themes" ? (
-          <Themes />
-        ) : route === "/blocks" ? (
-          <Blocks />
-        ) : (
-          <Home />
-        )}
-      </main>
-      <footer className="border-t border-line">
-        <div className="shell flex flex-wrap items-center justify-between gap-6 py-9 text-xs text-muted">
-          <p>
-            Aretusa, by{" "}
-            <a
-              href="https://github.com/emanueledenaro"
-              className="text-ink underline underline-offset-4"
-            >
-              TrinacriaLabs
-            </a>
-            .
-          </p>
-          <div className="flex gap-5">
-            <a href={github + "/blob/main/LICENSE"}>MIT License</a>
-            <a href={github + "/releases"}>Releases</a>
-            <a href={github + "/issues"}>Feedback</a>
-          </div>
-        </div>
-      </footer>
-      <U.Modal
-        open={search}
-        onOpenChange={setSearch}
-        title="Find your next building block."
-        description="Search the Aretusa catalog."
-      >
-        <U.Input
-          aria-label="Search components"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Dialog, input, card…"
-        />
-        <div className="mt-4 max-h-72 overflow-auto">
-          {catalog
-            .filter((c) =>
-              (c.name + " " + c.description)
-                .toLowerCase()
-                .includes(q.toLowerCase()),
-            )
-            .map((c) => (
-              <a
-                key={c.id}
-                className="flex items-center justify-between rounded-lg px-3 py-3 text-sm hover:bg-surface focus:bg-surface"
-                href={"#/components/" + c.id}
-                onClick={() => setSearch(false)}
-              >
-                {c.name}
-                <span className="text-xs text-muted">
-                  {categories[c.module]}
-                </span>
-              </a>
-            ))}
-          {!catalog.some((c) =>
-            (c.name + " " + c.description)
-              .toLowerCase()
-              .includes(q.toLowerCase()),
-          ) && (
-            <p role="status" className="py-6 text-center text-sm text-muted">
-              No results. Try another name.
-            </p>
-          )}
-        </div>
-      </U.Modal>
-    </>
-  );
-}
+const navigation=[['Home','/'],['Docs','/docs'],['Components','/components/button'],['Blocks','/blocks'],['Charts','/charts/area'],['Directory','/directory'],['Typeset','/typeset'],['Create','/create']];
+export function App(){
+const route=useRoute(),[path,query='']=route.split('?');
+const [theme,setTheme]=React.useState(()=>{try{return localStorage.getItem('aretusa-theme')||'light'}catch{return 'light'}}),[search,setSearch]=React.useState(false),[q,setQ]=React.useState(''),[mobile,setMobile]=React.useState(false),[active,setActive]=React.useState(0);
+React.useEffect(()=>{if(path==='/preview')return;document.documentElement.dataset.theme=theme;try{localStorage.setItem('aretusa-theme',theme)}catch{}},[theme,path]);
+React.useEffect(()=>{const handler=(e:KeyboardEvent)=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();setSearch(v=>!v)}};addEventListener('keydown',handler);return()=>removeEventListener('keydown',handler)},[]);
+React.useEffect(()=>{setSearch(false);setMobile(false);document.title=(path.startsWith('/components/')?(catalog.find(c=>c.id===path.split('/')[2])?.name||'Components')+' / ':'')+'Aretusa by TrinacriaLabs'},[path]);
+const results=[...navigation.map(([name,href])=>({name,href,group:'Pages'})),...catalog.map(c=>({name:c.name,href:'/components/'+c.id,group:categories[c.module]}))].filter(c=>(c.name+' '+c.group).toLowerCase().includes(q.toLowerCase()));
+if(path==='/preview')return <PreviewPage query={query}/>;
+return <><a className="skip-link" href="#content" onClick={e=>{e.preventDefault();document.getElementById('content')?.focus();document.getElementById('content')?.scrollIntoView()}}>Skip to content</a><header className="site-header"><div className="site-header-inner"><a href="#/" className="brand" aria-label="Aretusa home">aretusa<span>.</span></a><nav className="desktop-nav" aria-label="Main">{navigation.map(([name,href])=><a key={href} href={'#'+href} aria-current={path===href?'page':undefined}>{name}</a>)}</nav><div className="header-actions"><U.Button tone="secondary" size="sm" aria-label="Search documentation" onClick={()=>setSearch(true)}><Search className="size-3.5"/><span className="search-label">Search documentation…</span><kbd className="search-shortcut">⌘ K</kbd></U.Button><a href={github} className="github-link">GitHub<ArrowUpRight className="size-3"/></a><U.Button tone="quiet" size="sm" aria-label={theme==='light'?'Switch to dark theme':'Switch to light theme'} onClick={()=>setTheme(theme==='light'?'dark':'light')}>{theme==='light'?<Moon className="size-3.5"/>:<Sun className="size-3.5"/>}</U.Button><U.Button size="sm" className="new-project" onClick={()=>location.hash='/create'}>+ New</U.Button><U.Button tone="quiet" size="sm" className="mobile-menu" aria-label="Open navigation" aria-expanded={mobile} onClick={()=>setMobile(!mobile)}><Menu className="size-4"/></U.Button></div></div>{mobile&&<nav className="mobile-nav" aria-label="Mobile">{navigation.map(([n,p])=><a key={p} href={'#'+p}>{n}</a>)}</nav>}</header>
+<main id="content" tabIndex={-1}>{path.startsWith('/components/')?<ComponentPage id={path.split('/')[2]}/>:path==='/docs'?<Docs/>:path==='/create'||path==='/themes'?<CreatePage/>:path==='/typeset'?<TypesetPage/>:path==='/directory'?<DirectoryPage/>:path.startsWith('/charts')?<ChartsPage kind={path.split('/')[2]}/>:path==='/blocks'?<Blocks/>:path==='/'?<Landing/>:<div className="shell py-20"><U.Empty title="This page could not be found." action={<a href="#/docs">Back to documentation</a>}/></div>}</main>
+{path!=='/create'&&<footer className="border-t border-line"><div className="gallery-shell flex flex-wrap items-center justify-between gap-5 py-7 text-[11px] text-muted"><p>Built by <a href="https://github.com/emanueledenaro" className="text-ink underline underline-offset-4">TrinacriaLabs</a>. The source is yours to explore.</p><div className="flex gap-4"><a href={github+'/blob/main/LICENSE'}>MIT License</a><a href={github+'/releases'}>Releases</a><a href={github+'/issues'}>Feedback</a></div></div></footer>}
+<U.Modal open={search} onOpenChange={setSearch} title="Search Aretusa" description="Find a component, a section or your next starting point."><U.Input role="combobox" aria-expanded="true" aria-controls="site-search-results" aria-activedescendant={results[active]?'site-search-'+active:undefined} aria-label="Search components" value={q} onChange={e=>{setQ(e.target.value);setActive(0)}} onKeyDown={e=>{if(e.key==='ArrowDown'){e.preventDefault();setActive(i=>Math.max(0,Math.min(i+1,results.length-1)))}if(e.key==='ArrowUp'){e.preventDefault();setActive(i=>Math.max(0,i-1))}if(e.key==='Enter'&&results[active]){location.hash=results[active].href;setSearch(false)}}} placeholder="Dialog, input, card…"/><div id="site-search-results" role="listbox" aria-label="Search results" className="mt-4 max-h-72 overflow-auto">{results.map((c,i)=><a role="option" aria-selected={i===active} id={'site-search-'+i} key={c.href+c.group} className={'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm '+(active===i?'bg-surface':'hover:bg-surface')} href={'#'+c.href} onClick={()=>setSearch(false)}>{c.name}<span className="text-[10px] text-muted">{c.group}</span></a>)}{!results.length&&<p role="status" className="py-6 text-center text-sm text-muted">No results. Try another name.</p>}</div><div className="mt-5 border-t border-line pt-4 text-[10px] text-muted">Arrow keys to explore · Enter to open · Escape to close</div></U.Modal></>}

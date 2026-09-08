@@ -5,6 +5,8 @@ const root = process.cwd();
 const text = await readFile("packages/ui/src/catalog.ts", "utf8");
 const compiled = ts.transpileModule(text, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
 const { catalog } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
+const themeSource=await readFile('packages/ui/src/theme.ts','utf8');
+await writeFile('packages/cli/src/theme.mjs',ts.transpileModule(themeSource,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText);
 const imports = {
   basic: ["utils"],
   forms: ["utils"],
@@ -56,10 +58,15 @@ async function itemFiles(mod) {
   return { files, dependencies: [...dependencies].sort() };
 }
 const items = [];
+const program=ts.createProgram(['packages/ui/src/index.ts'],{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,moduleResolution:ts.ModuleResolutionKind.Bundler,jsx:ts.JsxEmit.ReactJSX,skipLibCheck:true,esModuleInterop:true});
+const checker=program.getTypeChecker();
+const relevant=new Set('children tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked'.split(' '));
+function apiFor(module,name){const source=program.getSourceFile(path.resolve('packages/ui/src/'+module+'.tsx'))||program.getSourceFile('packages/ui/src/'+module+'.tsx');if(!source)return [];const symbol=checker.getSymbolAtLocation(source);if(!symbol)return [];const exp=checker.getExportsOfModule(symbol).find(s=>s.name===name);if(!exp)return [];const signatures=checker.getTypeOfSymbolAtLocation(exp,source).getCallSignatures();const param=signatures[0]?.parameters[0];if(!param)return [];const type=checker.getTypeOfSymbolAtLocation(param,source);return type.getProperties().filter(p=>relevant.has(p.name)).map(p=>({name:p.name,required:!(p.flags&ts.SymbolFlags.Optional),type:checker.typeToString(checker.getTypeOfSymbolAtLocation(p,source),undefined,ts.TypeFormatFlags.NoTruncation).slice(0,180)}));}
 for (const entry of catalog)
   items.push({
     ...entry,
     type: "component",
+    api:apiFor(entry.module,entry.exportName),
     ...(await itemFiles(entry.module)),
   });
 for (const name of [
@@ -71,6 +78,9 @@ for (const name of [
   "CTABlock",
   "FooterBlock",
   "FormBlock",
+  "LoginBlock",
+  "SignupBlock",
+  "ApplicationShell",
 ])
   items.push({
     name,

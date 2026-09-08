@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  AreaChart, Area, BarChart, Bar, Cell, PieChart, Pie, RadarChart, Radar, PolarGrid, PolarAngleAxis, RadialBarChart, RadialBar,
   LineChart,
   Line,
   XAxis,
@@ -111,67 +112,19 @@ export function DataTable({ rows }: { rows: DataRow[] }) {
     </div>
   );
 }
-export function Chart({
-  data,
-  label,
-}: {
-  data: { name: string; value: number }[];
-  label: string;
-}) {
-  return (
-    <figure>
-      <figcaption className="mb-4 text-sm font-medium">{label}</figcaption>
-      {data.length ? (
-        <>
-          <div className="h-52 min-w-0">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-              <LineChart
-                data={data}
-                accessibilityLayer
-                margin={{ top: 10, right: 15, bottom: 0, left: 0 }}
-              >
-                <CartesianGrid stroke="var(--color-line)" vertical={false} />
-                <XAxis
-                  dataKey="name"
-                  tick={{ fill: "var(--color-muted)", fontSize: 12 }}
-                />
-                <YAxis
-                  width={30}
-                  tick={{ fill: "var(--color-muted)", fontSize: 12 }}
-                />
-                <ChartTooltip
-                  contentStyle={{
-                    background: "var(--color-card)",
-                    borderColor: "var(--color-line)",
-                    color: "var(--color-ink)",
-                    borderRadius: 8,
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="var(--color-terracotta)"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                  isAnimationActive={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <details className="mt-4 text-xs">
-            <summary>View data table</summary>
-            <Table
-              caption={label}
-              columns={["Period", "Value"]}
-              rows={data.map((d) => [d.name, d.value])}
-            />
-          </details>
-        </>
-      ) : (
-        <Empty title="No chart data" />
-      )}
-    </figure>
-  );
+export type ChartKind = 'area'|'bar'|'line'|'pie'|'radar'|'radial';
+export function Chart({data,label,kind='line',compact=false}:{data:{name:string;value:number}[];label:string;kind?:ChartKind;compact?:boolean}){
+const tooltip=<ChartTooltip cursor={false} contentStyle={{background:'var(--color-card)',border:'1px solid var(--color-line)',color:'var(--color-ink)',borderRadius:10,fontSize:12,boxShadow:'0 8px 24px #0000000d'}}/>;
+const colors=['var(--color-terracotta)','var(--color-gold)','var(--color-chart-3)','var(--color-chart-4)','var(--color-chart-5)'];
+const axes=<><CartesianGrid stroke="var(--color-line)" vertical={false} strokeDasharray="3 4"/><XAxis dataKey="name" tickLine={false} axisLine={false} tick={{fill:'var(--color-muted)',fontSize:10}} dy={8}/>{!compact&&<YAxis width={30} tickLine={false} axisLine={false} tick={{fill:'var(--color-muted)',fontSize:10}}/>}</>;
+let drawing:React.ReactElement;
+if(kind==='pie')drawing=<PieChart accessibilityLayer>{tooltip}<Pie data={data} dataKey="value" nameKey="name" innerRadius="52%" outerRadius="80%" paddingAngle={4} cornerRadius={5} isAnimationActive={false}>{data.map((d,i)=><Cell key={d.name} fill={colors[i%colors.length]} stroke="none"/>)}</Pie></PieChart>;
+else if(kind==='radar')drawing=<RadarChart data={data} accessibilityLayer><PolarGrid stroke="var(--color-line)"/><PolarAngleAxis dataKey="name" tick={{fill:'var(--color-muted)',fontSize:11}}/>{tooltip}<Radar dataKey="value" stroke={colors[0]} fill={colors[0]} fillOpacity={.15} isAnimationActive={false}/></RadarChart>;
+else if(kind==='radial')drawing=<RadialBarChart data={data.map((d,i)=>({...d,fill:colors[i%colors.length]}))} innerRadius="25%" outerRadius="95%" startAngle={90} endAngle={-270} accessibilityLayer>{tooltip}<RadialBar dataKey="value" background={{fill:'var(--color-surface)'}} cornerRadius={8} isAnimationActive={false}/></RadialBarChart>;
+else if(kind==='bar')drawing=<BarChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Bar dataKey="value" fill={colors[0]} radius={[5,5,2,2]} maxBarSize={38} isAnimationActive={false}>{data.map((d,i)=><Cell key={d.name} fill={i===data.length-1?colors[0]:'var(--color-chart-3)'}/>)}</Bar></BarChart>;
+else if(kind==='area')drawing=<AreaChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Area dataKey="value" type="monotone" fill={colors[0]} fillOpacity={.13} stroke={colors[0]} strokeWidth={2} isAnimationActive={false}/></AreaChart>;
+else drawing=<LineChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Line dataKey="value" type="monotone" stroke={colors[0]} strokeWidth={2} dot={false} activeDot={{r:4,strokeWidth:3,stroke:'var(--color-card)'}} isAnimationActive={false}/></LineChart>;
+return <figure><figcaption className={compact?'sr-only':'mb-4 text-sm font-medium'}>{label}</figcaption>{data.length?<><div className={compact?'h-40 min-w-0':'h-60 min-w-0'}><ResponsiveContainer width="100%" height="100%" minWidth={0}>{drawing}</ResponsiveContainer></div><details className={compact?'mt-3 text-[10px] text-muted':'mt-4 text-xs text-muted'}><summary>View data</summary><Table caption={label} columns={['Period','Value']} rows={data.map(d=>[d.name,d.value])}/></details></>:<Empty title="No chart data"/>}</figure>
 }
 export function Carousel({
   slides,

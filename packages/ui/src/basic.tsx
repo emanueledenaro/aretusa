@@ -37,7 +37,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "bg-gold text-[#181818]": tone === "accent",
           },
           {
-            "min-h-9 px-3 text-xs": size === "sm",
+            "min-h-11 sm:min-h-9 px-3 text-xs": size === "sm",
             "min-h-11 px-4 text-sm": size === "md",
             "min-h-13 px-6 text-base": size === "lg",
           },

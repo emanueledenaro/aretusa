@@ -37,7 +37,7 @@ export function Modal({
         <D.Overlay className="a-overlay" />
         <D.Content
           className={cx(
-            "fixed z-50 flex max-h-[90dvh] flex-col border border-line bg-card text-ink shadow-xl outline-none",
+            "a-modal-content fixed z-50 flex max-h-[90dvh] flex-col border border-line bg-card text-ink shadow-xl outline-none",
             placement === "center"
               ? "left-1/2 top-1/2 w-[min(560px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 rounded-2xl"
               : placement === "right"
@@ -51,7 +51,7 @@ export function Modal({
               {description}
             </D.Description>
           </div>
-          <div className="overflow-y-auto p-6">{children}</div>
+          <div className="min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6">{children}</div>
           {footer && (
             <div className="flex flex-wrap justify-end gap-3 border-t border-line p-5">
               {footer}
@@ -59,7 +59,7 @@ export function Modal({
           )}
           <D.Close
             aria-label="Close dialog"
-            className="absolute end-4 top-4 rounded-md p-2 hover:bg-surface"
+            className="a-close absolute end-3 top-3 flex size-11 items-center justify-center rounded-md hover:bg-surface"
           >
             <X className="size-4" />
           </D.Close>
@@ -93,12 +93,12 @@ export function AlertDialog({
       <A.Trigger asChild>{trigger}</A.Trigger>
       <A.Portal>
         <A.Overlay className="a-overlay" />
-        <A.Content className="fixed left-1/2 top-1/2 z-50 w-[min(480px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-line bg-card p-6 text-ink shadow-xl">
+        <A.Content className="a-modal-content fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[min(480px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-line bg-card p-6 text-ink shadow-xl">
           <A.Title className="font-editorial text-2xl">{title}</A.Title>
           <A.Description className="my-4 text-sm leading-relaxed text-muted">
             {description}
           </A.Description>
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-wrap justify-end gap-3">
             <A.Cancel asChild>
               <Button tone="outline">Cancel</Button>
             </A.Cancel>

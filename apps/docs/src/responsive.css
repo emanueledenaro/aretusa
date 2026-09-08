@@ -1,0 +1,19 @@
+/* Last in the docs cascade: compact desktop examples keep full touch targets. */
+@media(max-width:767px),(pointer:coarse){
+ .showcase-panel .a-button{min-height:44px;min-width:44px}
+ .showcase-panel .a-input{min-height:44px;font-size:16px}
+ .showcase-panel label{font-size:13px}
+ .showcase-panel [role=switch]{min-height:24px;min-width:40px}
+ .showcase-panel [role=switch] span{width:18px;height:18px}
+ .showcase-panel [role=switch] span[data-state=checked]{transform:translateX(16px)}
+ .header-actions .a-button{min-height:44px;min-width:44px}
+ .mobile-nav a{min-height:44px;display:flex;align-items:center}
+ .category-bar a{min-height:44px}
+}
+@media(max-width:767px){
+ .docs-sidebar{max-height:none;margin:12px 0 0;padding:0;border:0}
+ .docs-tree-toggle{display:flex;min-height:44px;width:100%;align-items:center;justify-content:space-between;border:1px solid var(--color-line);border-radius:8px;padding:10px 14px;font-size:12px}
+ .docs-tree{display:none}
+ .docs-tree.is-open{display:block;max-height:50dvh;overflow-y:auto;padding:18px 10px;border-bottom:1px solid var(--color-line)}
+ .docs-tree a{min-height:44px;display:flex;align-items:center}
+}

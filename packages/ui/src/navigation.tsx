@@ -261,17 +261,19 @@ export function Pagination({
 export function ScrollArea({
   children,
   className = "h-44",
+  label = "Scrollable content",
 }: {
   children: React.ReactNode;
   className?: string;
+  label?: string;
 }) {
   return (
-    <SA.Root className={"relative overflow-hidden " + className}>
-      <SA.Viewport className="size-full rounded-inherit">
+    <SA.Root type="auto" className={"relative overflow-hidden " + className}>
+      <SA.Viewport role="region" aria-label={label} tabIndex={0} className="size-full rounded-[inherit] focus-visible:outline-offset-[-2px]">
         {children}
       </SA.Viewport>
-      <SA.Scrollbar orientation="vertical" className="w-2 bg-surface p-0.5">
-        <SA.Thumb className="rounded-full bg-muted/50" />
+      <SA.Scrollbar orientation="vertical" className="a-scroll-track">
+        <SA.Thumb className="a-scroll-thumb" />
       </SA.Scrollbar>
     </SA.Root>
   );

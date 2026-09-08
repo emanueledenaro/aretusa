@@ -48,6 +48,9 @@
     outline-offset: 4px;
   }
 }
+.a-scroll-track { width: 14px; padding: 16px 4px; background: transparent; touch-action: none; user-select: none; }
+.a-scroll-thumb { min-height: 32px; border-radius: 999px; background: color-mix(in srgb, var(--color-muted) 32%, transparent); transition: background-color var(--motion-normal) var(--motion-ease); }
+.a-scroll-track:hover .a-scroll-thumb, .a-scroll-thumb:active { background: color-mix(in srgb, var(--color-muted) 72%, transparent); }
 @layer components {
   .a-card{
     padding:var(--space-card,24px);

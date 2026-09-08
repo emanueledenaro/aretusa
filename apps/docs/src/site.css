@@ -174,3 +174,13 @@
     font-size: 26px;
   }
 }
+
+/* Every native scroll region on the site uses the Aretusa scrollbar: a 6px pill thumb on a transparent track. */
+*::-webkit-scrollbar { width: 12px; height: 12px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 999px; background: color-mix(in srgb, var(--color-muted) 32%, transparent); background-clip: padding-box; min-height: 32px; }
+*::-webkit-scrollbar-thumb:hover, *::-webkit-scrollbar-thumb:active { background-color: color-mix(in srgb, var(--color-muted) 72%, transparent); }
+*::-webkit-scrollbar-corner { background: transparent; }
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--color-muted) 32%, transparent) transparent; }
+}

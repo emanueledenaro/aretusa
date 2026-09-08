@@ -51,6 +51,15 @@
 .a-scroll-track { width: 14px; padding: 16px 4px; background: transparent; touch-action: none; user-select: none; }
 .a-scroll-thumb { min-height: 32px; border-radius: 999px; background: color-mix(in srgb, var(--color-muted) 32%, transparent); transition: background-color var(--motion-normal) var(--motion-ease); }
 .a-scroll-track:hover .a-scroll-thumb, .a-scroll-thumb:active { background: color-mix(in srgb, var(--color-muted) 72%, transparent); }
+/* Native scroll surfaces inside components share the ScrollArea thumb: a 6px pill on a transparent track. */
+:is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar { width: 12px; height: 12px; }
+:is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar-track { background: transparent; }
+:is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 999px; background: color-mix(in srgb, var(--color-muted) 32%, transparent); background-clip: padding-box; min-height: 32px; }
+:is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar-thumb:hover, :is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar-thumb:active { background-color: color-mix(in srgb, var(--color-muted) 72%, transparent); }
+:is(.a-scrollbar, .a-popup, .a-modal-content)::-webkit-scrollbar-corner { background: transparent; }
+@supports not selector(::-webkit-scrollbar) {
+  :is(.a-scrollbar, .a-popup, .a-modal-content) { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--color-muted) 32%, transparent) transparent; }
+}
 @layer components {
   .a-card{
     padding:var(--space-card,24px);

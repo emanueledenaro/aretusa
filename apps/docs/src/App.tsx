@@ -809,7 +809,7 @@ export function App() {
           role="listbox"
           tabIndex={-1}
           aria-label="Search results"
-          className="mt-4 max-h-72 overflow-auto"
+          className="mt-4 max-h-72 space-y-1.5 overflow-auto pe-2"
         >
           {results.map((c, i) => (
             <a

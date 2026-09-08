@@ -27,13 +27,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         aria-busy={loading || undefined}
         className={cx(
-          "a-button",
+          "a-button relative",
           {
             "bg-ink text-paper hover:bg-ink/85": tone === "primary",
             "bg-surface text-ink hover:bg-surface/70": tone === "secondary",
-            "border border-line bg-transparent text-ink": tone === "outline",
+            "border border-control bg-transparent text-ink": tone === "outline",
             "bg-transparent text-ink hover:bg-surface": tone === "quiet",
-          "bg-danger text-on-danger": tone === "danger",
+            "bg-danger text-on-danger": tone === "danger",
             "bg-gold text-[#181818]": tone === "accent",
           },
           {
@@ -41,17 +41,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "min-h-11 px-4 text-sm": size === "md",
             "min-h-13 px-6 text-base": size === "lg",
           },
+          loading && "disabled:opacity-100",
           className,
         )}
         {...props}
       >
+        <span
+          className="inline-flex min-w-0 items-center justify-center gap-2"
+          style={{ opacity: loading ? 0 : undefined }}
+        >
+          {children}
+        </span>
         {loading && (
-          <LoaderCircle
-            className="size-4 animate-spin motion-reduce:animate-none"
-            aria-hidden
-          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
+            <LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" />
+          </span>
         )}
-        {children}
       </button>
     );
   },

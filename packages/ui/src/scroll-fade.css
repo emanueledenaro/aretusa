@@ -1,0 +1,60 @@
+.a-scroll-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.a-scroll-area[data-scroll-fade="utility"]::before,
+.a-scroll-area[data-scroll-fade="utility"]::after {
+  display: none;
+}
+.a-scroll-fade > span {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-normal, 220ms) var(--motion-ease, ease-out);
+}
+.a-scroll-fade > [data-edge="top"],
+.a-scroll-fade > [data-edge="bottom"] {
+  left: 0;
+  right: 0;
+  height: min(var(--scroll-fade-depth), 50%);
+}
+.a-scroll-fade > [data-edge="left"],
+.a-scroll-fade > [data-edge="right"] {
+  top: 0;
+  bottom: 0;
+  width: min(var(--scroll-fade-depth), 50%);
+}
+.a-scroll-fade > [data-edge="top"] {
+  top: 0;
+  background: linear-gradient(to bottom, var(--scroll-fade-color), transparent);
+}
+.a-scroll-fade > [data-edge="bottom"] {
+  bottom: 0;
+  background: linear-gradient(to top, var(--scroll-fade-color), transparent);
+}
+.a-scroll-fade > [data-edge="left"] {
+  left: 0;
+  background: linear-gradient(to right, var(--scroll-fade-color), transparent);
+}
+.a-scroll-fade > [data-edge="right"] {
+  right: 0;
+  background: linear-gradient(to left, var(--scroll-fade-color), transparent);
+}
+.a-scroll-fade[data-fade-top="true"] > [data-edge="top"],
+.a-scroll-fade[data-fade-bottom="true"] > [data-edge="bottom"],
+.a-scroll-fade[data-fade-left="true"] > [data-edge="left"],
+.a-scroll-fade[data-fade-right="true"] > [data-edge="right"] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .a-scroll-fade > span {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .a-scroll-fade {
+    display: none;
+  }
+}

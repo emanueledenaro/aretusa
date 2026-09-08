@@ -25,6 +25,11 @@ import {
   CalendarDays,
 } from "lucide-react";
 import * as U from "../../../packages/ui/src/index";
+const demoPortraits: Record<string, string> = {
+  "Alex Rivers": "./portraits/alex.png",
+  "Sam Chen": "./portraits/sam.png",
+  "Jo Bell": "./portraits/jo.png",
+};
 const monthData = [
   { name: "Jan", value: 32 },
   { name: "Feb", value: 48 },
@@ -360,7 +365,7 @@ export function Showcase({
               ["Sam Chen", "sam@example.com", "Editor"],
             ].map(([n, e, r]) => (
               <div key={n} className="flex items-center gap-3">
-                <U.Avatar size="sm" name={n} decorative />
+                <U.Avatar size="sm" name={n} src={demoPortraits[n]} decorative />
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium">{n}</p>
                   <p className="text-[10px] text-muted">{e}</p>
@@ -469,9 +474,9 @@ export function Showcase({
           <U.Progress label="Design system" value={68} />
           <div className="mt-5 flex items-center justify-between">
             <div className="flex -space-x-2">
-              <U.Avatar size="sm" name="Alex Rivers" />
-              <U.Avatar size="sm" name="Sam Chen" />
-              <U.Avatar size="sm" name="Jo Bell" />
+              <U.Avatar size="sm" name="Alex Rivers" src={demoPortraits["Alex Rivers"]} />
+              <U.Avatar size="sm" name="Sam Chen" src={demoPortraits["Sam Chen"]} />
+              <U.Avatar size="sm" name="Jo Bell" src={demoPortraits["Jo Bell"]} />
             </div>
             <span className="text-[10px] text-muted">3 contributors</span>
           </div>

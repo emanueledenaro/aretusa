@@ -141,17 +141,21 @@ export function Switch({
 export function RadioGroup({
   label,
   options,
+  focusRef,
   ...props
 }: React.ComponentProps<typeof RG.Root> & {
   label: string;
+  focusRef?: React.Ref<HTMLButtonElement>;
   options: { value: string; label: string; disabled?: boolean }[];
 }) {
   const uid = React.useId();
+  const firstEnabled = props.disabled ? -1 : options.findIndex(option => !option.disabled);
   return (
     <RG.Root aria-label={label} {...props} className="grid gap-3">
       {options.map((o, i) => (
         <div className="flex items-center gap-3" key={o.value}>
           <RG.Item
+            ref={i === firstEnabled ? focusRef : undefined}
             id={uid + i}
             value={o.value}
             disabled={o.disabled}
@@ -168,7 +172,7 @@ export function RadioGroup({
 export function NativeSelect({
   options,
   ...props
-}: React.SelectHTMLAttributes<HTMLSelectElement> & {
+}: React.ComponentPropsWithRef<"select"> & {
   options: { value: string; label: string; disabled?: boolean }[];
 }) {
   return (
@@ -184,12 +188,16 @@ export function NativeSelect({
 export function Select({
   label,
   options,
+  triggerRef,
+  triggerOnBlur,
   placeholder = "Choose an option",
   id,
   "aria-invalid": invalid,
   "aria-describedby": describedBy,
   ...props
 }: React.ComponentProps<typeof SE.Root> & {
+  triggerRef?: React.Ref<HTMLButtonElement>;
+  triggerOnBlur?: React.FocusEventHandler<HTMLButtonElement>;
   id?: string;
   "aria-invalid"?: React.AriaAttributes["aria-invalid"];
   "aria-describedby"?: string;
@@ -206,6 +214,8 @@ export function Select({
   return (
     <SE.Root {...props}>
       <SE.Trigger
+        ref={triggerRef}
+        onBlur={triggerOnBlur}
         id={id}
         aria-invalid={invalid}
         aria-describedby={describedBy}

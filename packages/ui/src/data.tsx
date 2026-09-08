@@ -24,7 +24,12 @@ export function Table({
   caption: string;
 }) {
   return (
-    <div className="overflow-x-auto">
+    <div
+      role="region"
+      aria-label={caption}
+      tabIndex={0}
+      className="a-scrollbar overflow-x-auto focus-visible:outline-offset-2"
+    >
       <table className="w-full text-start text-sm">
         <caption className="pb-3 text-start text-muted">{caption}</caption>
         <thead>

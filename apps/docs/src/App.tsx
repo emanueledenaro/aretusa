@@ -262,7 +262,7 @@ function ComponentPage({ id }: { id: string }) {
             { label: entry.name },
           ]}
         />
-        <div className="mb-9 mt-6 flex items-start justify-between gap-4">
+        <div className="mb-9 mt-6 flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="font-editorial text-4xl tracking-tight md:text-5xl">
               {entry.name}

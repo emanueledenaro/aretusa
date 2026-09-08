@@ -615,6 +615,10 @@ export function App() {
   ].filter((c) =>
     (c.name + " " + c.group).toLowerCase().includes(q.toLowerCase()),
   );
+  React.useEffect(() => {
+    if (!search) return;
+    document.getElementById("site-search-" + active)?.scrollIntoView?.({block: "nearest", inline: "nearest"});
+  }, [search, active, q]);
   if (path === "/preview") return <PreviewPage query={query} />;
   return (
     <>

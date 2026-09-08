@@ -47,3 +47,23 @@ test('search Escape returns focus to the search button', async () => {
   await userEvent.keyboard('{Escape}');
   expect(trigger).toHaveFocus();
 });
+
+test('keyboard search keeps the active result visible and handles empty results', async () => {
+  const original = HTMLElement.prototype.scrollIntoView;
+  const scrolled: string[] = [];
+  HTMLElement.prototype.scrollIntoView = function () { scrolled.push(this.id); };
+  try {
+    history.replaceState(null, '', '#/docs');
+    render(<App />);
+    await userEvent.click(screen.getByRole('button', {name:'Search documentation'}));
+    const search = screen.getByRole('combobox', {name:'Search components'});
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+    expect(search).toHaveAttribute('aria-activedescendant','site-search-2');
+    expect(scrolled).toContain('site-search-2');
+    await userEvent.type(search, 'nomatchingcomponentxyz');
+    expect(search).not.toHaveAttribute('aria-activedescendant');
+    await userEvent.keyboard('{Enter}');
+    expect(location.hash).toBe('#/docs');
+    expect(screen.getByRole('status')).toHaveTextContent('No results');
+  } finally { HTMLElement.prototype.scrollIntoView = original; }
+});

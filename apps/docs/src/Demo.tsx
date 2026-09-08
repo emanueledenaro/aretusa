@@ -5,6 +5,7 @@ import { fr } from "react-day-picker/locale";
 import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
+import { FormischExample } from "../../../examples/formisch/example";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -796,6 +797,9 @@ export function Demo({ id }: { id: string }) {
       break;
     case "tanstack-form":
       content = <TanStackFormExample />;
+      break;
+    case "formisch":
+      content = <FormischExample />;
       break;
     case "scroll-area":
       content = (

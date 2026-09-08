@@ -85,3 +85,4 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Scroll Fade | utility | [#91](https://github.com/emanueledenaro/aretusa/issues/91) | visually-reviewed |
 | React Hook Form | integration | [#88](https://github.com/emanueledenaro/aretusa/issues/88) | visually-reviewed |
 | TanStack Form | integration | [#89](https://github.com/emanueledenaro/aretusa/issues/89) | visually-reviewed |
+| Formisch | integration | [#90](https://github.com/emanueledenaro/aretusa/issues/90) | visually-reviewed |

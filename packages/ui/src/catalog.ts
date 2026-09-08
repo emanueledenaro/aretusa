@@ -3,6 +3,7 @@ export const catalog = [
   { "id": "scroll-fade", "name": "Scroll Fade", "module": "utilities", "exportName": "ScrollFade", "description": "Edge fades for any scroll container, driven by a hook that tracks remaining content on both axes.", "source": "scroll-fade" },
   { "id": "react-hook-form", "name": "React Hook Form", "module": "integrations", "exportName": "HookFormField", "description": "Typed React Hook Form fields with Aretusa labels, help text, errors and focus on invalid submit.", "source": "react-hook-form" },
   { "id": "tanstack-form", "name": "TanStack Form", "module": "integrations", "exportName": "TanStackFormField", "description": "Typed TanStack Form fields with Aretusa labels, help text, errors and focus on invalid submit.", "source": "tanstack-form", "dependencies": ["@tanstack/react-form"] },
+  { "id": "formisch", "name": "Formisch", "module": "integrations", "exportName": "FormischField", "description": "Typed Formisch fields from a Valibot schema with Aretusa labels, help text, errors and focus on invalid submit.", "source": "formisch" },
   {
     "id": "aspect-ratio",
     "name": "Aspect Ratio",

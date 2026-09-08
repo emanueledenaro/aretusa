@@ -26,6 +26,9 @@ jobs:
       - run: npm ci --prefix examples/tanstack-form
       - run: npm test --prefix examples/tanstack-form
       - run: npm run build --prefix examples/tanstack-form
+      - run: npm ci --prefix examples/formisch
+      - run: npm test --prefix examples/formisch
+      - run: npm run build --prefix examples/formisch
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main'
         with:

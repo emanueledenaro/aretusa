@@ -2,6 +2,7 @@ export const usage: Record<string,string> = {
   "shimmer": "<Shimmer enabled speed={2.8}>Preparing your next idea.</Shimmer>",
   "react-hook-form": "<form noValidate onSubmit={form.handleSubmit((values) => console.log(values))}><HookFormField control={form.control} name=\"name\" label=\"Name\" description=\"Shown to your team.\" rules={{ required: \"Enter your name.\" }}>{({ field, controlProps }) => <Input {...field} {...controlProps} />}</HookFormField><button type=\"submit\">Save</button></form>",
   "tanstack-form": "<form noValidate onSubmit={(event) => { event.preventDefault(); void form.handleSubmit(); }}><form.Field name=\"name\" validators={{ onChange: ({ value }) => (value ? undefined : \"Enter your name.\") }}>{(field) => <TanStackFormField field={field} label=\"Name\" description=\"Shown to your team.\">{({ controlProps }) => <Input {...controlProps} name={field.name} value={field.state.value} onChange={(event) => field.handleChange(event.target.value)} onBlur={field.handleBlur} />}</TanStackFormField>}</form.Field><button type=\"submit\">Save</button></form>",
+  "formisch": "<Form of={form} onSubmit={(output) => console.log(output)}><FormischField of={form} path={[\"name\"]} label=\"Name\" description=\"Shown to your team.\">{({ field, controlProps }) => <Input {...field.props} {...controlProps} value={field.input ?? \"\"} />}</FormischField><button type=\"submit\">Save</button></Form>",
   "scroll-fade": "<div className=\"relative overflow-hidden rounded-xl bg-paper\"><div ref={ref} role=\"region\" aria-label=\"Activity\" tabIndex={0} className=\"h-40 overflow-auto p-4\"><p>Your scrollable content.</p></div><ScrollFade edges={edges} depth={32} /></div>",
   "button": "<Button onClick={() => alert(\"Hello\")}>Create project</Button>",
   "button-group": "<ButtonGroup label=\"Actions\"><button>Save</button><button>Publish</button></ButtonGroup>",
@@ -77,11 +78,13 @@ export const usageImports: Record<string,string[]> = {
 /** Whole import lines for examples that need another module. */
 export const usageExtraImports: Record<string,string[]> = {
   "react-hook-form": ['import { useForm } from "react-hook-form";', 'import { Input } from "./components/aretusa/forms";'],
-  "tanstack-form": ['import { useForm } from "@tanstack/react-form";', 'import { Input } from "./components/aretusa/forms";']
+  "tanstack-form": ['import { useForm } from "@tanstack/react-form";', 'import { Input } from "./components/aretusa/forms";'],
+  "formisch": ['import { Form, useForm } from "@formisch/react";', 'import * as v from "valibot";', 'import { Input } from "./components/aretusa/forms";']
 };
 export const usageSetup: Record<string,string> = {
   "react-hook-form": "const form = useForm<{ name: string }>({ defaultValues: { name: \"\" } });",
   "tanstack-form": "const form = useForm({ defaultValues: { name: \"\" }, onSubmitInvalid: ({ formApi }) => { setTimeout(() => focusFirstInvalidField(formApi), 0); } });",
+  "formisch": "const form = useForm({ schema: v.object({ name: v.pipe(v.string(), v.nonEmpty(\"Enter your name.\")) }), initialInput: { name: \"\" } });",
   "scroll-fade": "const { ref, edges } = useScrollFade();",
   "calendar": "const [range, setRange] = useState<{ from: Date | undefined; to?: Date }>();"
 };

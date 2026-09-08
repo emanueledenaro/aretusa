@@ -203,6 +203,8 @@ function Sidebar({ selected }: { selected?: string }) {
   );
 }
 const itemNotes: Record<string, string> = {
+  formisch:
+    "FormischField calls useField and renders the label, help text and error for one field of a Valibot schema; your render function receives field, controlProps, errors and invalid. Spread field.props and controlProps on Input or NativeSelect with value={field.input ?? ''}; map value, onValueChange, triggerRef and triggerOnBlur on Select; checked and onCheckedChange on Checkbox and Switch; value, onValueChange and focusRef on RadioGroup. controlProps.ref registers the control so an invalid submit focuses it. Validation lives in the schema; submission, reset and dynamic fields use Form, reset, useFieldArray, insert, remove and move. The full reservation example lives in examples/formisch.",
   "tanstack-form":
     "Create fields with form.Field or useField and pass the field to TanStackFormField, which renders the label, help text and error and returns controlProps, the readable errors and isValidating. Spread controlProps on the control and wire value, handleChange and handleBlur yourself. TanStack Form does not focus on invalid submit: call focusFirstInvalidField(formApi) from onSubmitInvalid, deferred one tick so a disabled fieldset has been re-enabled. onChange validators run on every keystroke and onChangeAsync runs after a 300ms debounce while typing and immediately on submit. Validation, submission, reset and array fields stay in the library. The full visit request example lives in examples/tanstack-form.",
   "react-hook-form":

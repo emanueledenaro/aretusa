@@ -4,7 +4,7 @@
 - Base: `62cf4549335b25eed70ab555ee875c1c177dc0b8` (main at dispatch)
 - Worker branch: `agent/formisch-90`
 - Implementation commit: `3257956` (adapter, example, tests); documentation and this record follow on the same branch
-- Status: behavior-checked in JSDOM. Not visually reviewed: the browser pane was reserved by the coordinator during this work, so every rendered check below is pending.
+- Status: visually-reviewed after coordinator integration on main; see the coordinator section at the end.
 - Reviewer: worker self-review of automated checks. Coordinator acceptance remains a separate gate.
 
 ## Library verification
@@ -84,3 +84,13 @@ The integration leaves networking, backend persistence, file inputs, asynchronou
 ## Decision
 
 Automated behavior, type inference and builds pass. No rendered state has been inspected, so this delivery is behavior-checked at most and not visually reviewed. Keep #90 open until coordinator integration, clean-consumer installation and the browser, zoom and reduced-motion checks have evidence.
+
+## Coordinator review and integration
+
+The two worker commits (`3257956`, `1d0a742`) were cherry-picked onto main as `d1885ac` and `736a06e`. Typecheck, the 12 example tests and the example build were reproduced in the worker worktree and again on main after `npm ci` in the example.
+
+Wiring on main: root dependencies `@formisch/react ^1.1.0` and `valibot ^1.4.2`, barrel export, catalog entry `formisch` in the `integrations` module (the registry detects both libraries from the adapter imports), Forms route and sidebar entry, the reservation example rendered on the documentation page, a typed usage example importing `Form`, `useForm`, Valibot and `Input` beside `FormischField`, interaction notes, quality coverage, ticket record, tracker index, scope table, changelog, CI steps for the standalone example and the clean-consumer install of the item with a compiled `FormischField` form.
+
+Rendered checks of the documentation route in the authorized browser pane: at 390 px light the Forms group lists Formisch, React Hook Form and TanStack Form, the page shows the form without overflow, and an empty submit shows four linked errors and focuses the name input with `aria-invalid="true"` and `aria-describedby` pointing at its error; the focused control's native `name` is the JSON path `["name"]` that `field.props` supplies, which is the library's convention; at 1440 px dark the page has no overflow and invalid states use the danger token.
+
+Open: the worker's browser matrix at 320, 768 and 1024 on the standalone example, the 240 px parent, native text zoom, forced colors, reduced motion, real touch, assistive technology, and a second review. Gates: design, responsive, interaction, code and distribution passed for the checked states. Not release-ready.

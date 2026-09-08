@@ -30,12 +30,24 @@ export function Modal({
   footer,
   placement = "center",
 }: ModalProps) {
+  const previousFocus = React.useRef<HTMLElement | null>(null);
   return (
     <D.Root open={open} onOpenChange={onOpenChange}>
       {trigger && <D.Trigger asChild>{trigger}</D.Trigger>}
       <D.Portal>
         <D.Overlay className="a-overlay" />
         <D.Content
+          onOpenAutoFocus={() => {
+            previousFocus.current = document.activeElement instanceof HTMLElement
+              ? document.activeElement
+              : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            if (!trigger && previousFocus.current?.isConnected) {
+              event.preventDefault();
+              previousFocus.current.focus({ preventScroll: true });
+            }
+          }}
           className={cx(
             "a-modal-content fixed z-50 flex max-h-[90dvh] flex-col border border-line bg-card text-ink shadow-xl outline-none",
             placement === "center"

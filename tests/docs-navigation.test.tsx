@@ -37,3 +37,13 @@ test('homepage contains a permanent fade without a reveal control', () => {
   expect(markup).not.toContain('Restore soft fade');
   expect(markup).not.toContain('data-revealed');
 });
+
+test('search Escape returns focus to the search button', async () => {
+  history.replaceState(null, '', '#/docs');
+  render(<App />);
+  const trigger = screen.getByRole('button', {name:'Search documentation'});
+  await userEvent.click(trigger);
+  expect(screen.getByRole('combobox', {name:'Search components'})).toHaveFocus();
+  await userEvent.keyboard('{Escape}');
+  expect(trigger).toHaveFocus();
+});

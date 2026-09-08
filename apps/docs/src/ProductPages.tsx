@@ -545,6 +545,8 @@ export function CreatePage() {
             tone="quiet"
             size="sm"
             aria-label="Desktop preview"
+            aria-pressed={!mobile}
+            className={!mobile ? "bg-surface" : undefined}
             onClick={() => setMobile(false)}
           >
             <Monitor className="size-4" />
@@ -553,6 +555,8 @@ export function CreatePage() {
             tone="quiet"
             size="sm"
             aria-label="Mobile preview"
+            aria-pressed={mobile}
+            className={mobile ? "bg-surface" : undefined}
             onClick={() => setMobile(true)}
           >
             <Smartphone className="size-4" />

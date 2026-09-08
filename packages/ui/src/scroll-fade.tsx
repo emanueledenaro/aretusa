@@ -78,8 +78,9 @@ export function useScrollFade<T extends HTMLElement = HTMLDivElement>({
         }
     };
     observeContent();
-    const mutations = new MutationObserver(() => {
-      observeContent();
+    const mutations = new MutationObserver((records) => {
+      if (records.some((record) => record.type === "childList"))
+        observeContent();
       refresh();
     });
     mutations.observe(node, {
@@ -121,7 +122,7 @@ export function useScrollFade<T extends HTMLElement = HTMLDivElement>({
   return { ref, edges: enabled && node ? edges : emptyEdges, refresh };
 }
 
-export interface ScrollFadeProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ScrollFadeProps extends React.ComponentPropsWithRef<"div"> {
   edges: ScrollFadeEdges;
   /** CSS length or pixels. Each fade is capped at half the available dimension. */
   depth?: number | string;

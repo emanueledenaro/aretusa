@@ -13,6 +13,18 @@ import {
   type ScrollFadeOptions,
 } from "../packages/ui/src/scroll-fade";
 
+test("overlay preserves its caller's DOM ref and native attributes", () => {
+  const ref = React.createRef<HTMLDivElement>();
+  render(
+    <ScrollFade
+      ref={ref}
+      id="decoration"
+      edges={{ top: false, bottom: false, left: false, right: false }}
+    />,
+  );
+  expect(ref.current).toHaveAttribute("id", "decoration");
+});
+
 function Example(options: ScrollFadeOptions) {
   const { ref, edges } = useScrollFade(options);
   return (

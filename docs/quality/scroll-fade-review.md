@@ -77,6 +77,10 @@ Use `axis: "both"` for a bounded two-dimensional viewport. Empty and non-overflo
 
 Behavior tests use browser layout/observer boundaries in jsdom. They verify vertical start/middle/end, LTR and RTL horizontal start/middle/end, overscroll clamping, no overflow, content mutation, viewport/content resize, disable/re-enable, axis changes, ref replacement, explicit refresh, configuration and cleanup. `tests/scroll-area.test.tsx` checks existing ScrollArea behavior.
 
+At implementation commit `4cb9f43`, `npm run typecheck`, `npm test` (120 Vitest tests and 5 CLI tests), `npm run build` and `npm run quality:check` passed. Build reports the existing large documentation bundle warning. Quality checking still reports all 76 catalog items awaiting complete release evidence. Generated artifacts from validation were restored and are excluded from this worker's commits.
+
+Independent Standards review found a missing public overlay ref type. A failing TypeScript usage test reproduced it; `ComponentPropsWithRef<"div">` now preserves that ref, and the DOM test verifies forwarding. The same review suggested avoiding descendant rescans on attribute/text changes; reconciliation now runs only for child-list mutations. Independent Spec review found no blocking defect within worker ownership and confirmed the pending integration gates below. The corrected source passed TypeScript and all 8 focused tests, including existing ScrollArea coverage.
+
 Rendered evidence remains pending at 320, 390, 768, 1024 and 1440 CSS pixels, 240px parent, 200% text zoom, light/dark, reduced motion and forced colors. Keyboard and touch scrolling, overlay pointer transparency, focus readability and screen-reader behavior need browser inspection. There are no loading, error, invalid, selected or disabled controls in this decoration; the enabled flag is the applicable off state.
 
 ## Coordinator integration

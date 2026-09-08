@@ -34,7 +34,7 @@ export const usage: Record<string,string> = {
   "textarea": "<Textarea aria-label=\"Notes\" placeholder=\"Your thoughts…\" />",
   "toggle": "<Toggle aria-label=\"Favorite\" pressed={enabled} onPressedChange={setEnabled}>Favorite</Toggle>",
   "toggle-group": "<ToggleGroup label=\"View\" options={[\"List\", \"Grid\"]} value={value} onValueChange={setValue} />",
-  "alert-dialog": "<AlertDialog trigger={<button>Archive</button>} title=\"Archive project?\" description=\"You can restore it later.\" onConfirm={() => setEnabled(true)} />",
+  "alert-dialog": "<AlertDialog trigger={<button>Archive</button>} title=\"Archive project?\" description=\"Members keep read access and you can restore it later.\" confirmLabel=\"Archive\" onConfirm={async () => { await fetch(\"/api/archive\", { method: \"POST\" }); setEnabled(true); }} />",
   "dialog": "<Dialog trigger={<button>Open</button>} title=\"Profile\" description=\"Edit your public profile.\"><input aria-label=\"Name\" /></Dialog>",
   "drawer": "<Drawer trigger={<button>Open</button>} title=\"Preferences\" description=\"Choose your settings.\"><p>Your controls go here.</p></Drawer>",
   "sheet": "<Sheet trigger={<button>Open</button>} title=\"Project\" description=\"Inspect project details.\"><p>Your content goes here.</p></Sheet>",

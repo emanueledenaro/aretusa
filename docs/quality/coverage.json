@@ -587,13 +587,13 @@
       "issue": 45,
       "databaseId": 5386380028,
       "url": "https://github.com/emanueledenaro/aretusa/issues/45",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "button"
@@ -606,13 +606,13 @@
       "issue": 46,
       "databaseId": 5386380157,
       "url": "https://github.com/emanueledenaro/aretusa/issues/46",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "button"
@@ -625,13 +625,13 @@
       "issue": 47,
       "databaseId": 5386380308,
       "url": "https://github.com/emanueledenaro/aretusa/issues/47",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "dialog"
@@ -644,15 +644,16 @@
       "issue": 48,
       "databaseId": 5386380427,
       "url": "https://github.com/emanueledenaro/aretusa/issues/48",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/alert-dialog-review.md"
     },
     {
       "id": "popover",

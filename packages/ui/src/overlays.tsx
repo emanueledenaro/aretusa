@@ -87,35 +87,120 @@ export function Sheet(props: Omit<ModalProps, "placement">) {
 export function Drawer(props: Omit<ModalProps, "placement">) {
   return <Modal {...props} placement="bottom" />;
 }
+export type AlertDialogProps = {
+  trigger?: React.ReactElement;
+  title: string;
+  description: React.ReactNode;
+  /** Return a promise to keep the dialog open with a pending confirmation. A rejection shows its message and allows a retry. */
+  onConfirm: () => void | Promise<unknown>;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  /** danger marks an irreversible action; neutral asks for a decision. */
+  tone?: "danger" | "neutral";
+  /** Short eyebrow above the title. Defaults to the tone's wording; pass an empty string to hide it. */
+  label?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Optional detail between the description and the actions, such as what will be affected. */
+  children?: React.ReactNode;
+};
 export function AlertDialog({
   trigger,
   title,
   description,
   onConfirm,
   confirmLabel = "Confirm",
-}: {
-  trigger: React.ReactElement;
-  title: string;
-  description: string;
-  onConfirm: () => void;
-  confirmLabel?: string;
-}) {
+  cancelLabel = "Cancel",
+  tone = "danger",
+  label = tone === "danger" ? "Irreversible action" : "Before you continue",
+  open,
+  onOpenChange,
+  children,
+}: AlertDialogProps) {
+  const [internalOpen, setInternalOpen] = React.useState(false);
+  const [pending, setPending] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const isOpen = open ?? internalOpen;
+  const errorId = React.useId();
+  const setOpen = (next: boolean) => {
+    if (!next && pending) return;
+    if (!next) setError("");
+    setInternalOpen(next);
+    onOpenChange?.(next);
+  };
+  const confirm = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    setError("");
+    try {
+      setPending(true);
+      await onConfirm();
+      setPending(false);
+      setInternalOpen(false);
+      onOpenChange?.(false);
+    } catch (reason) {
+      setPending(false);
+      setError(
+        reason instanceof Error && reason.message
+          ? reason.message
+          : "Something went wrong. Try again.",
+      );
+    }
+  };
   return (
-    <A.Root>
-      <A.Trigger asChild>{trigger}</A.Trigger>
+    <A.Root open={isOpen} onOpenChange={setOpen}>
+      {trigger && <A.Trigger asChild>{trigger}</A.Trigger>}
       <A.Portal>
         <A.Overlay className="a-overlay" />
-        <A.Content className="a-modal-content fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[min(480px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-line bg-card p-6 text-ink shadow-xl">
-          <A.Title className="font-editorial text-2xl">{title}</A.Title>
-          <A.Description className="my-4 text-sm leading-relaxed text-muted">
-            {description}
-          </A.Description>
-          <div className="flex flex-wrap justify-end gap-3">
+        <A.Content
+          onEscapeKeyDown={(event) => {
+            if (pending) event.preventDefault();
+          }}
+          className="a-modal-content a-alert fixed left-1/2 top-1/2 z-50 flex max-h-[90dvh] w-[min(460px,calc(100%-32px))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-2xl border border-line bg-card text-ink shadow-xl outline-none"
+        >
+          <div className="px-6 pt-6 sm:px-7 sm:pt-7">
+            {label && (
+              <p
+                aria-hidden="true"
+                className={cx(
+                  "mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em]",
+                  tone === "danger" ? "text-danger" : "text-muted",
+                )}
+              >
+                {label}
+              </p>
+            )}
+            <A.Title className="font-editorial text-[1.625rem] leading-tight tracking-tight sm:text-[1.75rem]">
+              {title}
+            </A.Title>
+            <A.Description className="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+              {description}
+            </A.Description>
+            {children && <div className="mt-4 text-sm leading-relaxed">{children}</div>}
+            {error && (
+              <p
+                id={errorId}
+                role="alert"
+                className="mt-4 rounded-lg border border-danger/30 bg-danger/5 px-3 py-2 text-sm leading-relaxed text-danger"
+              >
+                {error}
+              </p>
+            )}
+          </div>
+          <div className="mx-6 mt-6 border-t border-line sm:mx-7" />
+          <div className="flex flex-col-reverse gap-2 px-6 py-5 sm:flex-row sm:justify-end sm:gap-3 sm:px-7">
             <A.Cancel asChild>
-              <Button tone="outline">Cancel</Button>
+              <Button tone="outline" disabled={pending} className="w-full sm:w-auto">
+                {cancelLabel}
+              </Button>
             </A.Cancel>
             <A.Action asChild>
-              <Button tone="danger" onClick={onConfirm}>
+              <Button
+                tone={tone === "danger" ? "danger" : "primary"}
+                loading={pending}
+                aria-describedby={error ? errorId : undefined}
+                onClick={confirm}
+                className="w-full sm:w-auto"
+              >
                 {confirmLabel}
               </Button>
             </A.Action>

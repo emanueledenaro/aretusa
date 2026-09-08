@@ -148,6 +148,45 @@ function CalendarExample() {
     </div>
   );
 }
+function AlertDialogExample({ onNotice }: { onNotice: (text: string) => void }) {
+  const attempts = React.useRef(0);
+  return (
+    <div className="flex flex-wrap gap-3">
+      <U.AlertDialog
+        trigger={<U.Button tone="danger">Archive project</U.Button>}
+        title="Archive this project?"
+        description="Field notes will leave the active workspace. Members keep read access and you can restore it from the archive."
+        confirmLabel="Archive project"
+        onConfirm={() => new Promise<void>((resolve) => setTimeout(() => { onNotice("Project archived in the example"); resolve(); }, 1200))}
+      >
+        <ul className="space-y-1 text-muted">
+          <li>12 documents and 3 shared boards move to the archive.</li>
+          <li>Scheduled reminders stop.</li>
+        </ul>
+      </U.AlertDialog>
+      <U.AlertDialog
+        trigger={<U.Button tone="outline">Delete workspace</U.Button>}
+        title="Delete the Studio workspace?"
+        description="This removes the workspace for everyone. The first attempt in this example fails so you can see the recovery path."
+        confirmLabel="Delete workspace"
+        onConfirm={() => new Promise<void>((resolve, reject) => setTimeout(() => {
+          attempts.current += 1;
+          if (attempts.current % 2 === 1) reject(new Error("The server did not respond. Check your connection and try again."));
+          else { onNotice("Workspace deleted in the example"); resolve(); }
+        }, 900))}
+      />
+      <U.AlertDialog
+        tone="neutral"
+        trigger={<U.Button tone="quiet">Leave editor</U.Button>}
+        title="Leave without saving?"
+        description="Your draft of A letter from Ortigia has unsaved changes from the last four minutes."
+        confirmLabel="Leave"
+        cancelLabel="Keep editing"
+        onConfirm={() => onNotice("Editor closed in the example")}
+      />
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -518,15 +557,7 @@ export function Demo({ id }: { id: string }) {
       break;
     }
     case "alert-dialog":
-      content = (
-        <U.AlertDialog
-          trigger={<U.Button tone="danger">Archive project</U.Button>}
-          title="Archive this project?"
-          description="This example only displays a confirmation. No data will be deleted."
-          confirmLabel="Archive"
-          onConfirm={() => setNotice("Project archived in the example")}
-        />
-      );
+      content = <AlertDialogExample onNotice={setNotice} />;
       break;
     case "popover":
       content = (

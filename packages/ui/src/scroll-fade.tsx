@@ -1,4 +1,5 @@
 import * as React from "react";
+import { cx } from "./utils";
 import "./scroll-fade.css";
 
 export interface ScrollFadeOptions {
@@ -33,8 +34,9 @@ export function useScrollFade<T extends HTMLElement = HTMLDivElement>({
     const y = Math.max(0, Math.min(maxY, node.scrollTop));
     const maxX = Math.max(0, node.scrollWidth - node.clientWidth);
     const rtl =
+      axis !== "vertical" &&
       node.ownerDocument.defaultView?.getComputedStyle(node).direction ===
-      "rtl";
+        "rtl";
     // Current browsers use negative scrollLeft from the right-hand origin in RTL.
     const x = Math.max(
       0,
@@ -64,8 +66,10 @@ export function useScrollFade<T extends HTMLElement = HTMLDivElement>({
         ? null
         : new ResizeObserver(refresh);
     const observed = new Set<Element>();
+    // The viewport and its direct children determine scrollable overflow.
+    // Deeper changes reach them through layout, mutations or load events.
     const observeContent = () => {
-      const current = new Set<Element>([node, ...node.querySelectorAll("*")]);
+      const current = new Set<Element>([node, ...Array.from(node.children)]);
       for (const child of observed)
         if (!current.has(child)) {
           resize?.unobserve(child);
@@ -135,7 +139,7 @@ export function ScrollFade({
   edges,
   depth = 48,
   color = "var(--color-paper)",
-  className = "",
+  className,
   style,
   ...props
 }: ScrollFadeProps) {
@@ -143,7 +147,7 @@ export function ScrollFade({
     <div
       {...props}
       aria-hidden="true"
-      className={`a-scroll-fade ${className}`}
+      className={cx("a-scroll-fade", className)}
       style={
         {
           "--scroll-fade-depth":

@@ -4,10 +4,6 @@
   pointer-events: none;
   z-index: 1;
 }
-.a-scroll-area[data-scroll-fade="utility"]::before,
-.a-scroll-area[data-scroll-fade="utility"]::after {
-  display: none;
-}
 .a-scroll-fade > span {
   position: absolute;
   pointer-events: none;

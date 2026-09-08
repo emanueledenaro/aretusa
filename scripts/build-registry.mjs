@@ -104,7 +104,7 @@ const program = ts.createProgram(["packages/ui/src/index.ts"], {
 });
 const checker = program.getTypeChecker();
 const relevant = new Set(
-  "triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
+  "edges depth color axis triggerRef triggerOnBlur focusRef enabled speed highlight fade children shape decorative tone size loading disabled trigger title description onConfirm confirmLabel onOpenChange open footer placement label options hint error ratio as editorial value onValueChange defaultValue min max step length onChange items defaultOpen type orientation src onRemove slides columns rows caption data kind compact left right questions onComplete author time side action name links eyebrow onSubmit id className name placeholder required checked onCheckedChange defaultChecked".split(
     " ",
   ),
 );

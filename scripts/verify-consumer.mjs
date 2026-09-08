@@ -20,6 +20,7 @@ run(process.execPath, [cli, "init", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "dialog", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "field", "--cwd", consumer]);
 run(process.execPath, [cli, "add", "shimmer", "--cwd", consumer]);
+run(process.execPath, [cli, "add", "scroll-fade", "--cwd", consumer]);
 const registry = JSON.parse(
   await readFile(path.join(root, "packages/cli/registry/index.json"), "utf8"),
 );
@@ -30,7 +31,7 @@ const required = new Set([
   "react",
   "react-dom",
   ...registry.items
-    .filter((item) => ["dialog", "field", "shimmer"].includes(item.name))
+    .filter((item) => ["dialog", "field", "shimmer", "scroll-fade"].includes(item.name))
     .flatMap((item) => item.dependencies),
 ]);
 const dependencies = Object.fromEntries(
@@ -88,7 +89,7 @@ await writeFile(
 );
 await writeFile(
   path.join(consumer, "src/main.tsx"),
-  "import React from 'react';import {Shimmer} from './components/aretusa/shimmer';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Shimmer>Loading preview</Shimmer><Field label='Name'><Input/></Field></Modal>);",
+  "import React from 'react';import {Shimmer} from './components/aretusa/shimmer';import {ScrollFade,useScrollFade} from './components/aretusa/scroll-fade';import {createRoot} from 'react-dom/client';import {Button} from './components/aretusa/button';import {Modal} from './components/aretusa/overlays';import {Input,Field} from './components/aretusa/forms';import './components/aretusa/styles.css';function Activity(){const {ref,edges}=useScrollFade({axis:'both'});return <div className='relative'><div ref={ref} role='region' aria-label='Activity' tabIndex={0} className='h-20 overflow-auto'><p>Installed scroll fade</p></div><ScrollFade edges={edges} depth={24}/></div>;}createRoot(document.getElementById('root')!).render(<Modal trigger={<Button>Open</Button>} title='Consumer' description='Installed source'><Shimmer>Loading preview</Shimmer><Activity/><Field label='Name'><Input/></Field></Modal>);",
 );
 console.log("Clean consumer: " + consumer);
 console.log(run("npm", ["install", "--no-audit", "--no-fund"]));

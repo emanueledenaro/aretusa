@@ -272,7 +272,7 @@ export function ScrollArea({
 }) {
   const { ref, edges } = useScrollFade({ enabled: fade });
   return (
-    <SA.Root type="auto" data-scroll-fade="utility" data-fade-top={edges.top} data-fade-bottom={edges.bottom} className={"a-scroll-area relative overflow-hidden " + className}>
+    <SA.Root type="auto" data-fade-top={edges.top} data-fade-bottom={edges.bottom} className={"a-scroll-area relative overflow-hidden " + className}>
       <SA.Viewport ref={ref} role="region" aria-label={label} tabIndex={0} className="size-full rounded-[inherit] focus-visible:outline-offset-[-2px]">
         {children}
       </SA.Viewport>

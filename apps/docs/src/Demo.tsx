@@ -14,6 +14,88 @@ const rows = [
   { id: "5", name: "Small details", status: "Draft", amount: 40 },
   { id: "6", name: "A new beginning", status: "Published", amount: 300 },
 ];
+const chapters = [
+  "Arrival at the harbour",
+  "The salt gardens",
+  "A letter from Ortigia",
+  "Workshop notes",
+  "Evening on the terrace",
+  "The printing room",
+  "Maps and margins",
+  "Departure",
+];
+const collection = ["Ceramics", "Prints", "Textiles", "Books", "Maps", "Posters"];
+function ScrollFadeExample() {
+  const [enabled, setEnabled] = React.useState(true);
+  const [rtl, setRtl] = React.useState(false);
+  const vertical = U.useScrollFade({ enabled });
+  const horizontal = U.useScrollFade<HTMLElement>({ axis: "horizontal", enabled });
+  const both = U.useScrollFade({ axis: "both", enabled });
+  const short = U.useScrollFade({ enabled });
+  const region = "focus-visible:outline-offset-[-2px]";
+  return (
+    <div className="w-full space-y-5">
+      <div className="flex flex-wrap gap-x-6 gap-y-3">
+        <U.Switch label="Fade edges" checked={enabled} onCheckedChange={setEnabled} />
+        <U.Switch label="Right to left" checked={rtl} onCheckedChange={setRtl} />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="min-w-0">
+          <h3 id="scroll-fade-reading" className="mb-2 text-sm font-medium">Reading list</h3>
+          <div className="relative overflow-hidden rounded-xl border border-line bg-paper">
+            <div ref={vertical.ref} role="region" aria-labelledby="scroll-fade-reading" tabIndex={0} className={"h-56 overflow-auto p-4 " + region}>
+              <ul className="space-y-3">
+                {chapters.map((title, index) => (
+                  <li key={title}>
+                    <U.Item title={title} description={"Chapter " + (index + 1)} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <U.ScrollFade edges={vertical.edges} depth={40} />
+          </div>
+        </div>
+        <div className="min-w-0">
+          <h3 id="scroll-fade-collection" className="mb-2 text-sm font-medium">Collection</h3>
+          <div className="relative overflow-hidden rounded-xl border border-line bg-card" dir={rtl ? "rtl" : undefined}>
+            <section ref={horizontal.ref} aria-labelledby="scroll-fade-collection" tabIndex={0} className={"flex gap-3 overflow-x-auto p-4 " + region}>
+              {collection.map((name) => (
+                <div key={name} className="min-w-40 shrink-0 rounded-lg border border-line bg-paper p-4">
+                  <p className="font-editorial text-lg">{name}</p>
+                  <p className="mt-1 text-sm text-muted">Studio archive</p>
+                </div>
+              ))}
+            </section>
+            <U.ScrollFade edges={horizontal.edges} color="var(--color-card)" depth="2.5rem" />
+          </div>
+          <h3 id="scroll-fade-short" className="mb-2 mt-4 text-sm font-medium">Short list</h3>
+          <div className="relative overflow-hidden rounded-xl border border-line bg-paper">
+            <div ref={short.ref} role="region" aria-labelledby="scroll-fade-short" tabIndex={0} className={"h-24 overflow-auto p-4 " + region}>
+              <p className="text-sm text-muted">Two lines fit without scrolling, so no fade appears.</p>
+            </div>
+            <U.ScrollFade edges={short.edges} depth={40} />
+          </div>
+        </div>
+      </div>
+      <div className="min-w-0">
+        <h3 id="scroll-fade-schedule" className="mb-2 text-sm font-medium">Schedule, both axes</h3>
+        <div className="relative overflow-hidden rounded-xl border border-line bg-paper">
+          <div ref={both.ref} role="region" aria-labelledby="scroll-fade-schedule" tabIndex={0} className={"h-44 overflow-auto p-4 " + region}>
+            <div className="grid w-[44rem] grid-cols-4 gap-3">
+              {Array.from({ length: 16 }, (_, index) => (
+                <div key={index} className="rounded-lg bg-surface px-3 py-4 text-sm">
+                  <p className="font-medium">Session {index + 1}</p>
+                  <p className="text-muted">Room {String.fromCharCode(65 + (index % 4))}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <U.ScrollFade edges={both.edges} depth={28} />
+        </div>
+      </div>
+    </div>
+  );
+}
 export function Demo({ id }: { id: string }) {
   const [value, setValue] = React.useState(""),
     [flag, setFlag] = React.useState(false),
@@ -544,6 +626,9 @@ export function Demo({ id }: { id: string }) {
       break;
     case "shimmer":
       content = <div className="w-full space-y-6"><U.Switch label="Pause shimmer" checked={flag} onCheckedChange={setFlag} /><p className="text-lg"><U.Shimmer enabled={!flag}>Preparing your next idea.</U.Shimmer></p><p className="max-w-64 font-editorial text-2xl"><U.Shimmer enabled={!flag} speed={4}>A little light across words that have room to breathe.</U.Shimmer></p><U.Marker><U.Shimmer enabled={!flag}>Reading project notes</U.Shimmer></U.Marker></div>;
+      break;
+    case "scroll-fade":
+      content = <ScrollFadeExample />;
       break;
     case "scroll-area":
       content = (

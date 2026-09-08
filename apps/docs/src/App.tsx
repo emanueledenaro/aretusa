@@ -197,6 +197,10 @@ function Sidebar({ selected }: { selected?: string }) {
     </aside>
   );
 }
+const itemNotes: Record<string, string> = {
+  "scroll-fade":
+    "Call useScrollFade({ axis, enabled }) in the component that owns the scroll container and attach its ref to the element that actually scrolls. Render ScrollFade as a sibling inside a positioned parent of the same size; it is aria-hidden and ignores pointer input. The hook returns physical top, bottom, left and right edges plus refresh() for layout changes it cannot observe. Keep the region focusable with an accessible name so keyboard users can scroll it.",
+};
 function ComponentPage({ id }: { id: string }) {
   const [api, setApi] = React.useState<
     { name: string; required: boolean; type: string }[]
@@ -243,7 +247,9 @@ function ComponentPage({ id }: { id: string }) {
       <article className="min-w-0 py-10 lg:py-14">
         <U.Breadcrumb
           items={[
-            { label: "Components", href: "#/components/button" },
+            entry.module === "utilities"
+              ? { label: "Utilities", href: "#/utils/scroll-fade" }
+              : { label: "Components", href: "#/components/button" },
             { label: entry.name },
           ]}
         />
@@ -387,13 +393,13 @@ function ComponentPage({ id }: { id: string }) {
         <section className="mt-12">
           <h2 className="doc-h2">Interaction notes</h2>
           <p className="text-sm leading-relaxed text-muted">
-            {entry.module === "overlays"
+            {itemNotes[entry.id] ?? (entry.module === "overlays"
               ? "Use a meaningful title and description. Modal surfaces contain focus, close with Escape and return focus to their trigger. Hover content must remain supplementary to an accessible control."
               : entry.module === "forms"
                 ? "Always provide a visible label or accessible name. Field connects hints and errors to its child control. Keep required, disabled and invalid states explicit. Native controls follow the browser interaction model."
                 : entry.module === "navigation"
                   ? "Use keyboard focus to move through controls. Composite Radix controls support arrow-key navigation. Navigation links must point to real destinations."
-                  : "Keep content and actions meaningful. Test long content, narrow viewports and the theme you ship. Examples use fictional data."}
+                  : "Keep content and actions meaningful. Test long content, narrow viewports and the theme you ship. Examples use fictional data.")}
           </p>
         </section>
         <div className="mt-14 flex justify-between border-t border-line pt-6 text-sm">

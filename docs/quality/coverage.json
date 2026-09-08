@@ -4,6 +4,7 @@
   "contract": "docs/quality-contract.md",
   "items": [
     {"id":"shimmer","name":"Shimmer","type":"utility","issue":92,"databaseId":5388131348,"url":"https://github.com/emanueledenaro/aretusa/issues/92","status":"implemented","gates":{"design":"pending","responsive":"pending","interaction":"pending","code":"pending","distribution":"pending"},"dependencies":[]},
+    {"id":"scroll-fade","name":"Scroll Fade","type":"utility","issue":91,"databaseId":5388130931,"url":"https://github.com/emanueledenaro/aretusa/issues/91","status":"visually-reviewed","gates":{"design":"passed","responsive":"passed","interaction":"passed","code":"passed","distribution":"passed"},"dependencies":[],"evidence":"docs/quality/scroll-fade-review.md"},
     {
       "id": "aspect-ratio",
       "name": "Aspect Ratio",

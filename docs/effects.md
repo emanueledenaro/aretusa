@@ -4,7 +4,7 @@ Effects ship with the shared stylesheet. They are opt-in and use theme colors in
 
 ## Scroll-aware fade
 
-`<ScrollArea fade={true} label="Activity">...</ScrollArea>` adds edge fades only where more content exists. `fade` defaults to `false` and can be changed at runtime. Top fade appears after scrolling away from the start; bottom fade disappears at the end. Resize observation updates the state when the viewport or its content changes. Decoration leaves the scrollbar and pointer input unobstructed. The component demo includes a Smart edge fade checkbox. This is separate from the permanent homepage fade.
+`useScrollFade` and `ScrollFade` from the `scroll-fade` utility add edge fades to any scroll container, only where more content exists. The hook returns a callback `ref` for the element that scrolls, physical `top`, `bottom`, `left` and `right` edge flags and a `refresh` function. Options are `axis` (`vertical`, `horizontal` or `both`) and `enabled`. The overlay is aria-hidden, ignores pointer input, accepts `depth` and `color`, drops its transition under reduced motion and disappears in forced-colors mode. `<ScrollArea fade={true} label="Activity">...</ScrollArea>` uses the same hook behind its boolean `fade` prop; the component demo includes a Smart edge fade checkbox. Both are separate from the permanent homepage fade.
 
 ## Edge fade
 

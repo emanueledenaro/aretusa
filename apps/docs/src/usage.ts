@@ -36,7 +36,7 @@ export const usage: Record<string,string> = {
   "switch": "<Switch label=\"Updates\" description=\"A weekly digest every Monday.\" checked={enabled} onCheckedChange={setEnabled} />",
   "textarea": "<Textarea aria-label=\"Notes\" placeholder=\"Your thoughts…\" autoResize maxRows={6} showCount maxLength={400} />",
   "toggle": "<Toggle aria-label=\"Favorite\" pressed={enabled} onPressedChange={setEnabled} size=\"sm\" tone=\"quiet\">Favorite</Toggle>",
-  "toggle-group": "<ToggleGroup label=\"View\" options={[\"List\", \"Grid\"]} value={value} onValueChange={setValue} />",
+  "toggle-group": "<ToggleGroup label=\"View\" options={[\"List\", \"Grid\"]} value={value} onValueChange={setValue} required />",
   "alert-dialog": "<AlertDialog trigger={<button>Archive</button>} title=\"Archive project?\" description=\"Members keep read access and you can restore it later.\" confirmLabel=\"Archive\" onConfirm={async () => { await fetch(\"/api/archive\", { method: \"POST\" }); setEnabled(true); }} />",
   "dialog": "<Dialog trigger={<button>Open</button>} title=\"Profile\" description=\"Edit your public profile.\"><input aria-label=\"Name\" /></Dialog>",
   "drawer": "<Drawer trigger={<button>Open</button>} title=\"Preferences\" description=\"Choose your settings.\"><p>Your controls go here.</p></Drawer>",

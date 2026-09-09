@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { Search, X, Copy, Eye, EyeOff, Heart, Bold, Italic, Underline, Bell, BellOff } from "lucide-react";
+import { Search, X, Copy, Eye, EyeOff, Heart, Bold, Italic, Underline, Bell, BellOff, List, LayoutGrid, Columns3, AlignLeft, AlignCenter, AlignRight } from "lucide-react";
 
 export function TextareaExample() {
   const [message, setMessage] = React.useState("");
@@ -232,6 +232,45 @@ export function ToggleExample() {
       <div className="w-60 max-w-full">
         <p className="mb-3 text-sm text-muted">Long label in a 240px parent</p>
         <U.Toggle defaultPressed className="w-full">Show the printing room schedule on my calendar</U.Toggle>
+      </div>
+    </div>
+  );
+}
+
+export function ToggleGroupExample() {
+  const [view, setView] = React.useState("list");
+  const [days, setDays] = React.useState(["mon", "wed"]);
+  const [align, setAlign] = React.useState("left");
+  const [submitted, setSubmitted] = React.useState(false);
+  const daysError = submitted && days.length === 0 ? "Choose at least one day." : undefined;
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-3">
+        <p id="tg-view" className="text-sm font-medium">View, single and required</p>
+        <U.ToggleGroup label="View" required value={view} onValueChange={setView} options={[{ value: "list", label: "List", icon: <List /> }, { value: "grid", label: "Grid", icon: <LayoutGrid /> }, { value: "board", label: "Board", icon: <Columns3 /> }]} />
+        <p className="text-xs text-muted">Showing the {view} view.</p>
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm font-medium">Open days, multiple</p>
+        <U.ToggleGroup type="multiple" label="Open days" value={days} onValueChange={(next) => { setDays(next); setSubmitted(false); }} aria-describedby={daysError ? "tg-days-error" : undefined} aria-invalid={daysError ? true : undefined} options={[{ value: "mon", label: "Mon" }, { value: "tue", label: "Tue" }, { value: "wed", label: "Wed" }, { value: "thu", label: "Thu" }, { value: "fri", label: "Fri" }, { value: "sat", label: "Sat" }, { value: "sun", label: "Sun", disabled: true }]} />
+        {daysError && <p id="tg-days-error" role="alert" className="text-xs text-danger">{daysError}</p>}
+        <div><U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate days</U.Button></div>
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm font-medium">Icon-only alignment, small size</p>
+        <U.ToggleGroup label="Alignment" size="sm" required value={align} onValueChange={setAlign} options={[{ value: "left", label: <span className="sr-only">Align left</span>, icon: <AlignLeft /> }, { value: "center", label: <span className="sr-only">Align center</span>, icon: <AlignCenter /> }, { value: "right", label: <span className="sr-only">Align right</span>, icon: <AlignRight /> }]} />
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm font-medium">Disabled group</p>
+        <U.ToggleGroup label="Plan" disabled defaultValue="studio" options={[{ value: "studio", label: "Studio" }, { value: "resident", label: "Resident" }]} />
+      </div>
+      <div className="w-60 max-w-full">
+        <p className="mb-3 text-sm font-medium">Long labels wrap in a 240px parent</p>
+        <U.ToggleGroup label="Delivery" defaultValue="pickup" options={[{ value: "pickup", label: "Pick up at the studio" }, { value: "courier", label: "Tracked courier" }, { value: "post", label: "Ordinary post" }]} />
+      </div>
+      <div className="w-60 max-w-full">
+        <p className="mb-3 text-sm font-medium">Vertical orientation</p>
+        <U.ToggleGroup label="Session" orientation="vertical" defaultValue="morning" options={["Morning", "Afternoon", "Evening"].map((name) => ({ value: name.toLowerCase(), label: name }))} />
       </div>
     </div>
   );

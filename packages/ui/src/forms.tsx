@@ -721,37 +721,103 @@ export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(function 
     </TO.Root>
   );
 });
-export function ToggleGroup({
-  label,
-  options,
-  value,
-  onValueChange,
-}: {
+export type ToggleGroupOption =
+  | string
+  | { value: string; label: React.ReactNode; icon?: React.ReactNode; disabled?: boolean };
+type ToggleGroupBase = {
+  /** Accessible name of the group. */
   label: string;
-  options: string[];
-  value?: string;
-  onValueChange?: (v: string) => void;
-}) {
+  /** Plain strings are both value and label. */
+  options: ToggleGroupOption[];
+  disabled?: boolean;
+  /** Prevents deselecting the last pressed item in single mode. */
+  required?: boolean;
+  /** sm keeps a 44px target on touch and 36px from the sm breakpoint. */
+  size?: "sm" | "md";
+  /** Items wrap to new lines by default; vertical stacks them. */
+  orientation?: "horizontal" | "vertical";
+  className?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+};
+export type ToggleGroupProps =
+  | (ToggleGroupBase & {
+      type?: "single";
+      value?: string;
+      defaultValue?: string;
+      onValueChange?: (value: string) => void;
+    })
+  | (ToggleGroupBase & {
+      type: "multiple";
+      value?: string[];
+      defaultValue?: string[];
+      onValueChange?: (value: string[]) => void;
+    });
+export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(function ToggleGroup(
+  props,
+  ref,
+) {
+  const {
+    label,
+    options,
+    disabled,
+    required = false,
+    size = "md",
+    orientation = "horizontal",
+    className,
+    "aria-describedby": describedBy,
+    "aria-invalid": invalid,
+  } = props;
+  const items = options.map((option) =>
+    typeof option === "string" ? { value: option, label: option } : option,
+  );
+  const itemClass = cx(
+    "a-button min-w-11 rounded-md text-sm text-muted hover:text-ink data-[state=on]:bg-card data-[state=on]:text-ink data-[state=on]:shadow-xs disabled:opacity-45 [&_svg]:size-4 [&_svg]:shrink-0",
+    size === "sm" ? "min-h-11 px-2.5 sm:min-h-9" : "min-h-11 px-3",
+    orientation === "vertical" && "w-full justify-start",
+  );
+  const rootClass = cx(
+    "inline-flex max-w-full gap-1 rounded-lg bg-surface p-1",
+    orientation === "vertical" ? "flex-col" : "flex-wrap",
+    className,
+  );
+  const children = items.map((o) => (
+    <TG.Item key={o.value} value={o.value} disabled={o.disabled} className={itemClass}>
+      {o.icon}
+      <span className="min-w-0 break-words">{o.label}</span>
+    </TG.Item>
+  ));
+  const shared = {
+    ref,
+    "aria-label": label,
+    "aria-describedby": describedBy,
+    "aria-invalid": invalid,
+    disabled,
+    orientation,
+    className: rootClass,
+  };
+  if (props.type === "multiple") {
+    return (
+      <TG.Root type="multiple" {...shared} value={props.value} defaultValue={props.defaultValue} onValueChange={props.onValueChange}>
+        {children}
+      </TG.Root>
+    );
+  }
   return (
     <TG.Root
       type="single"
-      aria-label={label}
-      value={value}
-      onValueChange={onValueChange}
-      className="inline-flex gap-1 rounded-lg bg-surface p-1"
+      {...shared}
+      value={props.value}
+      defaultValue={props.defaultValue}
+      onValueChange={(next) => {
+        if (required && next === "") return;
+        props.onValueChange?.(next);
+      }}
     >
-      {options.map((o) => (
-        <TG.Item
-          key={o}
-          value={o}
-          className="rounded-md px-3 py-2 text-sm data-[state=on]:bg-card"
-        >
-          {o}
-        </TG.Item>
-      ))}
+      {children}
     </TG.Root>
   );
-}
+});
 export function Calendar({
   className,
   showOutsideDays = true,

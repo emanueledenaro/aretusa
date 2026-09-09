@@ -2,7 +2,7 @@
 
 - Issue: [#70](https://github.com/emanueledenaro/aretusa/issues/70)
 - Reviewer: worker agent/batch3-conversation
-- Status: behavior-checked
+- Status: visually-reviewed by DOM measurement after coordinator integration; visual captures pending
 
 ## What changed
 
@@ -28,3 +28,7 @@ Browser evidence pending: the worker did not run the docs app. Checks to perform
 ## Decision
 
 Behavior and code gates passed by test; design and responsive gates await rendered inspection. Not release-ready.
+
+## Coordinator integration
+
+Merged on main from `agent/batch3-conversation` (worker head `a3f539c`, base `eb71728`). The worker's typecheck, 186 tests and 69 usage examples were reproduced in its worktree. DOM measurements in the authorized browser pane at 390 px light and 1440 px dark: no page-level horizontal overflow on any of the six pages, no console errors; the scroller exposes `role="log"` with its label, a scrolling region with the Aretusa scrollbar and the scroll fade. Interactive targets inside the previews are at least 44 px except the 20 px radio controls of the questionnaire, whose rows are 44 px, and one inline text link. Visual captures, 200% zoom, forced colors, reduced motion, real touch and assistive technology remain pending.

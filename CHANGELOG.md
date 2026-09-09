@@ -8,6 +8,7 @@
 - Formisch integration: `FormischField` adapter over a Valibot schema with registered focus, Forms documentation route with the reservation example, registry item declaring `@formisch/react` and `valibot`.
 - TanStack Form integration: `TanStackFormField` adapter with `focusFirstInvalidField`, Forms documentation route with the visit request example, registry item declaring `@tanstack/react-form`.
 - React Hook Form integration: `HookFormField` adapter, Forms documentation route with the reservation example, registry item with the `react-hook-form` dependency.
+- Conversation: Bubble with distinct sides and rich content, Attachment with type, size, download, upload progress and retry, Message with author, time, avatar, attachments, actions and delivery state, Message Scroller that follows new messages without moving the reader, Marker with machine-readable dates and a sticky option, Questionnaire with validation, optional and conditional steps and asynchronous completion with retry. Marker no longer carries its own vertical margin; parents provide the gap.
 - Switch: `description` and `error`, clearer off state, 44px rows and first-line alignment.
 - Radio Group: option descriptions, group `description` and `error`, `variant="cards"`, 44px rows and first-line alignment.
 - Checkbox: `description`, `error` and indeterminate support, 44px rows and first-line alignment for multiline labels.

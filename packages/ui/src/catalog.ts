@@ -473,7 +473,7 @@ export const catalog = [
     "name": "Attachment",
     "module": "conversation",
     "exportName": "Attachment",
-    "description": "A composable attachment for coherent, adaptable interfaces.",
+    "description": "A file chip with type, size, download, upload progress and error recovery.",
     "source": "conversation"
   },
   {
@@ -481,7 +481,7 @@ export const catalog = [
     "name": "Bubble",
     "module": "conversation",
     "exportName": "Bubble",
-    "description": "A composable bubble for coherent, adaptable interfaces.",
+    "description": "A message surface with incoming and outgoing sides and readable rich content.",
     "source": "conversation"
   },
   {
@@ -489,7 +489,7 @@ export const catalog = [
     "name": "Marker",
     "module": "conversation",
     "exportName": "Marker",
-    "description": "A composable marker for coherent, adaptable interfaces.",
+    "description": "A quiet text boundary between groups of messages.",
     "source": "conversation"
   },
   {
@@ -497,7 +497,7 @@ export const catalog = [
     "name": "Message",
     "module": "conversation",
     "exportName": "Message",
-    "description": "A composable message for coherent, adaptable interfaces.",
+    "description": "A conversation entry with author, time, attachments, actions and delivery state.",
     "source": "conversation"
   },
   {
@@ -505,7 +505,7 @@ export const catalog = [
     "name": "Message Scroller",
     "module": "conversation",
     "exportName": "MessageScroller",
-    "description": "A composable message scroller for coherent, adaptable interfaces.",
+    "description": "A bounded conversation log that follows new messages without moving the reader.",
     "source": "conversation"
   },
   {

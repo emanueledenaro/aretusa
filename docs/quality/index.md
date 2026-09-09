@@ -64,12 +64,12 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Data Table | component | [#67](https://github.com/emanueledenaro/aretusa/issues/67) | implemented |
 | Resizable | component | [#68](https://github.com/emanueledenaro/aretusa/issues/68) | implemented |
 | Table | component | [#69](https://github.com/emanueledenaro/aretusa/issues/69) | implemented |
-| Attachment | component | [#70](https://github.com/emanueledenaro/aretusa/issues/70) | implemented |
-| Bubble | component | [#71](https://github.com/emanueledenaro/aretusa/issues/71) | implemented |
-| Marker | component | [#72](https://github.com/emanueledenaro/aretusa/issues/72) | implemented |
-| Message | component | [#73](https://github.com/emanueledenaro/aretusa/issues/73) | implemented |
-| Message Scroller | component | [#74](https://github.com/emanueledenaro/aretusa/issues/74) | implemented |
-| Questionnaire | component | [#75](https://github.com/emanueledenaro/aretusa/issues/75) | implemented |
+| Attachment | component | [#70](https://github.com/emanueledenaro/aretusa/issues/70) | visually-reviewed |
+| Bubble | component | [#71](https://github.com/emanueledenaro/aretusa/issues/71) | visually-reviewed |
+| Marker | component | [#72](https://github.com/emanueledenaro/aretusa/issues/72) | visually-reviewed |
+| Message | component | [#73](https://github.com/emanueledenaro/aretusa/issues/73) | visually-reviewed |
+| Message Scroller | component | [#74](https://github.com/emanueledenaro/aretusa/issues/74) | visually-reviewed |
+| Questionnaire | component | [#75](https://github.com/emanueledenaro/aretusa/issues/75) | visually-reviewed |
 | header-block | block | [#76](https://github.com/emanueledenaro/aretusa/issues/76) | implemented |
 | hero-block | block | [#77](https://github.com/emanueledenaro/aretusa/issues/77) | implemented |
 | editorial-block | block | [#78](https://github.com/emanueledenaro/aretusa/issues/78) | implemented |

@@ -1057,15 +1057,16 @@
       "issue": 70,
       "databaseId": 5386383206,
       "url": "https://github.com/emanueledenaro/aretusa/issues/70",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/attachment-review.md"
     },
     {
       "id": "bubble",
@@ -1074,15 +1075,16 @@
       "issue": 71,
       "databaseId": 5386383314,
       "url": "https://github.com/emanueledenaro/aretusa/issues/71",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/bubble-review.md"
     },
     {
       "id": "marker",
@@ -1091,15 +1093,16 @@
       "issue": 72,
       "databaseId": 5386383465,
       "url": "https://github.com/emanueledenaro/aretusa/issues/72",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/marker-review.md"
     },
     {
       "id": "message",
@@ -1108,17 +1111,18 @@
       "issue": 73,
       "databaseId": 5386383568,
       "url": "https://github.com/emanueledenaro/aretusa/issues/73",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "bubble"
-      ]
+      ],
+      "evidence": "docs/quality/message-review.md"
     },
     {
       "id": "message-scroller",
@@ -1127,17 +1131,18 @@
       "issue": 74,
       "databaseId": 5386383723,
       "url": "https://github.com/emanueledenaro/aretusa/issues/74",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "message"
-      ]
+      ],
+      "evidence": "docs/quality/message-scroller-review.md"
     },
     {
       "id": "questionnaire",
@@ -1146,20 +1151,21 @@
       "issue": 75,
       "databaseId": 5386383836,
       "url": "https://github.com/emanueledenaro/aretusa/issues/75",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "field",
         "radio-group",
         "progress",
         "button"
-      ]
+      ],
+      "evidence": "docs/quality/questionnaire-review.md"
     },
     {
       "id": "header-block",

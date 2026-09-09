@@ -9,7 +9,7 @@ import {
   NavigationMenu as NM,
   ScrollArea as SA,
 } from "radix-ui";
-import { Search, Menu, ChevronRight, ChevronLeft, Ellipsis } from "lucide-react";
+import { Search, Menu, ChevronRight, ChevronLeft, Ellipsis, Check } from "lucide-react";
 import { Button } from "./button";
 import { Modal } from "./overlays";
 import { ScrollFade, useScrollFade } from "./scroll-fade";
@@ -231,40 +231,131 @@ export const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(fu
   );
 });
 export type MenuOption = {
+  type?: "item";
   label: string;
   onSelect: () => void;
   disabled?: boolean;
+  /** Marks a destructive action. */
   danger?: boolean;
+  /** Leading icon, rendered aria-hidden. */
+  icon?: React.ReactNode;
+  /** Keyboard hint shown at the end of the row; the row itself does not bind the key. */
+  shortcut?: string;
+  /** Second, muted line under the label. */
+  description?: string;
 };
-const menuClass =
-  "cursor-pointer rounded-md px-3 py-2 text-sm outline-none data-[highlighted]:bg-surface data-[disabled]:opacity-40";
-export function DropdownMenu({
-  trigger,
-  items,
-}: {
-  trigger: React.ReactElement;
-  items: MenuOption[];
-}) {
+export type MenuEntry =
+  | MenuOption
+  | { type: "separator" }
+  | { type: "group"; label: string; items: MenuEntry[] }
+  | { type: "submenu"; label: string; items: MenuEntry[]; icon?: React.ReactNode; disabled?: boolean }
+  | { type: "checkbox"; label: string; checked: boolean; onCheckedChange: (checked: boolean) => void; disabled?: boolean; icon?: React.ReactNode; shortcut?: string };
+const menuItemClass =
+  "group/item relative flex min-h-10 cursor-default select-none items-center gap-3 rounded-md px-3 py-2 text-sm leading-snug text-ink outline-none transition-colors [overflow-wrap:anywhere] data-[highlighted]:bg-surface data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[danger=true]:text-danger data-[danger=true]:data-[highlighted]:bg-danger/10 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted data-[danger=true]:[&_svg]:text-danger";
+export const menuContentClass =
+  "a-popup a-scrollbar min-w-48 max-w-[min(20rem,calc(100vw-24px))] p-1.5";
+const menuSeparatorClass = "-mx-1.5 my-1.5 h-px bg-line";
+const menuLabelClass = "px-3 pb-1 pt-2 text-xs font-medium uppercase tracking-wide text-muted";
+/** The subset of a Radix menu namespace the shared renderer needs; DropdownMenu, ContextMenu and Menubar all provide it. */
+type MenuKit = {
+  Item: React.ElementType;
+  CheckboxItem: React.ElementType;
+  ItemIndicator: React.ElementType;
+  Separator: React.ElementType;
+  Group: React.ElementType;
+  Label: React.ElementType;
+  Sub: React.ElementType;
+  SubTrigger: React.ElementType;
+  SubContent: React.ElementType;
+  Portal: React.ElementType;
+};
+function MenuRow({ icon, label, description, shortcut }: { icon?: React.ReactNode; label: string; description?: string; shortcut?: string }) {
   return (
-    <DM.Root>
+    <>
+      {icon && <span aria-hidden="true" className="flex shrink-0">{icon}</span>}
+      <span className="min-w-0 flex-1">
+        <span className="block">{label}</span>
+        {description && <span className="mt-0.5 block text-xs leading-relaxed text-muted">{description}</span>}
+      </span>
+      {shortcut && (
+        <span aria-hidden="true" className="ms-4 shrink-0 text-xs tracking-wide text-muted">
+          {shortcut}
+        </span>
+      )}
+    </>
+  );
+}
+function renderMenuEntries(M: MenuKit, entries: MenuEntry[], prefix = ""): React.ReactNode {
+  return entries.map((entry, n) => {
+    const key = prefix + n;
+    if (entry.type === "separator") return <M.Separator key={key} className={menuSeparatorClass} />;
+    if (entry.type === "group") {
+      const id = key + "-label";
+      return (
+        <M.Group key={key} aria-labelledby={id}>
+          <M.Label id={id} className={menuLabelClass}>{entry.label}</M.Label>
+          {renderMenuEntries(M, entry.items, key + ".")}
+        </M.Group>
+      );
+    }
+    if (entry.type === "submenu")
+      return (
+        <M.Sub key={key}>
+          <M.SubTrigger disabled={entry.disabled} className={menuItemClass + " data-[state=open]:bg-surface"}>
+            <MenuRow icon={entry.icon} label={entry.label} />
+            <ChevronRight aria-hidden="true" className="ms-auto" />
+          </M.SubTrigger>
+          <M.Portal>
+            <M.SubContent className={menuContentClass} sideOffset={6} alignOffset={-6} collisionPadding={12}>
+              {renderMenuEntries(M, entry.items, key + ".")}
+            </M.SubContent>
+          </M.Portal>
+        </M.Sub>
+      );
+    if (entry.type === "checkbox")
+      return (
+        <M.CheckboxItem key={key} checked={entry.checked} onCheckedChange={entry.onCheckedChange} disabled={entry.disabled} className={menuItemClass + " ps-9"}>
+          <span className="absolute start-3 flex size-4 items-center justify-center">
+            <M.ItemIndicator>
+              <Check aria-hidden="true" className="!text-ink" />
+            </M.ItemIndicator>
+          </span>
+          <MenuRow icon={entry.icon} label={entry.label} shortcut={entry.shortcut} />
+        </M.CheckboxItem>
+      );
+    return (
+      <M.Item key={key} disabled={entry.disabled} onSelect={entry.onSelect} data-danger={entry.danger ? "true" : undefined} className={menuItemClass}>
+        <MenuRow icon={entry.icon} label={entry.label} description={entry.description} shortcut={entry.shortcut} />
+      </M.Item>
+    );
+  });
+}
+export type DropdownMenuProps = Omit<React.ComponentPropsWithoutRef<typeof DM.Root>, "children"> & {
+  trigger: React.ReactElement;
+  items: MenuEntry[];
+  /** Accessible name of the menu. */
+  label?: string;
+  align?: "start" | "center" | "end";
+  side?: "top" | "bottom" | "left" | "right";
+};
+/**
+ * Actions behind a trigger. Arrow keys move between items and skip disabled ones, ArrowRight opens a submenu,
+ * Enter and Space select, Escape closes and focus returns to the trigger. Items may carry icons, shortcut hints,
+ * descriptions and a danger tone; entries may be separators, labelled groups, submenus or checkbox items.
+ */
+export function DropdownMenu({ trigger, items, label, align = "start", side = "bottom", ...props }: DropdownMenuProps) {
+  return (
+    <DM.Root {...props}>
       <DM.Trigger asChild>{trigger}</DM.Trigger>
       <DM.Portal>
-        <DM.Content className="a-popup min-w-44" sideOffset={6}>
-          {items.map((i) => (
-            <DM.Item
-              key={i.label}
-              disabled={i.disabled}
-              onSelect={i.onSelect}
-              className={menuClass + (i.danger ? " text-danger" : "")}
-            >
-              {i.label}
-            </DM.Item>
-          ))}
+        <DM.Content {...(label ? { "aria-label": label, "aria-labelledby": undefined } : {})} align={align} side={side} sideOffset={6} collisionPadding={12} className={menuContentClass}>
+          {renderMenuEntries(DM, items)}
         </DM.Content>
       </DM.Portal>
     </DM.Root>
   );
 }
+const menuClass = menuItemClass;
 export function ContextMenu({
   children,
   items,

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { Activity, LayoutGrid, Settings2 } from "lucide-react";
+import { Activity, Archive, Copy, FolderInput, LayoutGrid, Pencil, Settings2, Share2, Trash2 } from "lucide-react";
 
 export function TabsExample() {
   const [section, setSection] = React.useState("activity");
@@ -170,6 +170,54 @@ export function PaginationExample() {
         <p className="mb-3 text-sm text-muted">Custom labels in a 240px parent.</p>
         <div className="w-60 max-w-full">
           <U.Pagination page={page} total={5} onChange={setPage} previousLabel="Newer" nextLabel="Older" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DropdownMenuExample() {
+  const [last, setLast] = React.useState("none");
+  const [archived, setArchived] = React.useState(true);
+  const [starred, setStarred] = React.useState(false);
+  const say = (label: string) => () => setLast(label);
+  const actions: U.MenuEntry[] = [
+    { label: "Rename", icon: <Pencil />, shortcut: "⌘R", onSelect: say("Rename") },
+    { label: "Duplicate", icon: <Copy />, shortcut: "⌘D", onSelect: say("Duplicate") },
+    { label: "Share", icon: <Share2 />, description: "Members with the link can view.", onSelect: say("Share") },
+    { type: "submenu", label: "Move to", icon: <FolderInput />, items: [{ label: "Prints", onSelect: say("Move to Prints") }, { label: "Maps and margins", onSelect: say("Move to Maps") }, { label: "Letters from Ortigia", onSelect: say("Move to Letters") }] },
+    { type: "separator" },
+    { type: "group", label: "View", items: [{ type: "checkbox", label: "Show archived", checked: archived, onCheckedChange: setArchived }, { type: "checkbox", label: "Starred only", checked: starred, onCheckedChange: setStarred }] },
+    { type: "separator" },
+    { label: "Archive", icon: <Archive />, disabled: true, onSelect: say("Archive") },
+    { label: "Delete project", icon: <Trash2 />, danger: true, onSelect: say("Delete") },
+  ];
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Icons, shortcut hints, a description, a submenu, a labelled group of checkbox items, a disabled entry and a destructive action. Last action: <span className="font-medium text-ink">{last}</span></p>
+        <U.DropdownMenu label="Project actions" trigger={<U.Button tone="outline">Project actions</U.Button>} items={actions} />
+      </div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="mb-3 text-sm text-muted">Aligned to the end of an icon trigger.</p>
+          <U.DropdownMenu label="More" align="end" trigger={<U.Button tone="quiet" aria-label="More options" className="min-w-11 px-2"><Settings2 aria-hidden="true" className="size-4" /></U.Button>} items={actions.slice(0, 3)} />
+        </div>
+        <div>
+          <p className="mb-3 text-sm text-muted">Inside a dialog.</p>
+          <U.Dialog trigger={<U.Button tone="outline">Open dialog</U.Button>} title="Letters from Ortigia" description="Forty-two letters, transcribed and searchable.">
+            <U.DropdownMenu label="Letter actions" trigger={<U.Button size="sm" tone="outline">Actions</U.Button>} items={actions} />
+          </U.Dialog>
+        </div>
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Long labels wrap and forty entries scroll inside the menu, in a 240px parent.</p>
+        <div className="w-60 max-w-full">
+          <U.DropdownMenu
+            label="Chapters"
+            trigger={<U.Button tone="outline" className="w-full">Jump to a chapter of the workshop notes</U.Button>}
+            items={Array.from({ length: 40 }, (_, n) => ({ label: n === 3 ? "Chapter 4, in which the press is moved across the courtyard during the first rain of October" : "Chapter " + (n + 1), onSelect: say("Chapter " + (n + 1)) }))}
+          />
         </div>
       </div>
     </div>

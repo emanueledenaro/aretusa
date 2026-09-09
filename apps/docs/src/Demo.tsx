@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample, TooltipExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample, HoverCardExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -754,23 +754,7 @@ export function Demo({ id }: { id: string }) {
       content = <TooltipExample />;
       break;
     case "hover-card":
-      content = (
-        <U.HoverCard
-          trigger={
-            <a
-              href="https://github.com/emanueledenaro/aretusa"
-              className="underline"
-            >
-              Aretusa
-            </a>
-          }
-        >
-          <p className="font-editorial text-xl">Aretusa</p>
-          <p className="mt-2 text-sm text-muted">
-            Original interfaces, by TrinacriaLabs.
-          </p>
-        </U.HoverCard>
-      );
+      content = <HoverCardExample />;
       break;
     case "toast":
       content = <U.ToastDemo />;

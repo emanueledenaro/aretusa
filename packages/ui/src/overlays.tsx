@@ -376,19 +376,52 @@ export function Tooltip({
   );
   return shared ? root : <T.Provider delayDuration={delay}>{root}</T.Provider>;
 }
+export type HoverCardProps = {
+  /** A link or button that stays usable on its own; the card only adds context. */
+  trigger: React.ReactElement;
+  children: React.ReactNode;
+  side?: "top" | "right" | "bottom" | "left";
+  align?: "start" | "center" | "end";
+  /** Milliseconds before a hover opens the card. Focus uses the same delay. */
+  openDelay?: number;
+  closeDelay?: number;
+  /** Surface width before the viewport cap: sm 240px, md 320px, lg 400px. */
+  width?: "sm" | "md" | "lg";
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  className?: string;
+};
 export function HoverCard({
   trigger,
   children,
-}: {
-  trigger: React.ReactElement;
-  children: React.ReactNode;
-}) {
+  side = "bottom",
+  align = "center",
+  openDelay = 300,
+  closeDelay = 150,
+  width = "md",
+  open,
+  defaultOpen,
+  onOpenChange,
+  className,
+}: HoverCardProps) {
   return (
-    <H.Root>
+    <H.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} openDelay={openDelay} closeDelay={closeDelay}>
       <H.Trigger asChild>{trigger}</H.Trigger>
       <H.Portal>
-        <H.Content sideOffset={8} className="a-popup w-72 p-5">
+        <H.Content
+          side={side}
+          align={align}
+          sideOffset={8}
+          collisionPadding={12}
+          className={cx(
+            "a-popup a-scrollbar p-5 leading-relaxed",
+            width === "sm" ? "w-60" : width === "lg" ? "w-[400px]" : "w-80",
+            className,
+          )}
+        >
           {children}
+          <H.Arrow width={14} height={7} className="fill-card stroke-line [stroke-width:1px]" />
         </H.Content>
       </H.Portal>
     </H.Root>

@@ -132,3 +132,63 @@ export function TooltipExample() {
     </div>
   );
 }
+
+export function HoverCardExample() {
+  const [following, setFollowing] = React.useState(false);
+  return (
+    <div className="w-full space-y-6">
+      <p className="max-w-prose text-[0.9375rem] leading-relaxed">
+        The workshop notes were written by{" "}
+        <U.HoverCard
+          trigger={<a href="#alex-rivers" className="font-medium underline underline-offset-4 decoration-line hover:decoration-ink">Alex Rivers</a>}
+        >
+          <div className="flex items-start gap-3">
+            <U.Avatar name="Alex Rivers" />
+            <div className="min-w-0">
+              <p className="font-editorial text-lg leading-snug">Alex Rivers</p>
+              <p className="text-sm text-muted">Designer, Ortigia studio</p>
+            </div>
+          </div>
+          <p className="mt-3 text-sm text-muted">Works on editorial systems and the salt garden archive. 42 notes this season.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <U.Button size="sm" tone={following ? "outline" : "primary"} onClick={() => setFollowing((value) => !value)}>
+              {following ? "Following" : "Follow"}
+            </U.Button>
+            <U.Button size="sm" tone="quiet">Message</U.Button>
+          </div>
+        </U.HoverCard>{" "}
+        during the spring residency, and the plates were proofed in{" "}
+        <U.HoverCard trigger={<a href="#printing-room" className="font-medium underline underline-offset-4 decoration-line hover:decoration-ink">the printing room</a>} side="top" width="sm">
+          <p className="font-editorial text-lg leading-snug">The printing room</p>
+          <p className="mt-2 text-sm text-muted">A two-press studio on the ground floor. Open to members from Tuesday to Saturday.</p>
+        </U.HoverCard>
+        .
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <U.HoverCard
+          trigger={<U.Button tone="secondary" size="sm">aretusa/main</U.Button>}
+          align="start"
+          width="lg"
+        >
+          <p className="text-xs uppercase tracking-[0.12em] text-muted">Repository</p>
+          <p className="mt-1 font-editorial text-lg leading-snug">emanueledenaro/aretusa</p>
+          <p className="mt-2 text-sm text-muted">Original React components with an editorial identity. 64 capabilities, 8 blocks, MIT license.</p>
+          <dl className="mt-4 grid grid-cols-3 gap-3 text-sm">
+            <div><dt className="text-muted">Stars</dt><dd className="font-medium tabular-nums">1,204</dd></div>
+            <div><dt className="text-muted">Issues</dt><dd className="font-medium tabular-nums">37</dd></div>
+            <div><dt className="text-muted">Updated</dt><dd className="font-medium">Today</dd></div>
+          </dl>
+        </U.HoverCard>
+        <div className="w-60 max-w-full rounded-xl border border-dashed border-line p-3 text-sm text-muted">
+          Narrow parent:{" "}
+          <U.HoverCard trigger={<a href="#harbour" className="font-medium text-ink underline underline-offset-4">arrival at the harbour and the salt gardens</a>} side="bottom" align="start">
+            <p className="text-sm">The card is placed by the viewport, so a narrow parent never clips it.</p>
+          </U.HoverCard>
+        </div>
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed text-muted">
+        Hover cards enrich a link that already works on its own. They open on focus as well as hover, close on blur or when the pointer leaves, and never hold the only route to an action.
+      </p>
+    </div>
+  );
+}

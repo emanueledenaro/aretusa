@@ -79,3 +79,45 @@ export function SkeletonExample() {
     </div>
   );
 }
+
+export function SpinnerExample() {
+  const [busy, setBusy] = React.useState(false);
+  React.useEffect(() => {
+    if (!busy) return;
+    const timer = window.setTimeout(() => setBusy(false), 2400);
+    return () => window.clearTimeout(timer);
+  }, [busy]);
+  return (
+    <div className="w-full space-y-6">
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <U.Spinner size="sm" label="Small" />
+        <U.Spinner label="Medium" />
+        <U.Spinner size="lg" label="Large" />
+        <U.Spinner label="Label for screen readers only" labelHidden />
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed">
+        Inline with running text the spinner sits on the middle of the line, so a sentence such as
+        "your export is being prepared <U.Spinner size="sm" label="preparing" labelHidden />" keeps its rhythm.
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <U.Button loading={busy} onClick={() => setBusy(true)}>Save changes</U.Button>
+        <U.Button tone="outline" onClick={() => setBusy(true)}>
+          {busy ? <U.Spinner size="sm" label="Saving" /> : "Save as draft"}
+        </U.Button>
+        {busy && <U.Spinner size="sm" label="Saving your draft, this takes a moment" className="text-muted" />}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex min-h-40 items-center justify-center rounded-xl border border-line bg-card">
+          <U.Spinner size="lg" label="Loading the archive" className="text-terracotta" />
+        </div>
+        <div className="flex min-h-40 items-center justify-center rounded-xl bg-ink text-paper" data-theme="dark">
+          <U.Spinner size="lg" label="Rendering preview" />
+        </div>
+      </div>
+      <div className="w-60 max-w-full rounded-xl border border-line p-4">
+        <p className="mb-2 text-xs text-muted">240px parent</p>
+        <U.Spinner label="Synchronising twelve notebooks with the studio archive" />
+      </div>
+    </div>
+  );
+}

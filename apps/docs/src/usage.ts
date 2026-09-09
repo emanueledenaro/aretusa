@@ -17,7 +17,7 @@ export const usage: Record<string,string> = {
   "progress": "<Progress value={45} label=\"Upload progress\" />",
   "separator": "<Separator />",
   "skeleton": "<SkeletonGroup label=\"Loading profile\" className=\"flex items-center gap-3\"><Skeleton shape=\"circle\" /><Skeleton lines={2} className=\"flex-1\" /></SkeletonGroup>",
-  "spinner": "<Spinner label=\"Loading projects\" />",
+  "spinner": "<Spinner size=\"md\" label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
   "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
   "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",

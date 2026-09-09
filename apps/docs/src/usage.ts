@@ -28,7 +28,7 @@ export const usage: Record<string,string> = {
   "input": "<Input aria-label=\"Project name\" placeholder=\"A new beginning\" />",
   "input-group": "<InputGroup prefix=\"https://\"><input aria-label=\"Domain\" /></InputGroup>",
   "input-otp": "<InputOTP value={value} onChange={setValue} length={6} />",
-  "label": "<><Label htmlFor=\"name\">Name</Label><input id=\"name\" /></>",
+  "label": "<><Label htmlFor=\"name\" required secondary=\"Shown to your team\">Name</Label><input id=\"name\" required /></>",
   "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} />",
   "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" description=\"You can change this later.\" />",
   "select": "<Select label=\"Discipline\" options={options} value={value} onValueChange={setValue} />",

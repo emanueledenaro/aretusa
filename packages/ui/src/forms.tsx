@@ -123,9 +123,45 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     );
   },
 );
-export function Label(p: React.LabelHTMLAttributes<HTMLLabelElement>) {
-  return <label {...p} className={cx("text-sm font-medium", p.className)} />;
-}
+export type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
+  /** Adds the required marker; the control itself carries the `required` attribute. */
+  required?: boolean;
+  /** Trailing muted text such as "Optional" or a short unit; not part of the accessible name. */
+  secondary?: React.ReactNode;
+  /** Dims the label to match a disabled control. */
+  disabled?: boolean;
+};
+export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(function Label(
+  { required = false, secondary, disabled = false, className, children, ...p },
+  ref,
+) {
+  return (
+    <label
+      ref={ref}
+      data-disabled={disabled || undefined}
+      {...p}
+      className={cx(
+        "inline-flex min-w-0 flex-wrap items-baseline gap-x-2 text-sm font-medium leading-6 text-ink",
+        disabled && "cursor-default opacity-50",
+        className,
+      )}
+    >
+      <span className="min-w-0 break-words">
+        {children}
+        {required && (
+          <span aria-hidden="true" className="ms-1 text-terracotta">
+            *
+          </span>
+        )}
+      </span>
+      {secondary && (
+        <span aria-hidden="true" className="text-xs font-normal text-muted">
+          {secondary}
+        </span>
+      )}
+    </label>
+  );
+});
 export function Field({
   label,
   hint,

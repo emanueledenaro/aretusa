@@ -35,3 +35,32 @@ export function TextareaExample() {
     </div>
   );
 }
+
+export function LabelExample() {
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-2">
+        <U.Label htmlFor="label-name" required>Display name</U.Label>
+        <U.Input id="label-name" required placeholder="As shown to other members" />
+      </div>
+      <div className="grid gap-2">
+        <U.Label htmlFor="label-site" secondary="Optional">Website</U.Label>
+        <U.Input id="label-site" type="url" placeholder="https://" />
+      </div>
+      <div className="grid gap-2">
+        <U.Label htmlFor="label-plan" disabled>Plan</U.Label>
+        <U.Input id="label-plan" disabled value="Studio, yearly" />
+      </div>
+      <div className="grid gap-2">
+        <U.Label htmlFor="label-select">Meeting room</U.Label>
+        <U.Select id="label-select" label="Meeting room" options={[{ value: "print", label: "Printing room" }, { value: "terrace", label: "Terrace" }]} />
+      </div>
+      <div className="w-60 max-w-full sm:col-span-2">
+        <div className="grid gap-2">
+          <U.Label htmlFor="label-long" required secondary="Max 80 chars">Title of the piece as it should appear in the catalogue and on the wall label</U.Label>
+          <U.Input id="label-long" maxLength={80} />
+        </div>
+      </div>
+    </div>
+  );
+}

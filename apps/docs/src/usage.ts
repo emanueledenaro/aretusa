@@ -19,7 +19,7 @@ export const usage: Record<string,string> = {
   "skeleton": "<SkeletonGroup label=\"Loading profile\" className=\"flex items-center gap-3\"><Skeleton shape=\"circle\" /><Skeleton lines={2} className=\"flex-1\" /></SkeletonGroup>",
   "spinner": "<Spinner size=\"md\" label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
-  "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
+  "alert": "<Alert tone=\"success\" title=\"Saved\" onDismiss={() => setEnabled(false)}>Your work is up to date.</Alert>",
   "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",
   "checkbox": "<Checkbox label=\"Accept terms\" description=\"You can cancel up to two days before.\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",

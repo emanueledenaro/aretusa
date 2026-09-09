@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample } from "./demos/foundations-b";
+import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample, AlertExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -476,16 +476,7 @@ export function Demo({ id }: { id: string }) {
       content = <EmptyExample />;
       break;
     case "alert":
-      content = (
-        <div className="space-y-3">
-          <U.Alert title="Your work is saved" tone="success">
-            You can safely close this page.
-          </U.Alert>
-          <U.Alert title="Something needs attention" tone="error">
-            Review the highlighted field and try again.
-          </U.Alert>
-        </div>
-      );
+      content = <AlertExample />;
       break;
     case "typography":
       content = (

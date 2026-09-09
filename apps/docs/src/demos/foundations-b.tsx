@@ -305,3 +305,59 @@ export function ItemExample() {
     </div>
   );
 }
+
+export function AlertExample() {
+  const [notice, setNotice] = React.useState("");
+  const [dismissed, setDismissed] = React.useState(false);
+  const [failed, setFailed] = React.useState(true);
+  return (
+    <div className="w-full space-y-6">
+      <div className="space-y-3">
+        <U.Alert title="An early release" live="off">
+          Components may change before 1.0. Pin a version in your lockfile and read the changelog before upgrading.
+        </U.Alert>
+        {!dismissed && (
+          <U.Alert tone="success" title="Your work is saved" onDismiss={() => { setDismissed(true); setNotice("Notice dismissed"); }}>
+            You can safely close this page. A copy is kept in the archive for thirty days.
+          </U.Alert>
+        )}
+        <U.Alert
+          tone="warning"
+          title="Storage almost full"
+          action={
+            <>
+              <U.Button size="sm" onClick={() => setNotice("Plan page opened")}>Upgrade plan</U.Button>
+              <U.Button size="sm" tone="quiet" onClick={() => setNotice("Large files listed")}>Review large files</U.Button>
+            </>
+          }
+        >
+          94% of the studio space is used. New photographs will fail to upload once it is full; see <a href="#/docs">the storage guide</a> for what counts.
+        </U.Alert>
+        {failed ? (
+          <U.Alert
+            tone="error"
+            title="The upload could not be completed"
+            action={<U.Button size="sm" onClick={() => { setFailed(false); setNotice("Retrying the upload"); }}>Try again</U.Button>}
+          >
+            The connection dropped while sending "Marsala saltworks, contact sheet 07.tif" (312 MB). Nothing was lost; the file is still on your device.
+          </U.Alert>
+        ) : (
+          <U.Alert tone="success" title="Upload complete" action={<U.Button size="sm" tone="quiet" onClick={() => setFailed(true)}>Show the error again</U.Button>} />
+        )}
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
+        <div className="w-60 max-w-full">
+          <p className="mb-2 text-xs text-muted">240px parent, dismissable, long words</p>
+          <U.Alert tone="error" title="Unrecoverable synchronisation conflict" onDismiss={() => setNotice("Conflict notice dismissed")}>
+            Rename the local copy, then reopen /archive/correspondence/1958-1964/letters-and-telegrams.pdf.
+          </U.Alert>
+        </div>
+        <div className="space-y-3 rounded-xl bg-ink p-4 text-paper" data-theme="dark">
+          <U.Alert tone="info" title="Scheduled maintenance" live="off">Saturday 03:00 to 04:00 CET.</U.Alert>
+          <U.Alert tone="warning" title="Two collaborators are editing" live="off" icon={null}>Changes merge automatically.</U.Alert>
+        </div>
+      </div>
+      {notice && <p className="text-sm text-success" role="status">{notice}</p>}
+    </div>
+  );
+}

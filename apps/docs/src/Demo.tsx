@@ -6,6 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
+import { BadgeExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -411,14 +412,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "badge":
-      content = (
-        <div className="flex gap-3">
-          <U.Badge>Draft</U.Badge>
-          <U.Badge tone="success">Published</U.Badge>
-          <U.Badge tone="warning">Review</U.Badge>
-          <U.Badge tone="danger">Failed</U.Badge>
-        </div>
-      );
+      content = <BadgeExample />;
       break;
     case "avatar":
       content = (

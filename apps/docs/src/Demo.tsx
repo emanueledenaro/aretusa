@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample, AspectRatioExample } from "./demos/foundations-a";
+import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample, AspectRatioExample, DirectionExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -403,11 +403,7 @@ export function Demo({ id }: { id: string }) {
       content = <AspectRatioExample />;
       break;
     case "direction":
-      content = (
-        <U.Direction dir="rtl">
-          <U.Card>A right-to-left content container.</U.Card>
-        </U.Direction>
-      );
+      content = <DirectionExample onNotice={setNotice} />;
       break;
     case "item":
       content = (

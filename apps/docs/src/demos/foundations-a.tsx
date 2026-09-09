@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { AlignCenter, AlignLeft, AlignRight, Bold, Check, Clock, Italic, LayoutGrid, Link2, List, Map, Search, TriangleAlert, Underline, X } from "lucide-react";
+import { AlignCenter, ArrowUpRight, AlignLeft, AlignRight, Bold, Check, Clock, Italic, LayoutGrid, Link2, List, Map, Search, TriangleAlert, Underline, X } from "lucide-react";
 
 export function BadgeExample() {
   return (
@@ -411,6 +411,69 @@ export function AspectRatioExample() {
           <span className="px-4 text-center font-editorial text-2xl sm:text-3xl">Space to create.</span>
         </U.AspectRatio>
       </div>
+    </div>
+  );
+}
+
+export function DirectionExample({ onNotice }: { onNotice: (text: string) => void }) {
+  const [dir, setDir] = React.useState<U.TextDirection>("rtl");
+  const menu = [
+    { label: dir === "rtl" ? "إعادة تسمية" : "Rename", onSelect: () => onNotice("Rename chosen in the example") },
+    { label: dir === "rtl" ? "نسخ الرابط" : "Copy link", onSelect: () => onNotice("Link copied in the example") },
+    { label: dir === "rtl" ? "حذف" : "Delete", danger: true, onSelect: () => onNotice("Delete chosen in the example") },
+  ];
+  return (
+    <div className="grid w-full gap-8">
+      <div className="flex flex-wrap items-center gap-3">
+        <U.ButtonGroup label="Reading direction" attached>
+          <button type="button" aria-pressed={dir === "ltr"} onClick={() => setDir("ltr")}>Left to right</button>
+          <button type="button" aria-pressed={dir === "rtl"} onClick={() => setDir("rtl")}>Right to left</button>
+        </U.ButtonGroup>
+        <p className="text-xs text-muted">Every block below reads the same prop; nothing else is rewritten.</p>
+      </div>
+      <U.Direction dir={dir} className="grid gap-6 rounded-xl border border-line bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_240px]">
+        <div className="grid min-w-0 gap-4">
+          <U.Breadcrumb items={dir === "rtl" ? [{ label: "المشاريع", href: "#" }, { label: "الأرشيف", href: "#" }, { label: "الطلب 4821" }] : [{ label: "Projects", href: "#" }, { label: "Archive", href: "#" }, { label: "Order 4821" }]} />
+          <U.Card>
+            <U.CardHeader action={<U.DropdownMenu trigger={<U.Button tone="outline" size="sm">{dir === "rtl" ? "خيارات" : "Options"}</U.Button>} items={menu} />}>
+              <U.CardTitle>{dir === "rtl" ? "طباعة الملصقات" : "Poster printing"}</U.CardTitle>
+              <U.CardDescription>{dir === "rtl" ? "تُسلَّم النسخ يوم الخميس، القاعة الكبرى." : "Copies arrive on Thursday, main hall."}</U.CardDescription>
+            </U.CardHeader>
+            <U.CardContent>
+              <div className="flex flex-wrap items-center gap-2">
+                <U.Badge tone="success" icon={<Check strokeWidth={2.5} />}>{dir === "rtl" ? "مدفوع" : "Paid"}</U.Badge>
+                <U.Badge tone="info" icon={<Clock />}>{dir === "rtl" ? "يفتح 09:00" : "Opens at 09:00"}</U.Badge>
+                <U.Badge dot size="sm">{dir === "rtl" ? "مسودة" : "Draft"}</U.Badge>
+              </div>
+              <p className="mt-3 text-sm">
+                {dir === "rtl" ? "رقم الطلب " : "Order number "}
+                <U.Direction dir="ltr" className="inline-block font-mono">ARE-2026-4821</U.Direction>
+                {dir === "rtl" ? " ينتهي في " : " expires on "}
+                <U.Direction dir="ltr" className="inline-block">2026-10-01</U.Direction>.
+              </p>
+            </U.CardContent>
+            <U.CardFooter align="end">
+              <U.Popover label={dir === "rtl" ? "تفاصيل التسليم" : "Delivery details"} trigger={<U.Button tone="outline" size="sm">{dir === "rtl" ? "التسليم" : "Delivery"}</U.Button>}>
+                <p className="text-sm">{dir === "rtl" ? "القاعة الكبرى، الطابق الأول، من 09:00 إلى 18:00." : "Main hall, first floor, 09:00 to 18:00."}</p>
+              </U.Popover>
+              <U.Button size="sm" onClick={() => onNotice("Approved in the example")}>
+                {dir === "rtl" ? "اعتماد" : "Approve"}
+                <ArrowUpRight aria-hidden className="size-4 rtl:-scale-x-100" />
+              </U.Button>
+            </U.CardFooter>
+          </U.Card>
+        </div>
+        <div className="min-w-0">
+          <p className="mb-3 text-sm font-medium">{dir === "rtl" ? "عمود بعرض 240 بكسل" : "240px column"}</p>
+          <U.Field label={dir === "rtl" ? "البريد الإلكتروني" : "Email"} hint={dir === "rtl" ? "الحقل يبقى من اليسار إلى اليمين." : "The field itself stays left to right."}>
+            <U.Direction dir="ltr"><U.Input type="email" placeholder="name@example.com" /></U.Direction>
+          </U.Field>
+          <p className="mt-3 text-xs text-muted">
+            {dir === "rtl" ? "نص طويل جدًا بدون فواصل: " : "A long unbroken token: "}
+            <span className="break-all">https://aretusa.example/orders/4821/delivery-notes</span>
+          </p>
+        </div>
+      </U.Direction>
     </div>
   );
 }

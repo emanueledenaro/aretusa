@@ -10,7 +10,7 @@ export const usage: Record<string,string> = {
   "avatar": "<Avatar name=\"Alex Rivers\" />",
   "badge": "<Badge tone=\"success\" dot>Published</Badge>",
   "card": "<Card><CardHeader><CardTitle>Your project</CardTitle><CardDescription>Make room for an idea.</CardDescription></CardHeader><CardFooter align=\"end\"><button onClick={() => setEnabled(true)}>Open</button></CardFooter></Card>",
-  "direction": "<Direction dir=\"rtl\"><p>Right-to-left content</p></Direction>",
+  "direction": "<Direction dir=\"rtl\" className=\"p-4\"><p>Right-to-left content, including any menu or popover opened inside it.</p></Direction>",
   "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
   "kbd": "<p>Press <Kbd keys={[\"⌘\", \"K\"]} /> to search.</p>",

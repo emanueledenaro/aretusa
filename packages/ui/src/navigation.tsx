@@ -9,7 +9,7 @@ import {
   NavigationMenu as NM,
   ScrollArea as SA,
 } from "radix-ui";
-import { Search, Menu, ChevronRight } from "lucide-react";
+import { Search, Menu, ChevronRight, Ellipsis } from "lucide-react";
 import { Button } from "./button";
 import { Modal } from "./overlays";
 import { ScrollFade, useScrollFade } from "./scroll-fade";
@@ -345,32 +345,88 @@ export function NavigationMenu({
     </NM.Root>
   );
 }
-export function Breadcrumb({
-  items,
-}: {
-  items: { label: string; href?: string }[];
-}) {
+export type BreadcrumbItem = {
+  label: React.ReactNode;
+  /** Destination of an ancestor. The last item is the current page whether or not it links to itself. */
+  href?: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+};
+export type BreadcrumbProps = Omit<React.ComponentPropsWithoutRef<"nav">, "children"> & {
+  items: BreadcrumbItem[];
+  /** Accessible name of the navigation landmark. */
+  label?: string;
+  /** Rendered aria-hidden between items; a chevron by default. */
+  separator?: React.ReactNode;
+  /** Trails longer than this collapse their middle behind a control that reveals every ancestor. 0 disables collapsing. */
+  maxItems?: number;
+};
+/**
+ * Ordered navigation: ancestors are links, the last item is the current page (aria-current, as a link when it has an href). Long trails keep the first item and the
+ * last two visible and fold the rest behind a "Show hidden pages" button that moves focus to the first revealed link.
+ */
+export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(function Breadcrumb(
+  { items, label = "Breadcrumb", separator, maxItems = 4, className, ...props },
+  ref,
+) {
+  const [expanded, setExpanded] = React.useState(false);
+  const list = React.useRef<HTMLOListElement>(null);
+  const pendingFocus = React.useRef(false);
+  React.useEffect(() => {
+    if (!expanded || !pendingFocus.current) return;
+    pendingFocus.current = false;
+    const links = list.current ? Array.from(list.current.querySelectorAll("a")) : [];
+    links[1]?.focus();
+  }, [expanded]);
+  const hidden = maxItems > 0 && !expanded && items.length > maxItems ? items.length - maxItems + 1 : 0;
+  const visible = hidden
+    ? [items[0], { label: "", href: undefined, collapsed: true } as BreadcrumbItem & { collapsed: true }, ...items.slice(1 + hidden)]
+    : items;
+  const mark = <span aria-hidden="true" className="flex shrink-0 items-center text-muted/70 [&_svg]:size-3.5">{separator ?? <ChevronRight strokeWidth={1.75} />}</span>;
   return (
-    <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-2 text-sm">
-        {items.map((i, n) => (
-          <li key={n} className="flex items-center gap-2">
-            {n > 0 && (
-              <ChevronRight aria-hidden className="size-3 text-muted" />
-            )}
-            {i.href ? (
-              <a href={i.href} className="text-muted hover:underline">
-                {i.label}
-              </a>
-            ) : (
-              <span aria-current="page">{i.label}</span>
-            )}
-          </li>
-        ))}
+    <nav ref={ref} aria-label={label} className={cx("min-w-0 max-w-full", className)} {...props}>
+      <ol ref={list} className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+        {visible.map((i, n) => {
+          const current = n === visible.length - 1;
+          const collapsed = "collapsed" in i;
+          return (
+            <li key={n} className="flex min-w-0 items-center gap-2">
+              {n > 0 && mark}
+              {collapsed ? (
+                <button
+                  type="button"
+                  aria-label={"Show " + hidden + " hidden pages"}
+                  onClick={() => {
+                    pendingFocus.current = true;
+                    setExpanded(true);
+                  }}
+                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 text-muted transition-colors hover:bg-surface hover:text-ink sm:min-h-8 sm:min-w-8"
+                >
+                  <Ellipsis aria-hidden="true" className="size-4" />
+                </button>
+              ) : i.href ? (
+                <a
+                  href={i.href}
+                  onClick={i.onClick}
+                  aria-current={current ? "page" : undefined}
+                  className={cx(
+                    "inline-flex min-h-11 items-center rounded-sm underline-offset-4 transition-colors [overflow-wrap:anywhere] hover:text-ink hover:underline sm:min-h-8",
+                    current ? "font-medium text-ink" : "text-muted",
+                  )}
+                >
+                  {i.label}
+                </a>
+              ) : (
+                <span aria-current={current ? "page" : undefined} className="inline-flex min-h-11 items-center font-medium text-ink [overflow-wrap:anywhere] sm:min-h-8">
+                  {i.label}
+                </span>
+              )}
+            </li>
+          );
+        })}
       </ol>
     </nav>
   );
-}
+});
 export function Pagination({
   page,
   total,

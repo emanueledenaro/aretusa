@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TabsExample, AccordionExample, CollapsibleExample } from "./demos/navigation";
+import { TabsExample, AccordionExample, CollapsibleExample, BreadcrumbExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -841,15 +841,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "breadcrumb":
-      content = (
-        <U.Breadcrumb
-          items={[
-            { label: "Home", href: "#/" },
-            { label: "Components", href: "#/components/button" },
-            { label: "Breadcrumb" },
-          ]}
-        />
-      );
+      content = <BreadcrumbExample />;
       break;
     case "pagination":
       content = <U.Pagination page={page} total={5} onChange={setPage} />;

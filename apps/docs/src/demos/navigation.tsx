@@ -111,3 +111,34 @@ export function CollapsibleExample() {
     </div>
   );
 }
+
+export function BreadcrumbExample() {
+  const stop = (event: React.MouseEvent) => event.preventDefault();
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Three levels, the current page last.</p>
+        <U.Breadcrumb items={[{ label: "Home", href: "#/", onClick: stop }, { label: "Components", href: "#/components/button", onClick: stop }, { label: "Breadcrumb" }]} />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Six levels collapse behind a control that reveals the hidden ancestors.</p>
+        <U.Breadcrumb
+          items={[
+            { label: "Home", href: "#/", onClick: stop },
+            { label: "Archive", href: "#/archive", onClick: stop },
+            { label: "Letters", href: "#/archive/letters", onClick: stop },
+            { label: "Ortigia", href: "#/archive/letters/ortigia", onClick: stop },
+            { label: "1998", href: "#/archive/letters/ortigia/1998", onClick: stop },
+            { label: "A letter from Ortigia, 12 October" },
+          ]}
+        />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Slash separator and a long current title wrapping in a 240px parent.</p>
+        <div className="w-60 max-w-full">
+          <U.Breadcrumb separator="/" label="Location" items={[{ label: "Studio", href: "#/studio", onClick: stop }, { label: "Printing room", href: "#/studio/print", onClick: stop }, { label: "Reservations for the autumn open studio weekend" }]} />
+        </div>
+      </div>
+    </div>
+  );
+}

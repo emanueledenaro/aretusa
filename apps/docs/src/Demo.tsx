@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BadgeExample } from "./demos/foundations-a";
+import { BadgeExample, CardExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -394,22 +394,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "card":
-      content = (
-        <U.Card>
-          <U.CardHeader>
-            <U.Badge>In progress</U.Badge>
-            <U.CardTitle>A little room for ideas.</U.CardTitle>
-            <U.CardDescription>
-              Keep notes, share work and make your next step a thoughtful one.
-            </U.CardDescription>
-          </U.CardHeader>
-          <U.CardFooter>
-            <U.Button onClick={() => setNotice("Workspace opened")}>
-              Open workspace
-            </U.Button>
-          </U.CardFooter>
-        </U.Card>
-      );
+      content = <CardExample onNotice={setNotice} />;
       break;
     case "badge":
       content = <BadgeExample />;

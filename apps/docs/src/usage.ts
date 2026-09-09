@@ -9,7 +9,7 @@ export const usage: Record<string,string> = {
   "aspect-ratio": "<AspectRatio ratio={16 / 9}><img src=\"/your-image.jpg\" alt=\"Your description\" /></AspectRatio>",
   "avatar": "<Avatar name=\"Alex Rivers\" />",
   "badge": "<Badge tone=\"success\" dot>Published</Badge>",
-  "card": "<Card><h3>Your project</h3><p>Make room for an idea.</p></Card>",
+  "card": "<Card><CardHeader><CardTitle>Your project</CardTitle><CardDescription>Make room for an idea.</CardDescription></CardHeader><CardFooter align=\"end\"><button onClick={() => setEnabled(true)}>Open</button></CardFooter></Card>",
   "direction": "<Direction dir=\"rtl\"><p>Right-to-left content</p></Direction>",
   "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
@@ -72,6 +72,7 @@ export const usage: Record<string,string> = {
 
 /** Extra named imports and setup statements for examples that need a hook. */
 export const usageImports: Record<string,string[]> = {
+  "card": ["CardHeader", "CardTitle", "CardDescription", "CardFooter"],
   "scroll-fade": ["useScrollFade"],
   "tanstack-form": ["focusFirstInvalidField"]
 };

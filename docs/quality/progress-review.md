@@ -2,7 +2,7 @@
 
 - Issue: [#22](https://github.com/emanueledenaro/aretusa/issues/22)
 - Reviewer: worker agent/batch3-foundations-b, coordinator review pending
-- Status: behavior-checked
+- Status: visually-reviewed by DOM measurement after coordinator integration; visual captures pending
 
 ## What changed
 
@@ -33,3 +33,7 @@ Pending. No browser was available to this worker. Checks still owed: 320 to 1440
 ## Decision
 
 Code and interaction gates passed by test; design, responsive and distribution gates await the coordinator's rendered review. Not release-ready.
+
+## Coordinator integration
+
+Merged on main from `agent/batch3-foundations-b` (worker head `a6ba04c`, base `eb71728`); the Demo.tsx import conflict with the conversation batch was resolved by keeping both. The worker's typecheck, 192 tests and 69 usage examples were reproduced in its worktree; on main the suite is 210 tests with the registry rebuilt (Progress ships `progress.css`; the legacy global `progress` rules left the shared stylesheet). DOM measurements in the authorized browser pane at 390 px light and 1440 px dark: no page-level horizontal overflow on any of the seven pages, no console errors, status, progressbar and alert roles present; interactive targets are at least 44 px except inline text links and Item title links whose activation area extends to the whole row. The warning Alert in dark uses a 10 percent gold tint with paper text. Visual captures, 200% zoom, forced colors, reduced motion, real touch and assistive technology remain pending.

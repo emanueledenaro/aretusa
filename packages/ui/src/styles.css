@@ -99,23 +99,6 @@
 .a-input {
   min-width: 0;
 }
-progress {
-  appearance: none;
-  height: 8px;
-  background: var(--color-surface);
-}
-progress::-webkit-progress-bar {
-  background: var(--color-surface);
-  border-radius: 100px;
-}
-progress::-webkit-progress-value {
-  background: var(--color-terracotta);
-  border-radius: 100px;
-}
-progress::-moz-progress-bar {
-  background: var(--color-terracotta);
-  border-radius: 100px;
-}
 .a-calendar {
   --cal-radius: 10px;
   --cal-target: 44px;

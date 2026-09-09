@@ -138,15 +138,16 @@
       "issue": 19,
       "databaseId": 5386376442,
       "url": "https://github.com/emanueledenaro/aretusa/issues/19",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/empty-review.md"
     },
     {
       "id": "item",
@@ -155,15 +156,16 @@
       "issue": 20,
       "databaseId": 5386376550,
       "url": "https://github.com/emanueledenaro/aretusa/issues/20",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/item-review.md"
     },
     {
       "id": "kbd",
@@ -189,15 +191,16 @@
       "issue": 22,
       "databaseId": 5386376803,
       "url": "https://github.com/emanueledenaro/aretusa/issues/22",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/progress-review.md"
     },
     {
       "id": "separator",
@@ -223,15 +226,16 @@
       "issue": 24,
       "databaseId": 5386377213,
       "url": "https://github.com/emanueledenaro/aretusa/issues/24",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/skeleton-review.md"
     },
     {
       "id": "spinner",
@@ -240,15 +244,16 @@
       "issue": 25,
       "databaseId": 5386377343,
       "url": "https://github.com/emanueledenaro/aretusa/issues/25",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/spinner-review.md"
     },
     {
       "id": "typography",
@@ -257,15 +262,16 @@
       "issue": 26,
       "databaseId": 5386377453,
       "url": "https://github.com/emanueledenaro/aretusa/issues/26",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/typography-review.md"
     },
     {
       "id": "alert",
@@ -274,15 +280,16 @@
       "issue": 27,
       "databaseId": 5386377565,
       "url": "https://github.com/emanueledenaro/aretusa/issues/27",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/alert-review.md"
     },
     {
       "id": "calendar",

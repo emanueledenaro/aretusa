@@ -13,15 +13,15 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 | Button Group | component | [#16](https://github.com/emanueledenaro/aretusa/issues/16) | implemented |
 | Card | component | [#17](https://github.com/emanueledenaro/aretusa/issues/17) | implemented |
 | Direction | component | [#18](https://github.com/emanueledenaro/aretusa/issues/18) | implemented |
-| Empty | component | [#19](https://github.com/emanueledenaro/aretusa/issues/19) | implemented |
-| Item | component | [#20](https://github.com/emanueledenaro/aretusa/issues/20) | implemented |
+| Empty | component | [#19](https://github.com/emanueledenaro/aretusa/issues/19) | visually-reviewed |
+| Item | component | [#20](https://github.com/emanueledenaro/aretusa/issues/20) | visually-reviewed |
 | Kbd | component | [#21](https://github.com/emanueledenaro/aretusa/issues/21) | implemented |
-| Progress | component | [#22](https://github.com/emanueledenaro/aretusa/issues/22) | implemented |
+| Progress | component | [#22](https://github.com/emanueledenaro/aretusa/issues/22) | visually-reviewed |
 | Separator | component | [#23](https://github.com/emanueledenaro/aretusa/issues/23) | implemented |
-| Skeleton | component | [#24](https://github.com/emanueledenaro/aretusa/issues/24) | implemented |
-| Spinner | component | [#25](https://github.com/emanueledenaro/aretusa/issues/25) | implemented |
-| Typography | component | [#26](https://github.com/emanueledenaro/aretusa/issues/26) | implemented |
-| Alert | component | [#27](https://github.com/emanueledenaro/aretusa/issues/27) | implemented |
+| Skeleton | component | [#24](https://github.com/emanueledenaro/aretusa/issues/24) | visually-reviewed |
+| Spinner | component | [#25](https://github.com/emanueledenaro/aretusa/issues/25) | visually-reviewed |
+| Typography | component | [#26](https://github.com/emanueledenaro/aretusa/issues/26) | visually-reviewed |
+| Alert | component | [#27](https://github.com/emanueledenaro/aretusa/issues/27) | visually-reviewed |
 | Calendar | component | [#28](https://github.com/emanueledenaro/aretusa/issues/28) | visually-reviewed |
 | Checkbox | component | [#29](https://github.com/emanueledenaro/aretusa/issues/29) | visually-reviewed |
 | Combobox | component | [#30](https://github.com/emanueledenaro/aretusa/issues/30) | implemented |

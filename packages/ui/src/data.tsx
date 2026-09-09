@@ -431,43 +431,132 @@ else if(kind==='area')drawing=<AreaChart data={data} accessibilityLayer margin={
 else drawing=<LineChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Line dataKey="value" type="monotone" stroke={colors[0]} strokeWidth={2} dot={false} activeDot={{r:4,strokeWidth:3,stroke:'var(--color-card)'}} isAnimationActive={false}/></LineChart>;
 return <figure><figcaption className={compact?'sr-only':'mb-4 text-sm font-medium'}>{label}</figcaption>{data.length?<><div className={compact?'h-40 min-w-0':'h-60 min-w-0'}><ResponsiveContainer width="100%" height="100%" minWidth={0}>{drawing}</ResponsiveContainer></div><details className={compact?'mt-3 text-[10px] text-muted':'mt-4 text-xs text-muted'}><summary>View data</summary><Table caption={label} columns={['Period','Value']} rows={data.map(d=>[d.name,d.value])}/></details></>:<Empty title="No chart data"/>}</figure>
 }
-export function Carousel({
-  slides,
-}: {
-  slides: { title: string; description: string }[];
-}) {
-  const [index, setIndex] = React.useState(0);
-  if (!slides.length) return <Empty title="No slides" />;
-  const current = Math.min(index, slides.length - 1);
+export type CarouselSlide = {
+  title: string;
+  description?: string;
+  /** Extra content under the description, such as a link or a button. */
+  content?: React.ReactNode;
+  /** Media shown above the text; give images an alt text. */
+  media?: React.ReactNode;
+};
+export type CarouselProps = {
+  slides: CarouselSlide[];
+  /** Accessible name of the carousel. */
+  label?: string;
+  index?: number;
+  defaultIndex?: number;
+  onIndexChange?: (index: number) => void;
+  /** Wrap from the last slide to the first and back. */
+  loop?: boolean;
+  className?: string;
+};
+export function Carousel({ slides, label = "Highlights", index, defaultIndex = 0, onIndexChange, loop = false, className }: CarouselProps) {
+  const [inner, setInner] = React.useState(defaultIndex);
+  const count = slides.length;
+  const current = Math.min(Math.max(index ?? inner, 0), Math.max(count - 1, 0));
+  const start = React.useRef<{ x: number; y: number } | null>(null);
+  function go(next: number) {
+    if (count === 0) return;
+    const target = loop ? (next + count) % count : Math.min(Math.max(next, 0), count - 1);
+    if (target === current) return;
+    if (index === undefined) setInner(target);
+    onIndexChange?.(target);
+  }
+  if (count === 0) return <Empty title="No slides" />;
+  const atStart = !loop && current === 0;
+  const atEnd = !loop && current === count - 1;
   return (
-    <section aria-roledescription="carousel" aria-label="Highlights">
+    <section aria-roledescription="carousel" aria-label={label} className={cx("w-full min-w-0", className)}>
       <div
         role="group"
-        aria-roledescription="slide"
-        aria-label={current + 1 + " of " + slides.length}
-        className="rounded-xl bg-surface p-8"
+        aria-label="Slides"
+        aria-live="polite"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          const keys: Record<string, () => void> = {
+            ArrowRight: () => go(current + 1),
+            ArrowLeft: () => go(current - 1),
+            Home: () => go(0),
+            End: () => go(count - 1),
+          };
+          const handler = keys[event.key];
+          if (handler) {
+            event.preventDefault();
+            handler();
+          }
+        }}
+        onPointerDown={(event) => {
+          start.current = { x: event.clientX, y: event.clientY };
+        }}
+        onPointerUp={(event) => {
+          const from = start.current;
+          start.current = null;
+          if (!from) return;
+          const dx = event.clientX - from.x;
+          const dy = event.clientY - from.y;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? current + 1 : current - 1);
+        }}
+        onPointerCancel={() => {
+          start.current = null;
+        }}
+        className="touch-pan-y select-none overflow-hidden rounded-xl bg-surface outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
-        <h3 className="font-editorial text-2xl">{slides[current].title}</h3>
-        <p className="mt-3 text-sm text-muted">{slides[current].description}</p>
-      </div>
-      <div className="mt-4 flex items-center justify-between">
-        <Button
-          tone="outline"
-          aria-label="Previous slide"
-          disabled={current === 0}
-          onClick={() => setIndex(current - 1)}
+        <div
+          className="flex transition-transform duration-[var(--motion-enter)] ease-[var(--motion-ease)] motion-reduce:transition-none"
+          style={{ transform: "translateX(" + (document.dir === "rtl" ? current * 100 : -current * 100) + "%)" }}
         >
+          {slides.map((slide, i) => {
+            const active = i === current;
+            return (
+              <div
+                key={i}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={i + 1 + " of " + count}
+                aria-hidden={!active}
+                inert={!active}
+                className="w-full shrink-0 p-6 sm:p-8"
+              >
+                {slide.media && <div className="mb-5 overflow-hidden rounded-lg">{slide.media}</div>}
+                <h3 className="font-editorial text-2xl leading-snug tracking-tight sm:text-[1.75rem]">{slide.title}</h3>
+                {slide.description && <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted">{slide.description}</p>}
+                {slide.content && <div className="mt-5">{slide.content}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <Button tone="outline" aria-label="Previous slide" disabled={atStart} onClick={() => go(current - 1)} className="size-11 p-0">
           <ChevronLeft className="size-4" />
         </Button>
-        <span aria-live="polite" className="text-xs">
-          {current + 1} / {slides.length}
-        </span>
-        <Button
-          tone="outline"
-          aria-label="Next slide"
-          disabled={current === slides.length - 1}
-          onClick={() => setIndex(current + 1)}
-        >
+        <div className="flex min-w-0 items-center gap-1">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={"Go to slide " + (i + 1)}
+              aria-current={i === current ? "true" : undefined}
+              onClick={() => go(i)}
+              className="group flex size-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              <span
+                aria-hidden="true"
+                className={cx(
+                  "block h-2 rounded-full transition-all duration-[var(--motion-normal)] motion-reduce:transition-none",
+                  i === current ? "w-5 bg-ink" : "w-2 bg-control/60 group-hover:bg-control",
+                )}
+              />
+            </button>
+          ))}
+          <span className="sr-only" aria-live="polite">
+            Slide {current + 1} of {count}
+          </span>
+          <span aria-hidden="true" className="ms-2 text-xs tabular-nums text-muted">
+            {current + 1} / {count}
+          </span>
+        </div>
+        <Button tone="outline" aria-label="Next slide" disabled={atEnd} onClick={() => go(current + 1)} className="size-11 p-0">
           <ChevronRight className="size-4" />
         </Button>
       </div>

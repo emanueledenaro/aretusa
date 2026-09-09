@@ -57,7 +57,7 @@ export const usage: Record<string,string> = {
   "scroll-area": "<ScrollArea fade={enabled} label=\"Project activity\" className=\"h-40\"><p>Your scrollable content.</p></ScrollArea>",
   "sidebar": "<Sidebar items={[{label:\"Projects\",href:\"/projects\"}]}><p>Workspace content.</p></Sidebar>",
   "tabs": "<Tabs items={[{value:\"overview\",label:\"Overview\",content:<p>Your overview.</p>},{value:\"settings\",label:\"Settings\",content:<p>Your settings.</p>}]} />",
-  "carousel": "<Carousel slides={[{title:\"First idea\",description:\"A beginning.\"},{title:\"Next step\",description:\"Keep going.\"}]} />",
+  "carousel": "<Carousel label=\"Ideas\" loop slides={[{title:\"First idea\",description:\"A beginning.\"},{title:\"Next step\",description:\"Keep going.\",content:<a href=\"/next\">Read more</a>}]} />",
   "chart": "<Chart label=\"Contributions\" data={[{name:\"Mon\",value:12},{name:\"Tue\",value:24}]} />",
   "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} selectable onSelectionChange={(ids) => console.log(ids)} defaultSort={{ key: \"amount\", direction: \"descending\" }} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",

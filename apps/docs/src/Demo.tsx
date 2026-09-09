@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample, DataTableExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample, DataTableExample, CarouselExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -936,24 +936,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "carousel":
-      content = (
-        <U.Carousel
-          slides={[
-            {
-              title: "A space for ideas.",
-              description: "Start with what matters.",
-            },
-            {
-              title: "Make a little progress.",
-              description: "One thoughtful step at a time.",
-            },
-            {
-              title: "Build it together.",
-              description: "Share the work and what you learn.",
-            },
-          ]}
-        />
-      );
+      content = <CarouselExample />;
       break;
     case "resizable":
       content = (

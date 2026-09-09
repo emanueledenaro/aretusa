@@ -382,3 +382,47 @@ export function DataTableExample() {
     </div>
   );
 }
+
+export function CarouselExample() {
+  const [index, setIndex] = React.useState(0);
+  const chapters = [
+    { title: "A space for ideas.", description: "Start with what matters and leave room for the next thought.", tone: "bg-terracotta/20" },
+    { title: "Make a little progress.", description: "One thoughtful step at a time, recorded in the field notes.", tone: "bg-gold/25" },
+    { title: "Build it together.", description: paragraph, tone: "bg-chart-3/20" },
+    { title: "Open the studio.", description: "Members visit the printing room from Tuesday to Saturday.", tone: "bg-chart-4/20" },
+  ];
+  return (
+    <div className="w-full space-y-8">
+      <U.Carousel
+        label="Studio chapters"
+        index={index}
+        onIndexChange={setIndex}
+        slides={chapters.map((chapter, i) => ({
+          title: chapter.title,
+          description: chapter.description,
+          media: <div aria-hidden="true" className={"h-32 w-full rounded-lg " + chapter.tone} />,
+          content: (
+            <U.Button size="sm" tone="outline" onClick={() => setIndex((i + 1) % chapters.length)}>
+              Continue
+            </U.Button>
+          ),
+        }))}
+      />
+      <div className="w-60 max-w-full">
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted">Narrow parent, loop</p>
+        <U.Carousel
+          label="Short notes"
+          loop
+          slides={[
+            { title: "Tide line", description: "A thin white line on the stones each morning." },
+            { title: "Shutters", description: "Half closed until noon." },
+            { title: "Plates", description: "Proofed in the printing room." },
+          ]}
+        />
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed text-muted">
+        Slides move with the controls, the indicators, the arrow keys when the slide group has focus, or a horizontal swipe. Nothing rotates on its own. Hidden slides are inert, so Tab never lands on an off-screen control, and the current position is announced.
+      </p>
+    </div>
+  );
+}

@@ -308,3 +308,37 @@ export function SliderExample() {
     </div>
   );
 }
+
+export function InputOTPExample() {
+  const [code, setCode] = React.useState("");
+  const [status, setStatus] = React.useState<"idle" | "checking" | "wrong" | "ok">("idle");
+  const check = (value: string) => {
+    setStatus("checking");
+    window.setTimeout(() => setStatus(value === "246810" ? "ok" : "wrong"), 600);
+  };
+  const error = status === "wrong" ? "That code did not match. Check the message and try again." : undefined;
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-3">
+        <U.Field label="Verification code" hint={status === "checking" ? "Checking the code." : status === "ok" ? "Verified." : "Six digits from the SMS. Try 246810."} error={error}>
+          <U.InputOTP value={code} onChange={(next) => { setCode(next); setStatus("idle"); }} onComplete={check} disabled={status === "checking"} autoFocus />
+        </U.Field>
+        <p className="text-xs text-muted" aria-live="polite">{code.length} of 6 entered.</p>
+      </div>
+      <U.Field label="Backup code" hint="Eight letters and digits, shown as two groups.">
+        <U.InputOTP label="Backup code" length={8} pattern="alphanumeric" groupSize={4} defaultValue="K7" />
+      </U.Field>
+      <U.Field label="Expired code" error="This code expired after ten minutes. Request a new one.">
+        <U.InputOTP label="Expired code" defaultValue="335911" groupSize={3} />
+      </U.Field>
+      <U.Field label="Locked" hint="Disabled while a new code is on its way." disabled>
+        <U.InputOTP label="Locked" defaultValue="12" />
+      </U.Field>
+      <div className="w-60 max-w-full">
+        <U.Field label="In a 240px parent" hint="Slots shrink before the row overflows.">
+          <U.InputOTP label="Narrow code" length={8} groupSize={4} />
+        </U.Field>
+      </div>
+    </div>
+  );
+}

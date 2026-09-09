@@ -917,32 +917,168 @@ export function Combobox({
     </>
   );
 }
-export function InputOTP({
-  length = 6,
-  label = "Verification code",
-  value,
-  onChange,
-  disabled,
-}: {
+export type InputOTPProps = {
+  /** Number of characters; defaults to 6. */
   length?: number;
+  /** Accessible name of the group; each slot is named "Digit n of length" from it. */
   label?: string;
-  value: string;
-  onChange: (v: string) => void;
+  /** Controlled code without separators. */
+  value?: string;
+  /** Initial code when uncontrolled. */
+  defaultValue?: string;
+  /** Fires with the sanitized code on every edit, paste and autofill. */
+  onChange?: (value: string) => void;
+  /** Fires once when every slot is filled. */
+  onComplete?: (value: string) => void;
+  /** numeric (default) accepts digits only; alphanumeric accepts letters and digits and upper-cases them. */
+  pattern?: "numeric" | "alphanumeric";
+  /** Slot count per visual group, for example 3 renders 123 456 with a separator between. */
+  groupSize?: number;
+  /** Submits the code under this name through a hidden input. */
+  name?: string;
+  /** Applied to the first slot so a Label or Field can point at the control. */
+  id?: string;
   disabled?: boolean;
-}) {
+  required?: boolean;
+  autoFocus?: boolean;
+  className?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+};
+const otpPatterns = { numeric: /[^0-9]/g, alphanumeric: /[^0-9a-zA-Z]/g };
+export const InputOTP = React.forwardRef<HTMLInputElement, InputOTPProps>(function InputOTP(
+  {
+    length = 6,
+    label = "Verification code",
+    value,
+    defaultValue = "",
+    onChange,
+    onComplete,
+    pattern = "numeric",
+    groupSize,
+    name,
+    id,
+    disabled,
+    required,
+    autoFocus,
+    className,
+    "aria-describedby": describedBy,
+    "aria-invalid": invalid,
+  },
+  ref,
+) {
+  const [internal, setInternal] = React.useState(defaultValue);
+  const controlled = value !== undefined;
+  const code = (controlled ? value : internal).slice(0, length);
+  const slots = React.useRef<(HTMLInputElement | null)[]>([]);
+  // Focus handlers run before the next render, so they read the latest code from here.
+  const latest = React.useRef(code);
+  latest.current = code;
+  const completed = React.useRef(code.length === length);
+  const sanitize = (text: string) => {
+    const clean = text.replace(otpPatterns[pattern], "");
+    return (pattern === "alphanumeric" ? clean.toUpperCase() : clean).slice(0, length);
+  };
+  const focusSlot = (index: number) => {
+    const slot = slots.current[Math.max(0, Math.min(index, length - 1))];
+    slot?.focus();
+    slot?.select();
+  };
+  const commit = (next: string, focusIndex: number) => {
+    latest.current = next;
+    if (!controlled) setInternal(next);
+    if (next !== code) onChange?.(next);
+    if (next.length === length && !completed.current) onComplete?.(next);
+    completed.current = next.length === length;
+    focusSlot(focusIndex);
+  };
+  /** Writes text starting at a slot; a full code always starts from the first slot. */
+  const insert = (text: string, at: number) => {
+    const chars = sanitize(text);
+    if (!chars) return;
+    const start = chars.length >= length ? 0 : Math.min(at, code.length);
+    const next = (code.slice(0, start) + chars).slice(0, length);
+    commit(next, next.length);
+  };
+  const handleChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const text = event.target.value;
+    if (text === "") {
+      commit(code.slice(0, index) + code.slice(index + 1), index);
+      return;
+    }
+    // A slot already holding a character receives "old new" or "new old"; keep what was typed last.
+    const typed = text.length === 2 && code[index] ? text.replace(code[index], "") : text;
+    insert(typed, index);
+  };
+  const handleKeyDown = (index: number) => (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Backspace") {
+      event.preventDefault();
+      const target = code[index] ? index : index - 1;
+      if (target < 0) return;
+      commit(code.slice(0, target) + code.slice(target + 1), target);
+    } else if (event.key === "Delete") {
+      event.preventDefault();
+      commit(code.slice(0, index) + code.slice(index + 1), index);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      focusSlot(index - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      focusSlot(Math.min(index + 1, code.length));
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      focusSlot(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      focusSlot(code.length);
+    }
+  };
+  const handlePaste = (index: number) => (event: React.ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    insert(event.clipboardData.getData("text"), index);
+  };
+  const size = groupSize && groupSize > 0 ? groupSize : length;
   return (
-    <Input
+    <div
+      role="group"
       aria-label={label}
-      inputMode="numeric"
-      autoComplete="one-time-code"
-      value={value}
-      disabled={disabled}
-      maxLength={length}
-      pattern={"[0-9]{" + length + "}"}
-      onChange={(e) =>
-        onChange(e.target.value.replace(/\D/g, "").slice(0, length))
-      }
-      className="max-w-64 text-center font-mono text-xl tracking-[0.5em]"
-    />
+      aria-describedby={describedBy}
+      className={cx("flex w-full max-w-full items-center gap-2", disabled && "opacity-50", className)}
+    >
+      {name && <input type="hidden" name={name} value={code} />}
+      {Array.from({ length }, (_, index) => (
+        <React.Fragment key={index}>
+          {index > 0 && index % size === 0 && (
+            <span aria-hidden="true" className="h-px w-2 shrink-0 rounded-full bg-control" />
+          )}
+          <input
+            ref={index === 0 ? mergeRefs(ref, (node) => { slots.current[0] = node; }) : (node) => { slots.current[index] = node; }}
+            id={index === 0 ? id : undefined}
+            aria-label={`${label}: character ${index + 1} of ${length}`}
+            aria-invalid={invalid}
+            aria-describedby={describedBy}
+            type="text"
+            inputMode={pattern === "numeric" ? "numeric" : "text"}
+            autoComplete={index === 0 ? "one-time-code" : "off"}
+            autoCapitalize="characters"
+            autoCorrect="off"
+            spellCheck={false}
+            autoFocus={autoFocus && index === 0}
+            disabled={disabled}
+            required={required}
+            value={code[index] ?? ""}
+            onChange={handleChange(index)}
+            onKeyDown={handleKeyDown(index)}
+            onPaste={handlePaste(index)}
+            onFocus={(event) => {
+              // Keep entry contiguous: focusing a slot past the code moves to the first empty slot.
+              if (index > latest.current.length) focusSlot(latest.current.length);
+              else event.target.select();
+            }}
+            className="a-input h-11 min-w-8 flex-1 basis-0 px-0 text-center font-mono text-lg tabular-nums caret-terracotta selection:bg-terracotta/20 sm:max-w-12"
+          />
+        </React.Fragment>
+      ))}
+    </div>
   );
-}
+});

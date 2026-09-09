@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample, ToggleExample, ToggleGroupExample, SliderExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample, ToggleExample, ToggleGroupExample, SliderExample, InputOTPExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -620,14 +620,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "input-otp":
-      content = (
-        <div className="space-y-3">
-          <U.InputOTP value={value} onChange={setValue} />
-          <p className="text-xs text-muted">
-            Six digits. Paste and device autofill are supported.
-          </p>
-        </div>
-      );
+      content = <InputOTPExample />;
       break;
     case "toggle":
       content = <ToggleExample />;

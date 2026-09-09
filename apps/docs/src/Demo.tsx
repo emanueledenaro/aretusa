@@ -6,6 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
+import { TabsExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -815,29 +816,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "tabs":
-      content = (
-        <U.Tabs
-          items={[
-            {
-              value: "overview",
-              label: "Overview",
-              content: <p className="text-sm">Everything you need to begin.</p>,
-            },
-            {
-              value: "activity",
-              label: "Activity",
-              content: (
-                <p className="text-sm">Your recent changes appear here.</p>
-              ),
-            },
-            {
-              value: "settings",
-              label: "Settings",
-              content: <U.Switch label="Notifications" />,
-            },
-          ]}
-        />
-      );
+      content = <TabsExample />;
       break;
     case "dropdown-menu":
       content = (

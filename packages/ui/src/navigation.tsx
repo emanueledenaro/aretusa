@@ -13,37 +13,80 @@ import { Search, Menu, ChevronRight } from "lucide-react";
 import { Button } from "./button";
 import { Modal } from "./overlays";
 import { ScrollFade, useScrollFade } from "./scroll-fade";
-export function Tabs({
-  items,
-  defaultValue,
-}: {
-  items: { value: string; label: string; content: React.ReactNode }[];
-  defaultValue?: string;
-}) {
+import { cx } from "./utils";
+export type TabItem = {
+  value: string;
+  label: React.ReactNode;
+  content: React.ReactNode;
+  disabled?: boolean;
+  /** Optional leading icon, rendered aria-hidden next to the label. */
+  icon?: React.ReactNode;
+};
+export type TabsProps = Omit<
+  React.ComponentPropsWithoutRef<typeof TB.Root>,
+  "orientation"
+> & {
+  items: TabItem[];
+  /** Accessible name of the tab list. */
+  label?: string;
+  /** pill: segmented control on a surface. line: underline indicator on a hairline. */
+  variant?: "pill" | "line";
+};
+/**
+ * Automatic activation: arrow keys move focus and selection, Home and End jump to the edges,
+ * disabled tabs are skipped. Controlled through value/onValueChange or uncontrolled through defaultValue.
+ */
+export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
+  { items, label = "Sections", variant = "pill", defaultValue, className, ...props },
+  ref,
+) {
+  const first = items.find((i) => !i.disabled)?.value;
   return (
-    <TB.Root defaultValue={defaultValue || items[0]?.value}>
+    <TB.Root
+      ref={ref}
+      defaultValue={props.value === undefined ? defaultValue || first : undefined}
+      className={cx("w-full min-w-0", className)}
+      {...props}
+    >
       <TB.List
-        aria-label="Sections"
-        className="mb-5 flex flex-wrap gap-1 rounded-lg bg-surface p-1"
+        aria-label={label}
+        data-variant={variant}
+        className={cx(
+          "mb-5 flex max-w-full flex-wrap",
+          variant === "pill"
+            ? "w-fit gap-1 rounded-lg bg-surface p-1"
+            : "gap-x-5 gap-y-0 border-b border-line",
+        )}
       >
         {items.map((i) => (
           <TB.Trigger
             key={i.value}
             value={i.value}
-            className="rounded-md px-4 py-2 text-sm data-[state=active]:bg-card"
+            disabled={i.disabled}
+            className={cx(
+              "inline-flex min-h-10 items-center gap-2 text-sm font-medium text-muted transition-colors [overflow-wrap:anywhere] hover:text-ink data-[state=active]:text-ink data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:size-4 [&_svg]:shrink-0",
+              variant === "pill"
+                ? "rounded-md px-3.5 py-2 text-start focus-visible:outline-offset-2 data-[state=active]:bg-card data-[state=active]:shadow-xs"
+                : "-mb-px border-b-2 border-transparent px-1 py-2.5 text-start focus-visible:rounded-md focus-visible:outline-offset-[-2px] data-[state=active]:border-terracotta",
+            )}
           >
+            {i.icon && <span aria-hidden="true">{i.icon}</span>}
             {i.label}
           </TB.Trigger>
         ))}
       </TB.List>
       {items.map((i) => (
-        <TB.Content key={i.value} value={i.value} className="a-tabs-content">
+        <TB.Content
+          key={i.value}
+          value={i.value}
+          className="a-tabs-content min-w-0 rounded-lg [overflow-wrap:anywhere] focus-visible:outline-offset-4"
+        >
           {i.content}
         </TB.Content>
       ))}
     </TB.Root>
   );
-}
+});
 export function Accordion({
   items,
 }: {

@@ -62,12 +62,12 @@ export const usage: Record<string,string> = {
   "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",
   "table": "<Table caption=\"Projects\" columns={[\"Name\",\"Status\"]} rows={[[\"Field notes\",\"Draft\"]]} />",
-  "attachment": "<Attachment name=\"notes.pdf\" onRemove={() => setEnabled(true)} />",
+  "attachment": "<Attachment name=\"notes.pdf\" kind=\"PDF\" size={248000} href=\"/files/notes.pdf\" onRemove={() => setEnabled(true)} />",
   "bubble": "<Bubble side=\"end\">Hello there.</Bubble>",
-  "marker": "<Marker>Today</Marker>",
-  "message": "<Message author=\"Alex\" time=\"09:41\">A new idea.</Message>",
-  "message-scroller": "<MessageScroller label=\"Project conversation\"><p>First message.</p><p>Second message.</p></MessageScroller>",
-  "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",options:[\"Design\",\"Engineering\"]}]} onComplete={answers=>console.log(answers)} />"
+  "marker": "<Marker dateTime=\"2026-03-04\">Today</Marker>",
+  "message": "<Message author=\"Alex\" time=\"09:41\" dateTime=\"2026-03-04T09:41:00Z\" side=\"end\" status=\"sent\">A new idea.</Message>",
+  "message-scroller": "<MessageScroller label=\"Project conversation\" loading={enabled} className=\"max-h-80\"><p>First message.</p><p>Second message.</p></MessageScroller>",
+  "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",description:\"Pick one.\",options:[\"Design\",\"Engineering\"]},{id:\"follow\",title:\"Follow up?\",required:false,options:[\"Call me\",\"Email me\"]}]} onComplete={answers=>console.log(answers)} />"
 };
 
 /** Extra named imports and setup statements for examples that need a hook. */

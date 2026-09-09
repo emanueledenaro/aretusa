@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { AttachmentExample, BubbleExample, MarkerExample, MessageExample, MessageScrollerExample } from "./demos/conversation";
+import { AttachmentExample, BubbleExample, MarkerExample, MessageExample, MessageScrollerExample, QuestionnaireExample } from "./demos/conversation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -1016,25 +1016,7 @@ export function Demo({ id }: { id: string }) {
       content = <MessageScrollerExample />;
       break;
     case "questionnaire":
-      content = notice ? (
-        <U.Alert title="Answers saved">{notice}</U.Alert>
-      ) : (
-        <U.Questionnaire
-          questions={[
-            {
-              id: "focus",
-              title: "What are you building?",
-              options: ["A website", "An application", "A design system"],
-            },
-            {
-              id: "priority",
-              title: "What matters most?",
-              options: ["Clarity", "Speed", "Flexibility"],
-            },
-          ]}
-          onComplete={(a) => setNotice(Object.values(a).join(" · "))}
-        />
-      );
+      content = <QuestionnaireExample />;
       break;
     default:
       content = <U.Empty title="Choose a component" />;

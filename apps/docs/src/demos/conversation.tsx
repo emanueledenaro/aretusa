@@ -205,3 +205,75 @@ export function MarkerExample() {
     </div>
   );
 }
+
+const survey: U.QuestionnaireQuestion[] = [
+  {
+    id: "kind",
+    title: "What are you making for the open studio?",
+    description: "This decides which questions follow.",
+    options: [
+      { value: "print", label: "A printed piece", description: "Posters, cards or a small book." },
+      { value: "web", label: "A web page", description: "A landing page or a small site." },
+      { value: "exhibit", label: "An exhibit", description: "Something people walk through." },
+    ],
+  },
+  {
+    id: "paper",
+    title: "Which paper stock?",
+    options: ["Cream, uncoated, 300 g", "Bright white, coated, 250 g", "Recycled grey board, 400 g, with a visible fibre and a slightly rough surface that takes ink unevenly"],
+    when: (a) => a.kind === "print",
+  },
+  {
+    id: "priority",
+    title: "What matters most?",
+    description: "Pick the one you would defend in a review.",
+    options: ["Clarity", "Speed", "Flexibility"],
+  },
+  {
+    id: "contact",
+    title: "How should we follow up?",
+    required: false,
+    options: ["Call me", "Email me", "No follow up"],
+  },
+];
+
+export function QuestionnaireExample() {
+  const [result, setResult] = React.useState<Record<string, string> | null>(null);
+  const attempts = React.useRef(0);
+  const complete = (answers: Record<string, string>) =>
+    new Promise<void>((resolve, reject) => {
+      attempts.current += 1;
+      window.setTimeout(() => {
+        if (attempts.current === 1) reject(new Error("offline"));
+        else {
+          setResult(answers);
+          resolve();
+        }
+      }, 900);
+    });
+  return (
+    <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,1fr)_240px]">
+      <div className="min-w-0 max-w-xl">
+        {result ? (
+          <U.Alert title="Answers saved">
+            <ul className="mt-1 list-disc ps-5 text-sm">
+              {Object.entries(result).map(([id, value]) => (
+                <li key={id}>
+                  <span className="font-medium">{id}</span>: {value}
+                </li>
+              ))}
+            </ul>
+            <U.Button tone="outline" size="sm" className="mt-3" onClick={() => { attempts.current = 0; setResult(null); }}>Start again</U.Button>
+          </U.Alert>
+        ) : (
+          <U.Questionnaire questions={survey} onComplete={complete} />
+        )}
+        <p className="mt-3 text-xs text-muted">The first Finish fails on purpose to show the error and retry path.</p>
+      </div>
+      <div className="min-w-0 rounded-xl border border-dashed border-line p-3">
+        <p className="mb-3 text-xs text-muted">240px parent</p>
+        <U.Questionnaire questions={[survey[2]]} onComplete={() => {}} />
+      </div>
+    </div>
+  );
+}

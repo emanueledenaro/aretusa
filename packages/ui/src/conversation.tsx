@@ -2,7 +2,7 @@ import * as React from "react";
 import { ArrowDown, Download, LoaderCircle, Paperclip, RotateCw, TriangleAlert, X } from "lucide-react";
 import { Button } from "./button";
 import { Progress } from "./progress";
-import { Input, RadioGroup } from "./forms";
+import { RadioGroup } from "./forms";
 import { cx } from "./utils";
 import { ScrollFade, useScrollFade } from "./scroll-fade";
 /** Format a byte count as B, KB, MB or GB with one decimal above the unit boundary. */
@@ -383,47 +383,166 @@ export const MessageScroller = React.forwardRef<HTMLDivElement, MessageScrollerP
     </div>
   );
 });
-export function Questionnaire({
-  questions,
-  onComplete,
-}: {
-  questions: { id: string; title: string; options: string[] }[];
-  onComplete: (answers: Record<string, string>) => void;
-}) {
-  const [step, setStep] = React.useState(0),
-    [answers, setAnswers] = React.useState<Record<string, string>>({});
-  const q = questions[step];
-  if (!q) return <p>No questions configured.</p>;
+export type QuestionnaireOption =
+  | string
+  | { value: string; label: React.ReactNode; description?: React.ReactNode; disabled?: boolean };
+export type QuestionnaireQuestion = {
+  id: string;
+  title: string;
+  /** Help text under the title, linked to the group. */
+  description?: React.ReactNode;
+  options: QuestionnaireOption[];
+  /** Required by default; an optional question can be passed without an answer. */
+  required?: boolean;
+  /** Show the question only when earlier answers match. */
+  when?: (answers: Record<string, string>) => boolean;
+};
+export type QuestionnaireProps = Omit<React.ComponentPropsWithRef<"form">, "onSubmit" | "children"> & {
+  questions: QuestionnaireQuestion[];
+  /** Receives the answers of the visible questions. A returned promise drives the pending and error states. */
+  onComplete: (answers: Record<string, string>) => void | Promise<void>;
+  defaultAnswers?: Record<string, string>;
+  /** Controlled answers; pair with onAnswersChange. */
+  answers?: Record<string, string>;
+  onAnswersChange?: (answers: Record<string, string>) => void;
+  /** External submission error; the finish control retries. */
+  error?: React.ReactNode;
+  labels?: Partial<{
+    previous: string;
+    next: string;
+    finish: string;
+    retry: string;
+    optional: string;
+    progress: (current: number, total: number) => string;
+    required: string;
+    failed: string;
+    empty: string;
+  }>;
+};
+const questionnaireLabels = {
+  previous: "Previous",
+  next: "Next",
+  finish: "Finish",
+  retry: "Try again",
+  optional: "Optional",
+  progress: (current: number, total: number) => `Question ${current} of ${total}`,
+  required: "Choose one option to continue.",
+  failed: "Your answers could not be saved. Try again.",
+  empty: "No questions configured.",
+};
+/** A guided sequence of single-choice questions: progress, question, help, choices and navigation as one task. */
+export const Questionnaire = React.forwardRef<HTMLFormElement, QuestionnaireProps>(function Questionnaire(
+  { questions, onComplete, defaultAnswers, answers: controlled, onAnswersChange, error, labels, className, ...props },
+  ref,
+) {
+  const text = { ...questionnaireLabels, ...labels };
+  const uid = React.useId();
+  const [internal, setInternal] = React.useState<Record<string, string>>(defaultAnswers ?? {});
+  const answers = controlled ?? internal;
+  const [step, setStep] = React.useState(0);
+  const [invalid, setInvalid] = React.useState(false);
+  const [pending, setPending] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+  const firstRadio = React.useRef<HTMLButtonElement>(null);
+  const mounted = React.useRef(true);
+  React.useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+  const visible = questions.filter((q) => !q.when || q.when(answers));
+  const index = Math.min(step, Math.max(0, visible.length - 1));
+  const q = visible[index];
+  const last = index === visible.length - 1;
+  const submitError = failed ? text.failed : error;
+  const setAnswer = (id: string, value: string) => {
+    const next = { ...answers, [id]: value };
+    if (controlled === undefined) setInternal(next);
+    onAnswersChange?.(next);
+    setInvalid(false);
+    setFailed(false);
+  };
+  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!q || pending) return;
+    if (q.required !== false && !answers[q.id]) {
+      setInvalid(true);
+      firstRadio.current?.focus();
+      return;
+    }
+    if (!last) {
+      setStep(index + 1);
+      setInvalid(false);
+      return;
+    }
+    const result: Record<string, string> = {};
+    for (const question of visible) if (answers[question.id]) result[question.id] = answers[question.id];
+    let outcome: void | Promise<void>;
+    try {
+      outcome = onComplete(result);
+    } catch {
+      setFailed(true);
+      return;
+    }
+    if (outcome && typeof (outcome as Promise<void>).then === "function") {
+      setPending(true);
+      setFailed(false);
+      (outcome as Promise<void>).then(
+        () => {
+          if (mounted.current) setPending(false);
+        },
+        () => {
+          if (!mounted.current) return;
+          setPending(false);
+          setFailed(true);
+        },
+      );
+    }
+  };
+  if (!q)
+    return (
+      <p role="status" className="rounded-xl border border-dashed border-line p-6 text-center text-sm text-muted">
+        {text.empty}
+      </p>
+    );
+  const optional = q.required === false;
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!answers[q.id]) return;
-        if (step === questions.length - 1) onComplete(answers);
-        else setStep(step + 1);
-      }}
-      className="space-y-6"
-    >
-      <Progress label="Your progress" value={(step / questions.length) * 100} />
-      <h3 className="font-editorial text-2xl">{q.title}</h3>
-      <RadioGroup
-        label={q.title}
-        value={answers[q.id] || ""}
-        onValueChange={(value) => setAnswers((a) => ({ ...a, [q.id]: value }))}
-        options={q.options.map((o) => ({ label: o, value: o }))}
-      />
-      <div className="flex gap-3">
-        <Button
-          tone="outline"
-          disabled={!step}
-          onClick={() => setStep(step - 1)}
-        >
-          Previous
-        </Button>
-        <Button type="submit" disabled={!answers[q.id]}>
-          {step === questions.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </div>
+    <form {...props} ref={ref} noValidate onSubmit={submit} aria-labelledby={uid + "-title"} className={cx("flex min-w-0 flex-col gap-6", className)}>
+      <Progress label={text.progress(index + 1, visible.length)} value={Math.round((index / visible.length) * 100)} />
+      <fieldset disabled={pending} className="m-0 flex min-w-0 flex-col gap-5 border-0 p-0">
+        <div className="flex flex-col gap-2">
+          <h3 id={uid + "-title"} className="font-editorial text-2xl leading-tight text-ink text-balance">
+            {q.title}
+            {optional && (
+              <span className="ms-2 align-middle font-sans text-xs font-medium tracking-wide text-muted">{text.optional}</span>
+            )}
+          </h3>
+        </div>
+        <RadioGroup
+          key={q.id}
+          label={q.title}
+          description={q.description}
+          error={invalid ? text.required : undefined}
+          focusRef={firstRadio}
+          value={answers[q.id] ?? ""}
+          onValueChange={(value) => setAnswer(q.id, value)}
+          options={q.options.map((o) => (typeof o === "string" ? { label: o, value: o } : o))}
+        />
+        {submitError && (
+          <p role="alert" className="text-sm text-danger">
+            {submitError}
+          </p>
+        )}
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+          <Button tone="outline" disabled={index === 0} onClick={() => { setStep(index - 1); setInvalid(false); }} className="w-full sm:w-auto">
+            {text.previous}
+          </Button>
+          <Button type="submit" loading={pending} className="w-full sm:w-auto">
+            {last ? (submitError ? text.retry : text.finish) : text.next}
+          </Button>
+        </div>
+      </fieldset>
     </form>
   );
-}
+});

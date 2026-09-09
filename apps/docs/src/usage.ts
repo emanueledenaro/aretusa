@@ -67,7 +67,7 @@ export const usage: Record<string,string> = {
   "marker": "<Marker dateTime=\"2026-03-04\">Today</Marker>",
   "message": "<Message author=\"Alex\" time=\"09:41\" dateTime=\"2026-03-04T09:41:00Z\" side=\"end\" status=\"sent\">A new idea.</Message>",
   "message-scroller": "<MessageScroller label=\"Project conversation\" loading={enabled} className=\"max-h-80\"><p>First message.</p><p>Second message.</p></MessageScroller>",
-  "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",options:[\"Design\",\"Engineering\"]}]} onComplete={answers=>console.log(answers)} />"
+  "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",description:\"Pick one.\",options:[\"Design\",\"Engineering\"]},{id:\"follow\",title:\"Follow up?\",required:false,options:[\"Call me\",\"Email me\"]}]} onComplete={answers=>console.log(answers)} />"
 };
 
 /** Extra named imports and setup statements for examples that need a hook. */

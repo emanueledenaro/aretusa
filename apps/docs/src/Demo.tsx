@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample, AlertExample } from "./demos/foundations-b";
+import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample, AlertExample, TypographyExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -479,17 +479,7 @@ export function Demo({ id }: { id: string }) {
       content = <AlertExample />;
       break;
     case "typography":
-      content = (
-        <div className="space-y-5">
-          <U.Typography as="h2" editorial>
-            Thoughtful by nature.
-          </U.Typography>
-          <U.Typography>
-            Clear typography gives ideas room to breathe. DM Sans for utility,
-            Lora for editorial moments.
-          </U.Typography>
-        </div>
-      );
+      content = <TypographyExample />;
       break;
     case "input":
       content = (

@@ -361,3 +361,40 @@ export function AlertExample() {
     </div>
   );
 }
+
+export function TypographyExample() {
+  const [editorial, setEditorial] = React.useState(true);
+  return (
+    <div className="w-full space-y-8">
+      <U.Switch label="Editorial face for headings" description="Lora for headings, DM Sans for everything else." checked={editorial} onCheckedChange={setEditorial} />
+      <article className="max-w-prose space-y-4">
+        <U.Typography as="p" variant="overline">Chapter one</U.Typography>
+        <U.Typography as="h1" editorial={editorial}>Arrival at the harbour</U.Typography>
+        <U.Typography variant="lead" muted>The ferry docks a little after seven, when the salt light makes the facades look freshly painted.</U.Typography>
+        <U.Typography>
+          Clear typography gives ideas room to breathe. Body text sits at sixteen pixels with a relaxed line height, and links such as <a href="#/docs">the reading guide</a> keep a terracotta underline so they are recognisable without colour alone.
+        </U.Typography>
+        <U.Typography as="h2" editorial={editorial}>The salt gardens</U.Typography>
+        <U.Typography>
+          Headings scale with the viewport between 320 and 1440 pixels and keep their level in the document outline whatever size they use.
+        </U.Typography>
+        <U.Typography as="h3" editorial={editorial}>A letter from Ortigia</U.Typography>
+        <U.Typography as="h4">Workshop notes</U.Typography>
+        <U.Typography variant="small">Small text for asides and footnotes stays at fourteen pixels.</U.Typography>
+        <U.Typography as="figcaption" variant="caption">Photograph by the studio, Marsala, 1962.</U.Typography>
+      </article>
+      <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
+        <div className="w-60 max-w-full rounded-xl border border-line p-4">
+          <p className="mb-2 text-xs text-muted">240px parent, long words</p>
+          <U.Typography as="h2" variant="heading" editorial={editorial}>Donaudampfschifffahrtsgesellschaftskapitän</U.Typography>
+          <U.Typography variant="small" className="mt-2">Long words break inside the measure instead of pushing the page sideways; see /archive/correspondence/1958-1964/letters.pdf.</U.Typography>
+        </div>
+        <div className="rounded-xl bg-ink p-5 text-paper" data-theme="dark">
+          <U.Typography as="p" variant="overline">Dark surface</U.Typography>
+          <U.Typography as="h3" editorial={editorial} className="mt-1">Evening on the terrace</U.Typography>
+          <U.Typography variant="small" muted className="mt-2">Muted text and <a href="#/docs">links</a> use the dark tokens.</U.Typography>
+        </div>
+      </div>
+    </div>
+  );
+}

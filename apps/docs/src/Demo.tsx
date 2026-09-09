@@ -7,6 +7,7 @@ import { ReactHookFormExample } from "../../../examples/react-hook-form/example"
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
 import { AttachmentExample, BubbleExample, MarkerExample, MessageExample, MessageScrollerExample, QuestionnaireExample } from "./demos/conversation";
+import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample, AlertExample, TypographyExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -445,17 +446,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "item":
-      content = (
-        <U.Item
-          title="Project notes"
-          description="Updated just now"
-          action={
-            <U.Button tone="outline" onClick={() => setNotice("Notes opened")}>
-              Open
-            </U.Button>
-          }
-        />
-      );
+      content = <ItemExample />;
       break;
     case "kbd":
       content = (
@@ -474,66 +465,22 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "skeleton":
-      content = (
-        <div className="space-y-3" aria-label="Loading example">
-          <U.Skeleton className="h-9 w-1/2" />
-          <U.Skeleton />
-          <U.Skeleton className="w-3/4" />
-        </div>
-      );
+      content = <SkeletonExample />;
       break;
     case "spinner":
-      content = <U.Spinner label="Preparing your workspace" />;
+      content = <SpinnerExample />;
       break;
     case "progress":
-      content = (
-        <div className="space-y-4">
-          <U.Progress value={page * 20} label="Import progress" />
-          <U.Button
-            tone="outline"
-            onClick={() => setPage((p) => (p === 5 ? 1 : p + 1))}
-          >
-            Advance
-          </U.Button>
-        </div>
-      );
+      content = <ProgressExample />;
       break;
     case "empty":
-      content = (
-        <U.Empty title="A fresh page.">
-          Your first project belongs here.
-          <div className="mt-4">
-            <U.Button onClick={() => setNotice("Project created")}>
-              Create project
-            </U.Button>
-          </div>
-        </U.Empty>
-      );
+      content = <EmptyExample />;
       break;
     case "alert":
-      content = (
-        <div className="space-y-3">
-          <U.Alert title="Your work is saved" tone="success">
-            You can safely close this page.
-          </U.Alert>
-          <U.Alert title="Something needs attention" tone="error">
-            Review the highlighted field and try again.
-          </U.Alert>
-        </div>
-      );
+      content = <AlertExample />;
       break;
     case "typography":
-      content = (
-        <div className="space-y-5">
-          <U.Typography as="h2" editorial>
-            Thoughtful by nature.
-          </U.Typography>
-          <U.Typography>
-            Clear typography gives ideas room to breathe. DM Sans for utility,
-            Lora for editorial moments.
-          </U.Typography>
-        </div>
-      );
+      content = <TypographyExample />;
       break;
     case "input":
       content = (

@@ -11,15 +11,15 @@ export const usage: Record<string,string> = {
   "badge": "<Badge tone=\"success\">Published</Badge>",
   "card": "<Card><h3>Your project</h3><p>Make room for an idea.</p></Card>",
   "direction": "<Direction dir=\"rtl\"><p>Right-to-left content</p></Direction>",
-  "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
-  "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
+  "empty": "<Empty title=\"No projects yet\" action={<button>Create project</button>}>Your first project belongs here.</Empty>",
+  "item": "<Item href=\"#/notes/field-notes\" title=\"Field notes\" description=\"Updated today\" meta=\"12 files\" action={<button aria-label=\"Share Field notes\">Share</button>} />",
   "kbd": "<Kbd>⌘ K</Kbd>",
-  "progress": "<Progress value={45} label=\"Upload progress\" />",
+  "progress": "<Progress label=\"Upload progress\" value={45} description=\"Large files are compressed first.\" />",
   "separator": "<Separator />",
-  "skeleton": "<Skeleton className=\"h-10 w-40\" />",
-  "spinner": "<Spinner label=\"Loading projects\" />",
-  "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
-  "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
+  "skeleton": "<SkeletonGroup label=\"Loading profile\" className=\"flex items-center gap-3\"><Skeleton shape=\"circle\" /><Skeleton lines={2} className=\"flex-1\" /></SkeletonGroup>",
+  "spinner": "<Spinner size=\"md\" label=\"Loading projects\" />",
+  "typography": "<Typography as=\"h2\" variant=\"title\" editorial>A considered beginning.</Typography>",
+  "alert": "<Alert tone=\"success\" title=\"Saved\" onDismiss={() => setEnabled(false)}>Your work is up to date.</Alert>",
   "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",
   "checkbox": "<Checkbox label=\"Accept terms\" description=\"You can cancel up to two days before.\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",
@@ -72,6 +72,7 @@ export const usage: Record<string,string> = {
 
 /** Extra named imports and setup statements for examples that need a hook. */
 export const usageImports: Record<string,string[]> = {
+  "skeleton": ["SkeletonGroup"],
   "scroll-fade": ["useScrollFade"],
   "tanstack-form": ["focusFirstInvalidField"]
 };

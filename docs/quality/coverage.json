@@ -15,15 +15,16 @@
       "issue": 12,
       "databaseId": 5386375487,
       "url": "https://github.com/emanueledenaro/aretusa/issues/12",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/aspect-ratio-review.md"
     },
     {
       "id": "avatar",
@@ -50,15 +51,16 @@
       "issue": 14,
       "databaseId": 5386375857,
       "url": "https://github.com/emanueledenaro/aretusa/issues/14",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/badge-review.md"
     },
     {
       "id": "button",
@@ -85,17 +87,18 @@
       "issue": 16,
       "databaseId": 5386376088,
       "url": "https://github.com/emanueledenaro/aretusa/issues/16",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
       "dependencies": [
         "button"
-      ]
+      ],
+      "evidence": "docs/quality/button-group-review.md"
     },
     {
       "id": "card",
@@ -104,15 +107,16 @@
       "issue": 17,
       "databaseId": 5386376214,
       "url": "https://github.com/emanueledenaro/aretusa/issues/17",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/card-review.md"
     },
     {
       "id": "direction",
@@ -121,15 +125,16 @@
       "issue": 18,
       "databaseId": 5386376342,
       "url": "https://github.com/emanueledenaro/aretusa/issues/18",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/direction-review.md"
     },
     {
       "id": "empty",
@@ -174,15 +179,16 @@
       "issue": 21,
       "databaseId": 5386376680,
       "url": "https://github.com/emanueledenaro/aretusa/issues/21",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/kbd-review.md"
     },
     {
       "id": "progress",
@@ -209,15 +215,16 @@
       "issue": 23,
       "databaseId": 5386376982,
       "url": "https://github.com/emanueledenaro/aretusa/issues/23",
-      "status": "implemented",
+      "status": "visually-reviewed",
       "gates": {
-        "design": "pending",
-        "responsive": "pending",
-        "interaction": "pending",
-        "code": "pending",
-        "distribution": "pending"
+        "design": "passed",
+        "responsive": "passed",
+        "interaction": "passed",
+        "code": "passed",
+        "distribution": "passed"
       },
-      "dependencies": []
+      "dependencies": [],
+      "evidence": "docs/quality/separator-review.md"
     },
     {
       "id": "skeleton",

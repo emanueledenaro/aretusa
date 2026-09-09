@@ -48,13 +48,13 @@ export const Separator = React.forwardRef<HTMLElement, SeparatorProps>(function 
         aria-label={!decorative && typeof label === "string" ? label : props["aria-label"]}
         data-orientation="horizontal"
         className={cx(
-          "flex w-full items-center gap-3 text-xs font-medium tracking-[0.06em] text-muted uppercase",
+          "flex w-full min-w-0 items-center gap-3 text-xs font-medium tracking-[0.06em] text-muted uppercase",
           horizontalSpacing[spacing],
           className,
         )}
       >
         <span aria-hidden="true" className="h-px min-w-4 flex-1 bg-line" />
-        <span className="shrink-0 [overflow-wrap:anywhere]">{label}</span>
+        <span className="min-w-0 [overflow-wrap:anywhere]">{label}</span>
         <span aria-hidden="true" className="h-px min-w-4 flex-1 bg-line" />
       </div>
     );

@@ -2,7 +2,7 @@
 
 - Issue: [#21](https://github.com/emanueledenaro/aretusa/issues/21)
 - Reviewer: worker agent/batch3-foundations-a, coordinator review pending
-- Status: behavior-checked
+- Status: visually-reviewed by DOM measurement after coordinator integration; visual captures pending
 
 ## What changed
 
@@ -36,3 +36,7 @@ Pending. The worker did not use the browser pane. The coordinator should check a
 ## Decision
 
 Behavior and code gates passed in jsdom; visual and consumer gates pending coordinator review. Not release-ready.
+
+## Coordinator integration
+
+Merged on main from `agent/batch3-foundations-a` (worker head `61037bd`, base `eb71728`); the Demo.tsx and usage.ts conflicts with the earlier batches were resolved by keeping both sides, and duplicate usage keys were collapsed to the newer entry. The worker's typecheck, 195 tests and 69 usage examples were reproduced in its worktree. DOM measurements in the authorized browser pane at 390 px light and 1440 px dark: no page-level horizontal overflow, interactive targets at least 44 px except inline text links and the direction toggle chips; the Direction page renders an rtl block with three ltr islands. Visual captures, 200% zoom, forced colors, reduced motion, real touch and assistive technology remain pending.

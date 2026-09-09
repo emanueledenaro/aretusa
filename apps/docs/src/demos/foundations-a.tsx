@@ -307,13 +307,13 @@ export function SeparatorExample({ onNotice }: { onNotice: (text: string) => voi
             <U.Separator orientation="vertical" spacing="sm" decorative className="my-2" />
             <U.Button tone="quiet" size="sm" onClick={() => onNotice("Link inserted")}><Link2 className="size-4" /> Link</U.Button>
           </div>
-          <p className="mt-4 flex flex-wrap items-center text-sm text-muted">
+          <div className="mt-4 flex flex-wrap items-center text-sm text-muted">
             <span>Alex Rivers</span>
             <U.Separator orientation="vertical" decorative className="h-3 self-center" />
             <span>Edited 2 hours ago</span>
             <U.Separator orientation="vertical" decorative className="h-3 self-center" />
             <span>12 pages</span>
-          </p>
+          </div>
         </div>
         <div className="w-60 max-w-full">
           <p className="mb-3 text-sm font-medium">Long label in a 240px parent</p>

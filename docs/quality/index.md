@@ -6,18 +6,18 @@ Parent: [#11](https://github.com/emanueledenaro/aretusa/issues/11)
 
 | Item | Type | Issue | Status |
 | --- | --- | --- | --- |
-| Aspect Ratio | component | [#12](https://github.com/emanueledenaro/aretusa/issues/12) | implemented |
+| Aspect Ratio | component | [#12](https://github.com/emanueledenaro/aretusa/issues/12) | visually-reviewed |
 | Avatar | component | [#13](https://github.com/emanueledenaro/aretusa/issues/13) | behavior-checked |
-| Badge | component | [#14](https://github.com/emanueledenaro/aretusa/issues/14) | implemented |
+| Badge | component | [#14](https://github.com/emanueledenaro/aretusa/issues/14) | visually-reviewed |
 | Button | component | [#15](https://github.com/emanueledenaro/aretusa/issues/15) | behavior-checked |
-| Button Group | component | [#16](https://github.com/emanueledenaro/aretusa/issues/16) | implemented |
-| Card | component | [#17](https://github.com/emanueledenaro/aretusa/issues/17) | implemented |
-| Direction | component | [#18](https://github.com/emanueledenaro/aretusa/issues/18) | implemented |
+| Button Group | component | [#16](https://github.com/emanueledenaro/aretusa/issues/16) | visually-reviewed |
+| Card | component | [#17](https://github.com/emanueledenaro/aretusa/issues/17) | visually-reviewed |
+| Direction | component | [#18](https://github.com/emanueledenaro/aretusa/issues/18) | visually-reviewed |
 | Empty | component | [#19](https://github.com/emanueledenaro/aretusa/issues/19) | visually-reviewed |
 | Item | component | [#20](https://github.com/emanueledenaro/aretusa/issues/20) | visually-reviewed |
-| Kbd | component | [#21](https://github.com/emanueledenaro/aretusa/issues/21) | implemented |
+| Kbd | component | [#21](https://github.com/emanueledenaro/aretusa/issues/21) | visually-reviewed |
 | Progress | component | [#22](https://github.com/emanueledenaro/aretusa/issues/22) | visually-reviewed |
-| Separator | component | [#23](https://github.com/emanueledenaro/aretusa/issues/23) | implemented |
+| Separator | component | [#23](https://github.com/emanueledenaro/aretusa/issues/23) | visually-reviewed |
 | Skeleton | component | [#24](https://github.com/emanueledenaro/aretusa/issues/24) | visually-reviewed |
 | Spinner | component | [#25](https://github.com/emanueledenaro/aretusa/issues/25) | visually-reviewed |
 | Typography | component | [#26](https://github.com/emanueledenaro/aretusa/issues/26) | visually-reviewed |

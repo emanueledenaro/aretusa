@@ -9,7 +9,7 @@ export const catalog = [
     "name": "Aspect Ratio",
     "module": "basic",
     "exportName": "AspectRatio",
-    "description": "A composable aspect ratio for coherent, adaptable interfaces.",
+    "description": "A fixed-proportion frame that crops or contains media without shifting the layout.",
     "source": "aspect-ratio"
   },
   {
@@ -25,7 +25,7 @@ export const catalog = [
     "name": "Badge",
     "module": "basic",
     "exportName": "Badge",
-    "description": "A composable badge for coherent, adaptable interfaces.",
+    "description": "A status pill with soft and outline variants, five tones, an icon or dot, and a compact size.",
     "source": "badge"
   },
   {
@@ -41,7 +41,7 @@ export const catalog = [
     "name": "Button Group",
     "module": "basic",
     "exportName": "ButtonGroup",
-    "description": "A composable button group for coherent, adaptable interfaces.",
+    "description": "A row or column of actions, spaced or sharing borders, keeping native buttons.",
     "source": "button-group"
   },
   {
@@ -49,7 +49,7 @@ export const catalog = [
     "name": "Card",
     "module": "basic",
     "exportName": "Card",
-    "description": "A composable card for coherent, adaptable interfaces.",
+    "description": "A surface with explicit anatomy: header with an action slot, title, description, content and an alignable footer.",
     "source": "card"
   },
   {
@@ -57,7 +57,7 @@ export const catalog = [
     "name": "Direction",
     "module": "basic",
     "exportName": "Direction",
-    "description": "A composable direction for coherent, adaptable interfaces.",
+    "description": "Sets the reading direction of a subtree, including overlays rendered in a portal.",
     "source": "direction"
   },
   {
@@ -81,7 +81,7 @@ export const catalog = [
     "name": "Kbd",
     "module": "basic",
     "exportName": "Kbd",
-    "description": "A composable kbd for coherent, adaptable interfaces.",
+    "description": "A key or key combination with spoken names for the glyphs.",
     "source": "kbd"
   },
   {
@@ -97,7 +97,7 @@ export const catalog = [
     "name": "Separator",
     "module": "basic",
     "exportName": "Separator",
-    "description": "A composable separator for coherent, adaptable interfaces.",
+    "description": "A semantic or decorative rule, horizontal or vertical, with an optional label and chosen spacing.",
     "source": "separator"
   },
   {

@@ -50,3 +50,14 @@ test("a labelled separator shows its text and names the semantic break", () => {
   expect(screen.getByTestId("earlier")).toHaveTextContent("Earlier");
   expect(screen.getAllByRole("separator")).toHaveLength(1);
 });
+
+test("a long label shrinks instead of widening the rule past its parent", () => {
+  const { container } = render(
+    <Separator label="Earlier this week, before the workshop" />,
+  );
+  const row = container.querySelector('[data-orientation="horizontal"]') as HTMLElement;
+  const text = row.querySelector("span:not([aria-hidden])") as HTMLElement;
+  expect(row.className).toContain("min-w-0");
+  expect(text.className).toContain("min-w-0");
+  expect(text.className).not.toContain("shrink-0");
+});

@@ -449,28 +449,80 @@ export const Menubar = React.forwardRef<HTMLDivElement, MenubarProps>(function M
     </MB.Root>
   );
 });
-export function NavigationMenu({
-  items,
-}: {
-  items: { label: string; href: string }[];
-}) {
+export type NavigationLink = {
+  label: React.ReactNode;
+  href: string;
+  /** Marks the current page with aria-current. */
+  active?: boolean;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  /** Second, muted line under the label inside an open group. */
+  description?: React.ReactNode;
+};
+export type NavigationMenuItem =
+  | NavigationLink
+  | {
+      label: React.ReactNode;
+      /** Links revealed by a trigger button. */
+      items: NavigationLink[];
+      /** Identifies the group for `value`; the label by default when it is a string. */
+      value?: string;
+    };
+export type NavigationMenuProps = Omit<React.ComponentPropsWithoutRef<typeof NM.Root>, "children" | "orientation"> & {
+  items: NavigationMenuItem[];
+  /** Accessible name of the navigation landmark. */
+  label?: string;
+};
+const navigationLinkClass =
+  "inline-flex min-h-11 items-center rounded-md px-2 text-sm text-muted underline-offset-4 outline-none transition-colors [overflow-wrap:anywhere] hover:text-ink hover:underline focus-visible:ring-2 focus-visible:ring-line data-[active]:font-medium data-[active]:text-ink sm:min-h-9";
+/**
+ * Site navigation: a row of links that wraps on narrow widths. An entry with `items` renders a button that opens a
+ * panel of links on click, Enter, Space or hover; ArrowDown moves into the panel, Escape closes it and returns focus
+ * to the button. The current page carries aria-current. Controlled through value/onValueChange.
+ */
+export const NavigationMenu = React.forwardRef<HTMLElement, NavigationMenuProps>(function NavigationMenu(
+  { items, label = "Main navigation", className, ...props },
+  ref,
+) {
   return (
-    <NM.Root aria-label="Main navigation">
-      <NM.List className="flex flex-wrap gap-5">
-        {items.map((i) => (
-          <NM.Item key={i.href}>
-            <NM.Link
-              href={i.href}
-              className="text-sm underline-offset-4 hover:underline"
-            >
-              {i.label}
-            </NM.Link>
-          </NM.Item>
-        ))}
+    <NM.Root ref={ref} aria-label={label} className={cx("relative min-w-0 max-w-full", className)} {...props}>
+      <NM.List className="flex flex-wrap items-center gap-x-1 gap-y-1">
+        {items.map((item, n) =>
+          "items" in item ? (
+            <NM.Item key={n} value={item.value ?? (typeof item.label === "string" ? item.label : String(n))} className="relative">
+              <NM.Trigger className={cx(navigationLinkClass, "group/trigger gap-1 data-[state=open]:text-ink")}>
+                {item.label}
+                <ChevronRight aria-hidden="true" className="size-3.5 rotate-90 transition-transform group-data-[state=open]/trigger:-rotate-90" />
+              </NM.Trigger>
+              <NM.Content className="a-popup absolute start-0 top-full z-50 mt-2 w-[min(22rem,calc(100vw-24px))] p-1.5">
+                <ul className="flex flex-col">
+                  {item.items.map((link, m) => (
+                    <li key={m}>
+                      <NM.Link
+                        href={link.href}
+                        active={link.active}
+                        onClick={link.onClick}
+                        className="flex min-h-11 flex-col justify-center rounded-md px-3 py-2 text-sm text-ink outline-none transition-colors [overflow-wrap:anywhere] hover:bg-surface focus-visible:bg-surface data-[active]:font-medium"
+                      >
+                        <span>{link.label}</span>
+                        {link.description && <span className="mt-0.5 text-xs leading-relaxed text-muted">{link.description}</span>}
+                      </NM.Link>
+                    </li>
+                  ))}
+                </ul>
+              </NM.Content>
+            </NM.Item>
+          ) : (
+            <NM.Item key={n}>
+              <NM.Link href={item.href} active={item.active} onClick={item.onClick} className={navigationLinkClass}>
+                {item.label}
+              </NM.Link>
+            </NM.Item>
+          ),
+        )}
       </NM.List>
     </NM.Root>
   );
-}
+});
 export type BreadcrumbItem = {
   label: React.ReactNode;
   /** Destination of an ancestor. The last item is the current page whether or not it links to itself. */

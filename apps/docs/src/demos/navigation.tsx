@@ -296,3 +296,44 @@ export function MenubarExample() {
     </div>
   );
 }
+
+export function NavigationMenuExample() {
+  const [destination, setDestination] = React.useState("none");
+  const go = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setDestination(event.currentTarget.getAttribute("href") ?? "");
+  };
+  const items: U.NavigationMenuItem[] = [
+    { label: "Prints", href: "#/prints", active: true, onClick: go },
+    {
+      label: "Archive",
+      items: [
+        { label: "Letters from Ortigia", href: "#/archive/letters", description: "Forty-two letters, transcribed and searchable.", onClick: go },
+        { label: "Maps and margins", href: "#/archive/maps", description: "Hand drawn plans of the salt gardens.", onClick: go },
+        { label: "Workshop notes, 1998 to 2004", href: "#/archive/notes", onClick: go },
+      ],
+    },
+    {
+      label: "Studio",
+      items: [
+        { label: "Printing room", href: "#/studio/print", onClick: go },
+        { label: "Reservations", href: "#/studio/reservations", onClick: go },
+      ],
+    },
+    { label: "About", href: "#/about", onClick: go },
+  ];
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Two plain links, one current, and two groups that open a panel of links. Chosen destination: <span className="font-medium text-ink">{destination}</span></p>
+        <U.NavigationMenu label="Site" items={items} />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">In a 240px parent the row wraps and the panel stays inside the viewport.</p>
+        <div className="w-60 max-w-full rounded-xl border border-dashed border-line p-3">
+          <U.NavigationMenu label="Site, narrow" items={items} />
+        </div>
+      </div>
+    </div>
+  );
+}

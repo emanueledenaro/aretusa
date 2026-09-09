@@ -6,6 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
+import { BubbleExample } from "./demos/conversation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -1007,12 +1008,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "bubble":
-      content = (
-        <div className="space-y-3">
-          <U.Bubble>What are we working on today?</U.Bubble>
-          <U.Bubble side="end">A small idea with a lot of potential.</U.Bubble>
-        </div>
-      );
+      content = <BubbleExample />;
       break;
     case "marker":
       content = <U.Marker>Today</U.Marker>;

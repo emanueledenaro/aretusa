@@ -3,6 +3,7 @@ import { Paperclip, X } from "lucide-react";
 import { Button } from "./button";
 import { Progress } from "./progress";
 import { Input, RadioGroup } from "./forms";
+import { cx } from "./utils";
 export function Attachment({
   name,
   onRemove,
@@ -22,19 +23,27 @@ export function Attachment({
     </span>
   );
 }
-export function Bubble({
-  children,
-  side = "start",
-}: {
-  children: React.ReactNode;
+export type BubbleProps = React.ComponentPropsWithRef<"div"> & {
+  /** start is an incoming message, end is one the current user sent. */
   side?: "start" | "end";
-}) {
+};
+/** One message surface. Side is expressed by alignment, corner shape and tokens together. */
+export function Bubble({ side = "start", className, children, ...props }: BubbleProps) {
   return (
     <div
-      className={
-        "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed " +
-        (side === "end" ? "ms-auto bg-ink text-paper" : "bg-surface")
-      }
+      {...props}
+      data-side={side}
+      className={cx(
+        "min-w-0 max-w-[min(85%,42rem)] rounded-2xl px-4 py-3 text-sm leading-relaxed break-words [overflow-wrap:anywhere]",
+        "[&_p+p]:mt-2 [&_ul]:mt-2 [&_ol]:mt-2 [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-5 [&_ol]:ps-5",
+        "[&_a]:underline [&_a]:underline-offset-2 [&_a]:decoration-current/50 hover:[&_a]:decoration-current",
+        "[&_code]:rounded-md [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.875em]",
+        "[&_pre]:a-scrollbar [&_pre]:mt-2 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:p-3 [&_pre]:text-xs [&_pre]:leading-relaxed [&_pre_code]:p-0 [&_pre_code]:bg-transparent",
+        side === "end"
+          ? "ms-auto rounded-ee-md bg-ink text-paper [&_code]:bg-paper/15 [&_pre]:bg-paper/10"
+          : "me-auto rounded-es-md bg-surface text-ink [&_code]:bg-ink/8 [&_pre]:bg-ink/5",
+        className,
+      )}
     >
       {children}
     </div>

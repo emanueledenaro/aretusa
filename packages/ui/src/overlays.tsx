@@ -7,7 +7,7 @@ import {
   HoverCard as H,
   Toast as RT,
 } from "radix-ui";
-import { X } from "lucide-react";
+import { X, CircleCheck, CircleAlert } from "lucide-react";
 import { Button } from "./button";
 import { cx } from "./utils";
 type ModalProps = {
@@ -427,7 +427,136 @@ export function HoverCard({
     </H.Root>
   );
 }
-export function Toast({open,onOpenChange,title,description,duration=5000}:{open:boolean;onOpenChange:(open:boolean)=>void;title:string;description?:string;duration?:number}){
- return <RT.Provider swipeDirection="right" duration={duration}><RT.Root open={open} onOpenChange={onOpenChange} className="a-toast rounded-xl border border-line bg-card p-5 text-ink shadow-xl"><RT.Title className="font-medium">{title}</RT.Title>{description&&<RT.Description className="mt-1 text-sm text-muted">{description}</RT.Description>}<RT.Close className="mt-3 text-sm underline">Dismiss</RT.Close></RT.Root><RT.Viewport className="fixed bottom-4 right-4 z-[70] m-0 w-[min(360px,calc(100%-32px))] list-none outline-none"/></RT.Provider>
+export type ToastTone = "neutral" | "success" | "danger";
+export type ToastOptions = {
+  title: string;
+  description?: string;
+  /** Neutral by default; success and danger add an icon and colour. Danger is announced assertively. */
+  tone?: ToastTone;
+  /** Milliseconds before the notification closes on its own. Infinity keeps it until dismissed. */
+  duration?: number;
+  /** One optional action. It closes the notification after running. */
+  action?: { label: string; onClick: () => void };
+};
+export type ToastProps = ToastOptions & {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  className?: string;
+};
+type QueuedToast = ToastOptions & { id: string };
+type ToastApi = {
+  /** Enqueue a notification and get its id back. */
+  toast: (options: ToastOptions) => string;
+  /** Dismiss one notification by id, or every notification when called without an id. */
+  dismiss: (id?: string) => void;
+};
+const ToastContext = React.createContext<ToastApi | null>(null);
+/** Read the queue API. Requires a ToastProvider above the caller. */
+export function useToast(): ToastApi {
+  const api = React.useContext(ToastContext);
+  if (!api) throw new Error("useToast needs a ToastProvider above the component that calls it.");
+  return api;
 }
-export function ToastDemo(){const [open,setOpen]=React.useState(false);return <><Button tone="outline" onClick={()=>setOpen(true)}>Show notification</Button><Toast open={open} onOpenChange={setOpen} title="Changes saved" description="Your local example has been updated."/></>}
+export type ToastProviderProps = {
+  children: React.ReactNode;
+  /** Default duration for notifications that do not set their own. */
+  duration?: number;
+  /** How many notifications stay visible; the oldest leave first. */
+  limit?: number;
+  /** Corner of the viewport that holds the notifications. */
+  position?: "bottom-end" | "bottom-start" | "top-end" | "top-start";
+};
+/** Wrap the application once so any component can call useToast(). */
+export function ToastProvider({ children, duration = 5000, limit = 3, position = "bottom-end" }: ToastProviderProps) {
+  const [items, setItems] = React.useState<QueuedToast[]>([]);
+  const counter = React.useRef(0);
+  const api = React.useMemo<ToastApi>(
+    () => ({
+      toast(options) {
+        counter.current += 1;
+        const id = "toast-" + counter.current;
+        setItems((list) => [...list, { ...options, id }].slice(-limit));
+        return id;
+      },
+      dismiss(id) {
+        setItems((list) => (id ? list.filter((item) => item.id !== id) : []));
+      },
+    }),
+    [limit],
+  );
+  return (
+    <ToastContext.Provider value={api}>
+      <RT.Provider swipeDirection={position.endsWith("start") ? "left" : "right"} duration={duration}>
+        {children}
+        {items.map((item) => (
+          <ToastItem key={item.id} {...item} open onOpenChange={(open) => !open && api.dismiss(item.id)} />
+        ))}
+        <ToastViewport position={position} />
+      </RT.Provider>
+    </ToastContext.Provider>
+  );
+}
+function ToastViewport({ position = "bottom-end" }: { position?: ToastProviderProps["position"] }) {
+  return (
+    <RT.Viewport
+      className={cx(
+        "fixed z-[70] m-0 flex w-[min(360px,calc(100%-32px))] max-h-dvh list-none flex-col gap-3 p-0 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink",
+        position.startsWith("top") ? "top-[max(16px,env(safe-area-inset-top))]" : "bottom-[max(16px,env(safe-area-inset-bottom))]",
+        position.endsWith("start") ? "start-[max(16px,env(safe-area-inset-left))]" : "end-[max(16px,env(safe-area-inset-right))]",
+      )}
+    />
+  );
+}
+function ToastItem({ open, onOpenChange, title, description, tone = "neutral", duration, action, className }: ToastProps) {
+  const Icon = tone === "success" ? CircleCheck : tone === "danger" ? CircleAlert : null;
+  return (
+    <RT.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      duration={duration}
+      type={tone === "danger" || action ? "foreground" : "background"}
+      data-tone={tone}
+      className={cx(
+        "a-toast relative flex items-start gap-3 rounded-xl border border-line bg-card p-4 pe-14 text-ink shadow-xl",
+        "data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-transform data-[swipe=end]:opacity-0",
+        className,
+      )}
+    >
+      {Icon && (
+        <Icon
+          aria-hidden="true"
+          strokeWidth={1.75}
+          className={cx("mt-0.5 size-5 shrink-0", tone === "success" ? "text-success" : "text-danger")}
+        />
+      )}
+      <div className="min-w-0 flex-1">
+        <RT.Title className="text-[0.9375rem] font-medium leading-snug">{title}</RT.Title>
+        {description && <RT.Description className="mt-1 text-sm leading-relaxed text-muted">{description}</RT.Description>}
+        {action && (
+          <RT.Action asChild altText={action.label}>
+            <Button size="sm" tone="outline" className="mt-3" onClick={action.onClick}>
+              {action.label}
+            </Button>
+          </RT.Action>
+        )}
+      </div>
+      <RT.Close
+        aria-label="Dismiss"
+        className="a-close absolute end-2 top-2 flex size-10 items-center justify-center rounded-full border border-transparent text-muted transition-colors hover:border-line hover:bg-surface hover:text-ink"
+      >
+        <X className="size-4" strokeWidth={1.75} />
+      </RT.Close>
+    </RT.Root>
+  );
+}
+/** A controlled notification. Inside a ToastProvider it joins the shared stack; on its own it renders its own viewport. */
+export function Toast(props: ToastProps) {
+  const inProvider = React.useContext(ToastContext) !== null;
+  if (inProvider) return <ToastItem {...props} />;
+  return (
+    <RT.Provider swipeDirection="right" duration={props.duration}>
+      <ToastItem {...props} />
+      <ToastViewport />
+    </RT.Provider>
+  );
+}

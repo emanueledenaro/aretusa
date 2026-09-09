@@ -192,3 +192,67 @@ export function HoverCardExample() {
     </div>
   );
 }
+
+function ToastControls() {
+  const { toast, dismiss } = useToastApi();
+  const [count, setCount] = React.useState(0);
+  return (
+    <div className="w-full space-y-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <U.Button
+          onClick={() =>
+            toast({ title: "Draft saved", description: "Your notes are stored on this device.", tone: "success" })
+          }
+        >
+          Save draft
+        </U.Button>
+        <U.Button
+          tone="outline"
+          onClick={() => {
+            const n = count + 1;
+            setCount(n);
+            toast({
+              title: "Note " + n + " moved to the archive",
+              tone: "danger",
+              duration: 8000,
+              action: { label: "Undo", onClick: () => setCount((value) => value - 1) },
+            });
+          }}
+        >
+          Archive a note
+        </U.Button>
+        <U.Button tone="quiet" onClick={() => toast({ title: "Link copied", duration: 2500 })}>
+          Copy link
+        </U.Button>
+        <U.Button
+          tone="quiet"
+          onClick={() =>
+            toast({
+              title: "The printing room closes early on Saturday",
+              description: paragraph,
+              duration: Infinity,
+            })
+          }
+        >
+          Long message
+        </U.Button>
+        <U.Button tone="quiet" onClick={() => dismiss()}>
+          Dismiss all
+        </U.Button>
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed text-muted">
+        Notifications stack in the corner, pause while hovered or focused and can be reached with F8. Danger and action toasts are announced as foreground messages; the others wait for a quiet moment. Three stay visible at once; the oldest leaves first. Archived in this example: {count}.
+      </p>
+    </div>
+  );
+}
+function useToastApi() {
+  return U.useToast();
+}
+export function ToastExample() {
+  return (
+    <U.ToastProvider>
+      <ToastControls />
+    </U.ToastProvider>
+  );
+}

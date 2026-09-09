@@ -43,7 +43,7 @@ export const usage: Record<string,string> = {
   "sheet": "<Sheet trigger={<button>Open</button>} title=\"Project\" description=\"Inspect project details.\"><p>Your content goes here.</p></Sheet>",
   "hover-card": "<HoverCard trigger={<a href=\"/profile\">Profile</a>}><p>Supplementary profile information.</p></HoverCard>",
   "popover": "<Popover trigger={<button>Settings</button>} title=\"Quick settings\" description=\"Changes apply immediately.\"><p>Your controls go here.</p></Popover>",
-  "toast": "<><button onClick={() => setEnabled(true)}>Notify</button><Toast open={enabled} onOpenChange={setEnabled} title=\"Saved\" description=\"Your changes are stored.\" /></>",
+  "toast": "<><button onClick={() => setEnabled(true)}>Notify</button><Toast open={enabled} onOpenChange={setEnabled} title=\"Saved\" description=\"Your changes are stored.\" tone=\"success\" action={{ label: \"Undo\", onClick: () => setEnabled(false) }} /></>",
   "tooltip": "<Tooltip content=\"Save this project\"><button>Save</button></Tooltip>",
   "accordion": "<Accordion items={[{title: \"Can I customize it?\", content: \"Yes, edit the source.\"}]} />",
   "breadcrumb": "<Breadcrumb items={[{label:\"Home\",href:\"/\"},{label:\"Projects\"}]} />",

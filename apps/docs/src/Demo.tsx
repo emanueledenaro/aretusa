@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample, TooltipExample, HoverCardExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample, HoverCardExample, ToastExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -757,7 +757,7 @@ export function Demo({ id }: { id: string }) {
       content = <HoverCardExample />;
       break;
     case "toast":
-      content = <U.ToastDemo />;
+      content = <ToastExample />;
       break;
     case "accordion":
       content = (

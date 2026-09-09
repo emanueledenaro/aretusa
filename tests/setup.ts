@@ -21,3 +21,10 @@ Element.prototype.matches = function matches(selector: string) {
   if (selector === ":modal" || selector === ":popover-open") return false;
   return nativeMatches.call(this, selector);
 };
+
+// Radix Toast reads pointer capture on swipe; jsdom implements neither method.
+if (typeof Element.prototype.hasPointerCapture !== "function") {
+  Element.prototype.hasPointerCapture = () => false;
+  Element.prototype.setPointerCapture = () => {};
+  Element.prototype.releasePointerCapture = () => {};
+}

@@ -151,25 +151,89 @@ export function Marker({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-export function Message({
-  author,
-  children,
-  time,
-}: {
+export type MessageStatus = "sending" | "sent" | "failed";
+export type MessageProps = Omit<React.ComponentPropsWithRef<"article">, "children"> & {
   author: string;
-  children: React.ReactNode;
+  /** Visible time text, for example "09:41". */
   time?: string;
-}) {
+  /** Machine readable value for the time element. */
+  dateTime?: string;
+  side?: "start" | "end";
+  /** Avatar or initials placed beside the message. Hidden on the end side by default. */
+  avatar?: React.ReactNode;
+  /** Attachment chips rendered under the content. */
+  attachments?: React.ReactNode;
+  /** Message actions such as reply or copy. Always visible so hover is never the only route. */
+  actions?: React.ReactNode;
+  status?: MessageStatus;
+  /** Called from the retry control when status is failed. */
+  onRetry?: () => void;
+  /** Labels for the status line and the retry control. */
+  labels?: Partial<{ sending: string; failed: string; retry: string }>;
+  children: React.ReactNode;
+};
+const messageLabels = { sending: "Sending", failed: "Not sent", retry: "Retry sending" };
+/** One conversation entry: author, time, content, attachments, actions and delivery state. */
+export const Message = React.forwardRef<HTMLElement, MessageProps>(function Message(
+  { author, time, dateTime, side = "start", avatar, attachments, actions, status, onRetry, labels, className, children, ...props },
+  ref,
+) {
+  const uid = React.useId();
+  const text = { ...messageLabels, ...labels };
+  const end = side === "end";
   return (
-    <article className="space-y-2">
-      <div className="flex gap-3 text-xs">
-        <span className="font-semibold">{author}</span>
-        {time && <time className="text-muted">{time}</time>}
+    <article
+      {...props}
+      ref={ref}
+      aria-labelledby={props["aria-labelledby"] ?? uid + "-author"}
+      aria-busy={status === "sending" ? true : props["aria-busy"]}
+      data-side={side}
+      data-status={status}
+      className={cx(
+        "flex min-w-0 gap-3",
+        end && "flex-row-reverse",
+        status === "sending" && "opacity-70",
+        className,
+      )}
+    >
+      {avatar && <div className="mt-5 shrink-0">{avatar}</div>}
+      <div className={cx("flex min-w-0 flex-1 flex-col gap-1.5", end ? "items-end" : "items-start")}>
+        <div className={cx("flex min-w-0 max-w-full flex-wrap items-baseline gap-x-2 gap-y-0.5 px-1 text-xs", end && "flex-row-reverse")}>
+          <span id={uid + "-author"} className="truncate font-semibold text-ink">
+            {author}
+          </span>
+          {time && (
+            <time dateTime={dateTime} className="text-muted tabular-nums">
+              {time}
+            </time>
+          )}
+        </div>
+        <Bubble side={side}>{children}</Bubble>
+        {attachments && (
+          <div className={cx("flex w-full max-w-[min(85%,42rem)] flex-wrap gap-2", end && "justify-end")}>{attachments}</div>
+        )}
+        {status === "sending" && (
+          <p role="status" className="px-1 text-xs text-muted">
+            {text.sending}
+          </p>
+        )}
+        {status === "failed" && (
+          <div role="alert" className={cx("flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-xs text-danger", end && "justify-end")}>
+            <span>{text.failed}</span>
+            {onRetry && (
+              <Button tone="quiet" size="sm" onClick={onRetry} className="-my-2 h-auto min-h-11 px-2 text-xs text-danger underline underline-offset-2 hover:bg-danger/10">
+                {text.retry}
+              </Button>
+            )}
+          </div>
+        )}
+        {actions && (
+          <div className={cx("flex flex-wrap items-center gap-1 text-xs", end && "justify-end")}>{actions}</div>
+        )}
       </div>
-      <Bubble>{children}</Bubble>
     </article>
   );
-}
+});
 export function MessageScroller({
   children,
   label = "Conversation",

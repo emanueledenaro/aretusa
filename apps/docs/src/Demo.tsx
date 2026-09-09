@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { AttachmentExample, BubbleExample } from "./demos/conversation";
+import { AttachmentExample, BubbleExample, MessageExample } from "./demos/conversation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -1010,11 +1010,7 @@ export function Demo({ id }: { id: string }) {
       content = <U.Marker>Today</U.Marker>;
       break;
     case "message":
-      content = (
-        <U.Message author="Alex" time="09:41">
-          I have a first draft to share.
-        </U.Message>
-      );
+      content = <MessageExample />;
       break;
     case "message-scroller":
       content = (

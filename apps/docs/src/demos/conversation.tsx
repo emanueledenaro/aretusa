@@ -79,3 +79,54 @@ export function AttachmentExample() {
     </div>
   );
 }
+
+export function MessageExample() {
+  const [status, setStatus] = React.useState<U.MessageStatus>("failed");
+  const [copied, setCopied] = React.useState(false);
+  const retry = () => {
+    setStatus("sending");
+    window.setTimeout(() => setStatus("sent"), 1200);
+  };
+  const actions = (
+    <>
+      <U.Button tone="quiet" size="sm" onClick={() => setCopied(true)}>{copied ? "Copied" : "Copy"}</U.Button>
+      <U.Button tone="quiet" size="sm">Reply</U.Button>
+    </>
+  );
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-[1fr_240px]">
+      <div className="flex min-w-0 flex-col gap-5">
+        <U.Message author="Alex Rivers" time="09:41" dateTime="2026-03-04T09:41:00Z" avatar={<U.Avatar name="Alex Rivers" size="sm" decorative />} actions={actions}>
+          I have a first draft to share. The poster keeps the wide margins we talked about and the cream stock reads warmer than the sample.
+        </U.Message>
+        <U.Message
+          author="Sam Costa"
+          time="09:44"
+          dateTime="2026-03-04T09:44:00Z"
+          avatar={<U.Avatar name="Sam Costa" size="sm" decorative />}
+          attachments={
+            <>
+              <U.Attachment name="spring-proofs.pdf" kind="PDF" size={248000} href="#proofs" />
+              <U.Attachment name="terrace-photo.jpg" kind="Image" size={3_400_000} href="#terrace" />
+            </>
+          }
+        >
+          Attached the proofs and the photo from the terrace for the cover.
+        </U.Message>
+        <U.Message author="You" side="end" time="09:46" dateTime="2026-03-04T09:46:00Z" status={status} onRetry={retry}>
+          Looks right to me. Let us go with the cream stock and print twenty copies for the open studio.
+        </U.Message>
+        <U.Message author="You" side="end" time="09:47" dateTime="2026-03-04T09:47:00Z" status="sending">
+          Sending a second note with the address of the printer.
+        </U.Message>
+      </div>
+      <div className="flex min-w-0 flex-col gap-4 rounded-xl border border-dashed border-line p-3">
+        <p className="text-xs text-muted">240px parent</p>
+        <U.Message author="Alessandra Montalbano Serafini" time="Yesterday" attachments={<U.Attachment name="long-file-name-for-the-open-studio.pdf" kind="PDF" size={1024} href="#narrow" />}>
+          Antidisestablishmentarianism fits in a narrow bubble.
+        </U.Message>
+        <U.Message author="You" side="end" time="Now">Short reply.</U.Message>
+      </div>
+    </div>
+  );
+}

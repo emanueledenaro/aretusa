@@ -65,7 +65,7 @@ export const usage: Record<string,string> = {
   "attachment": "<Attachment name=\"notes.pdf\" kind=\"PDF\" size={248000} href=\"/files/notes.pdf\" onRemove={() => setEnabled(true)} />",
   "bubble": "<Bubble side=\"end\">Hello there.</Bubble>",
   "marker": "<Marker>Today</Marker>",
-  "message": "<Message author=\"Alex\" time=\"09:41\">A new idea.</Message>",
+  "message": "<Message author=\"Alex\" time=\"09:41\" dateTime=\"2026-03-04T09:41:00Z\" side=\"end\" status=\"sent\">A new idea.</Message>",
   "message-scroller": "<MessageScroller label=\"Project conversation\"><p>First message.</p><p>Second message.</p></MessageScroller>",
   "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",options:[\"Design\",\"Engineering\"]}]} onComplete={answers=>console.log(answers)} />"
 };

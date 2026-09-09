@@ -16,7 +16,7 @@ export const usage: Record<string,string> = {
   "kbd": "<Kbd>⌘ K</Kbd>",
   "progress": "<Progress value={45} label=\"Upload progress\" />",
   "separator": "<Separator />",
-  "skeleton": "<Skeleton className=\"h-10 w-40\" />",
+  "skeleton": "<SkeletonGroup label=\"Loading profile\" className=\"flex items-center gap-3\"><Skeleton shape=\"circle\" /><Skeleton lines={2} className=\"flex-1\" /></SkeletonGroup>",
   "spinner": "<Spinner label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
   "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
@@ -72,6 +72,7 @@ export const usage: Record<string,string> = {
 
 /** Extra named imports and setup statements for examples that need a hook. */
 export const usageImports: Record<string,string[]> = {
+  "skeleton": ["SkeletonGroup"],
   "scroll-fade": ["useScrollFade"],
   "tanstack-form": ["focusFirstInvalidField"]
 };

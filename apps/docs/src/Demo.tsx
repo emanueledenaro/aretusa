@@ -6,6 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
+import { SkeletonExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -473,13 +474,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "skeleton":
-      content = (
-        <div className="space-y-3" aria-label="Loading example">
-          <U.Skeleton className="h-9 w-1/2" />
-          <U.Skeleton />
-          <U.Skeleton className="w-3/4" />
-        </div>
-      );
+      content = <SkeletonExample />;
       break;
     case "spinner":
       content = <U.Spinner label="Preparing your workspace" />;

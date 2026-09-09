@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample } from "./demos/foundations-b";
+import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -445,17 +445,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "item":
-      content = (
-        <U.Item
-          title="Project notes"
-          description="Updated just now"
-          action={
-            <U.Button tone="outline" onClick={() => setNotice("Notes opened")}>
-              Open
-            </U.Button>
-          }
-        />
-      );
+      content = <ItemExample />;
       break;
     case "kbd":
       content = (

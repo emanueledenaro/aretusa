@@ -242,3 +242,66 @@ export function EmptyExample() {
     </div>
   );
 }
+
+export function ItemExample() {
+  const [notice, setNotice] = React.useState("");
+  const [current, setCurrent] = React.useState("field-notes");
+  const rows = [
+    { id: "field-notes", name: "Field notes", detail: "Updated this morning by Giulia", meta: "12 files, 48 MB" },
+    { id: "quiet", name: "Quiet interfaces", detail: "Draft, 1,240 words", meta: "Edited 3 days ago" },
+    { id: "salt", name: "The salt gardens", detail: "Photographs from the Marsala trip, still to be captioned", meta: "84 photographs" },
+  ];
+  return (
+    <div className="w-full space-y-8">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="min-w-0">
+          <p className="mb-1 text-sm font-medium">Linked rows with trailing actions</p>
+          <ul>
+            {rows.map((row) => (
+              <U.Item
+                key={row.id}
+                as="li"
+                href={"#/components/item?open=" + row.id}
+                selected={current === row.id}
+                title={row.name}
+                description={row.detail}
+                meta={row.meta}
+                leading={<U.Avatar name={row.name} />}
+                action={
+                  <U.Button tone="quiet" size="sm" aria-label={"Share " + row.name} onClick={() => { setCurrent(row.id); setNotice(row.name + " shared"); }}>
+                    Share
+                  </U.Button>
+                }
+              />
+            ))}
+          </ul>
+        </div>
+        <div className="min-w-0">
+          <p className="mb-1 text-sm font-medium">Activatable, static and disabled</p>
+          <U.Item title="Workshop notes" description="Opens the notebook in place." onActivate={() => setNotice("Workshop notes opened")} />
+          <U.Item title="Maps and margins" description="A static row with a badge." action={<U.Badge tone="success">Published</U.Badge>} />
+          <U.Item title="Departure" description="Archived by the owner." meta="Read only" onActivate={() => {}} disabled />
+          <U.Item title="Evening on the terrace" description="Two named actions beside a multiline description that wraps onto a second line in most widths." action={<><U.Button tone="outline" size="sm" aria-label="Rename Evening on the terrace">Rename</U.Button><U.Button tone="danger" size="sm" aria-label="Delete Evening on the terrace">Delete</U.Button></>} />
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
+        <div className="w-60 max-w-full rounded-xl border border-line px-4">
+          <p className="mt-3 text-xs text-muted">240px parent, actions stack</p>
+          <U.Item
+            href="#/components/item"
+            title="Correspondence with the Ortigia printing house, 1958 to 1964"
+            description="Twelve letters, two telegrams and one invoice."
+            leading={<U.Avatar name="Ortigia printing house" />}
+            action={<><U.Button tone="outline" size="sm" aria-label="Download the correspondence">Download</U.Button><U.Button tone="quiet" size="sm" aria-label="Archive the correspondence">Archive</U.Button></>}
+          />
+        </div>
+        <div className="rounded-xl bg-ink px-4 text-paper" data-theme="dark">
+          <p className="mt-3 text-xs text-muted">Dark surface</p>
+          <U.Item href="#/components/item" title="A letter from Ortigia" description="Chapter 3" meta="18 min read" action={<U.Badge>Draft</U.Badge>} />
+          <U.Item title="The printing room" description="Chapter 6" meta="9 min read" className="border-b-0" />
+        </div>
+      </div>
+      {notice && <p className="text-sm text-success" role="status">{notice}</p>}
+    </div>
+  );
+}

@@ -49,7 +49,7 @@ export const usage: Record<string,string> = {
   "breadcrumb": "<Breadcrumb items={[{label:\"Home\",href:\"/\"},{label:\"Projects\"}]} />",
   "collapsible": "<Collapsible title=\"Show details\"><p>More information.</p></Collapsible>",
   "command": "<Command items={[{label:\"New project\",onSelect:()=>setEnabled(true)}]} />",
-  "context-menu": "<ContextMenu items={menuItems}><div tabIndex={0}>Right-click here</div></ContextMenu>",
+  "context-menu": "<ContextMenu label=\"File actions\" items={menuItems} buttonLabel=\"File actions\"><div tabIndex={0}>Right-click, long press or Shift+F10 here</div></ContextMenu>",
   "dropdown-menu": "<DropdownMenu label=\"Project actions\" trigger={<button>Actions</button>} items={[...menuItems, { type: \"separator\" }, { label: \"Delete\", danger: true, onSelect: () => setEnabled(false) }]} />",
   "menubar": "<Menubar menus={[{label:\"File\",items:menuItems}]} />",
   "navigation-menu": "<NavigationMenu items={[{label:\"Projects\",href:\"/projects\"},{label:\"About\",href:\"/about\"}]} />",

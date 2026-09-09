@@ -355,34 +355,60 @@ export function DropdownMenu({ trigger, items, label, align = "start", side = "b
     </DM.Root>
   );
 }
-const menuClass = menuItemClass;
-export function ContextMenu({
-  children,
-  items,
-}: {
+export type ContextMenuProps = Omit<React.ComponentPropsWithoutRef<typeof CM.Root>, "children"> & {
+  /** The area that answers a right click, a long press or the keyboard context-menu key. */
   children: React.ReactNode;
-  items: MenuOption[];
-}) {
+  items: MenuEntry[];
+  /** Accessible name of the menu. */
+  label?: string;
+  /** Disables the trigger area. */
+  disabled?: boolean;
+  /**
+   * Name of an optional button placed after the area that opens the same entries as a Dropdown Menu, for touch
+   * users and assistive technology that cannot invoke a context menu.
+   */
+  buttonLabel?: string;
+  className?: string;
+};
+/**
+ * Actions on an area. Right click, Shift+F10 or the context-menu key on the focused area and a 700ms touch press
+ * open the menu at the pointer. Arrow keys move between items and skip disabled ones, Enter and Space select,
+ * Escape closes and focus returns to the area. Pass `buttonLabel` to add a visible button with the same entries.
+ */
+export function ContextMenu({ children, items, label, disabled, buttonLabel, className, ...props }: ContextMenuProps) {
   return (
-    <CM.Root>
-      <CM.Trigger className="block">{children}</CM.Trigger>
+    <CM.Root {...props}>
+      <div className={cx("relative min-w-0", className)}>
+        <CM.Trigger disabled={disabled} className="block min-w-0 rounded-[inherit] data-[state=open]:ring-2 data-[state=open]:ring-line">
+          {children}
+        </CM.Trigger>
+        {buttonLabel && (
+          <DropdownMenu
+            label={label}
+            align="end"
+            items={items}
+            trigger={
+              <button
+                type="button"
+                aria-label={buttonLabel}
+                disabled={disabled}
+                className="absolute end-2 top-2 inline-flex size-11 items-center justify-center rounded-md bg-card/80 text-muted transition-colors hover:bg-surface hover:text-ink disabled:opacity-40 sm:size-9"
+              >
+                <Ellipsis aria-hidden="true" className="size-4" />
+              </button>
+            }
+          />
+        )}
+      </div>
       <CM.Portal>
-        <CM.Content className="a-popup min-w-44">
-          {items.map((i) => (
-            <CM.Item
-              key={i.label}
-              disabled={i.disabled}
-              onSelect={i.onSelect}
-              className={menuClass}
-            >
-              {i.label}
-            </CM.Item>
-          ))}
+        <CM.Content aria-label={label} collisionPadding={12} className={menuContentClass}>
+          {renderMenuEntries(CM, items)}
         </CM.Content>
       </CM.Portal>
     </CM.Root>
   );
 }
+const menuClass = menuItemClass;
 export function Menubar({
   menus,
 }: {

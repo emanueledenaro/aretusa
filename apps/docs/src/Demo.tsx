@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TabsExample, AccordionExample, CollapsibleExample, BreadcrumbExample, PaginationExample, DropdownMenuExample } from "./demos/navigation";
+import { TabsExample, AccordionExample, CollapsibleExample, BreadcrumbExample, PaginationExample, DropdownMenuExample, ContextMenuExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -803,16 +803,7 @@ export function Demo({ id }: { id: string }) {
       content = <DropdownMenuExample />;
       break;
     case "context-menu":
-      content = (
-        <U.ContextMenu items={options}>
-          <div
-            className="rounded-xl border border-dashed border-line p-10 text-center text-sm"
-            tabIndex={0}
-          >
-            Right-click or use your context-menu key here.
-          </div>
-        </U.ContextMenu>
-      );
+      content = <ContextMenuExample />;
       break;
     case "menubar":
       content = (

@@ -223,3 +223,49 @@ export function DropdownMenuExample() {
     </div>
   );
 }
+
+export function ContextMenuExample() {
+  const [last, setLast] = React.useState("none");
+  const say = (label: string) => () => setLast(label);
+  const actions: U.MenuEntry[] = [
+    { label: "Open", icon: <LayoutGrid />, shortcut: "Enter", onSelect: say("Open") },
+    { label: "Rename", icon: <Pencil />, onSelect: say("Rename") },
+    { type: "submenu", label: "Move to", icon: <FolderInput />, items: [{ label: "Prints", onSelect: say("Move to Prints") }, { label: "Letters", onSelect: say("Move to Letters") }] },
+    { type: "separator" },
+    { type: "group", label: "Share", items: [{ label: "Copy link", icon: <Share2 />, onSelect: say("Copy link") }, { label: "Export as PDF", disabled: true, onSelect: say("Export") }] },
+    { type: "separator" },
+    { label: "Delete", icon: <Trash2 />, danger: true, onSelect: say("Delete") },
+  ];
+  const card = (title: string, note: string) => (
+    <div className="rounded-xl border border-dashed border-line bg-paper p-6 pe-14 text-sm">
+      <p className="font-medium text-ink">{title}</p>
+      <p className="mt-1 leading-relaxed text-muted">{note}</p>
+    </div>
+  );
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Right click, a long press or Shift+F10 on the focused card. The button in the corner offers the same actions to touch and assistive technology. Last action: <span className="font-medium text-ink">{last}</span></p>
+        <U.ContextMenu label="Letter actions" items={actions} buttonLabel="Actions for the letter">
+          <div tabIndex={0} className="rounded-xl">{card("A letter from Ortigia, 12 October", "Transcribed. Focus the card and press Shift+F10, or right click anywhere on it.")}</div>
+        </U.ContextMenu>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm text-muted">Without the button, in a 240px parent.</p>
+          <div className="w-60 max-w-full">
+            <U.ContextMenu label="Map actions" items={actions}>
+              <div tabIndex={0} className="rounded-xl">{card("Plan of the salt gardens", "Right click only.")}</div>
+            </U.ContextMenu>
+          </div>
+        </div>
+        <div>
+          <p className="mb-3 text-sm text-muted">Disabled area.</p>
+          <U.ContextMenu label="Archive actions" items={actions} disabled buttonLabel="Actions for the archive">
+            <div className="rounded-xl opacity-60">{card("Archived notebook", "Nothing to do here yet.")}</div>
+          </U.ContextMenu>
+        </div>
+      </div>
+    </div>
+  );
+}

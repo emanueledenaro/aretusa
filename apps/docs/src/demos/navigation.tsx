@@ -269,3 +269,30 @@ export function ContextMenuExample() {
     </div>
   );
 }
+
+export function MenubarExample() {
+  const [last, setLast] = React.useState("none");
+  const [spelling, setSpelling] = React.useState(true);
+  const [wrap, setWrap] = React.useState(false);
+  const say = (label: string) => () => setLast(label);
+  const menus: U.MenubarMenu[] = [
+    { label: "File", items: [{ label: "New letter", icon: <Pencil />, shortcut: "⌘N", onSelect: say("New letter") }, { label: "Duplicate", icon: <Copy />, onSelect: say("Duplicate") }, { type: "submenu", label: "Open recent", items: [{ label: "A letter from Ortigia", onSelect: say("Open letter") }, { label: "Plan of the salt gardens", onSelect: say("Open plan") }] }, { type: "separator" }, { label: "Close", onSelect: say("Close") }] },
+    { label: "Edit", items: [{ label: "Undo", shortcut: "⌘Z", onSelect: say("Undo") }, { label: "Redo", shortcut: "⇧⌘Z", disabled: true, onSelect: say("Redo") }, { type: "separator" }, { type: "checkbox", label: "Check spelling", checked: spelling, onCheckedChange: setSpelling }, { type: "checkbox", label: "Wrap long lines", checked: wrap, onCheckedChange: setWrap }] },
+    { label: "Share", items: [{ label: "Copy link", icon: <Share2 />, onSelect: say("Copy link") }, { label: "Export as PDF", onSelect: say("Export") }] },
+    { label: "Archive", disabled: true, items: [{ label: "Move to archive", onSelect: say("Archive") }] },
+  ];
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Four menus, one disabled. ArrowLeft and ArrowRight move between them. Last action: <span className="font-medium text-ink">{last}</span></p>
+        <U.Menubar label="Editor" menus={menus} />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">The same menubar in a 240px parent wraps its triggers instead of hiding them.</p>
+        <div className="w-60 max-w-full">
+          <U.Menubar label="Editor, narrow" menus={menus} />
+        </div>
+      </div>
+    </div>
+  );
+}

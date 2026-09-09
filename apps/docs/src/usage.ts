@@ -51,7 +51,7 @@ export const usage: Record<string,string> = {
   "command": "<Command items={[{label:\"New project\",onSelect:()=>setEnabled(true)}]} />",
   "context-menu": "<ContextMenu label=\"File actions\" items={menuItems} buttonLabel=\"File actions\"><div tabIndex={0}>Right-click, long press or Shift+F10 here</div></ContextMenu>",
   "dropdown-menu": "<DropdownMenu label=\"Project actions\" trigger={<button>Actions</button>} items={[...menuItems, { type: \"separator\" }, { label: \"Delete\", danger: true, onSelect: () => setEnabled(false) }]} />",
-  "menubar": "<Menubar menus={[{label:\"File\",items:menuItems}]} />",
+  "menubar": "<Menubar label=\"Editor\" menus={[{label:\"File\",items:menuItems},{label:\"Edit\",items:[{label:\"Undo\",shortcut:\"⌘Z\",onSelect:()=>setEnabled(false)}]}]} />",
   "navigation-menu": "<NavigationMenu items={[{label:\"Projects\",href:\"/projects\"},{label:\"About\",href:\"/about\"}]} />",
   "pagination": "<Pagination page={page} total={5} onChange={setPage} />",
   "scroll-area": "<ScrollArea fade={enabled} label=\"Project activity\" className=\"h-40\"><p>Your scrollable content.</p></ScrollArea>",

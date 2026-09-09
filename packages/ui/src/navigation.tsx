@@ -408,38 +408,47 @@ export function ContextMenu({ children, items, label, disabled, buttonLabel, cla
     </CM.Root>
   );
 }
-const menuClass = menuItemClass;
-export function Menubar({
-  menus,
-}: {
-  menus: { label: string; items: MenuOption[] }[];
-}) {
+export type MenubarMenu = {
+  label: string;
+  items: MenuEntry[];
+  disabled?: boolean;
+  /** Identifies the menu for `value`; the label by default. */
+  value?: string;
+};
+export type MenubarProps = Omit<React.ComponentPropsWithoutRef<typeof MB.Root>, "children"> & {
+  menus: MenubarMenu[];
+  /** Accessible name of the menubar. */
+  label?: string;
+};
+/**
+ * A row of menus. ArrowLeft and ArrowRight move between triggers and, while a menu is open, switch menus; ArrowDown,
+ * Enter and Space open a menu; inside it arrow keys skip disabled items, Enter selects, Escape closes and focus stays
+ * on the trigger. Triggers wrap on narrow widths so no menu is hidden. Controlled through value/onValueChange.
+ */
+export const Menubar = React.forwardRef<HTMLDivElement, MenubarProps>(function Menubar({ menus, label = "Menu", className, ...props }, ref) {
   return (
-    <MB.Root className="flex rounded-lg border border-line p-1">
-      {menus.map((m) => (
-        <MB.Menu key={m.label}>
-          <MB.Trigger className="rounded px-3 py-2 text-sm data-[state=open]:bg-surface">
-            {m.label}
-          </MB.Trigger>
-          <MB.Portal>
-            <MB.Content className="a-popup min-w-44">
-              {m.items.map((i) => (
-                <MB.Item
-                  key={i.label}
-                  disabled={i.disabled}
-                  onSelect={i.onSelect}
-                  className={menuClass}
-                >
-                  {i.label}
-                </MB.Item>
-              ))}
-            </MB.Content>
-          </MB.Portal>
-        </MB.Menu>
-      ))}
+    <MB.Root ref={ref} aria-label={label} className={cx("flex min-w-0 max-w-full flex-wrap gap-1 rounded-lg border border-line bg-card p-1", className)} {...props}>
+      {menus.map((m) => {
+        const value = m.value ?? m.label;
+        return (
+          <MB.Menu key={value} value={value}>
+            <MB.Trigger
+              disabled={m.disabled}
+              className="inline-flex min-h-11 select-none items-center rounded-md px-3 text-sm text-ink outline-none transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-line data-[state=open]:bg-surface data-[disabled]:pointer-events-none data-[disabled]:opacity-40 sm:min-h-9"
+            >
+              {m.label}
+            </MB.Trigger>
+            <MB.Portal>
+              <MB.Content aria-label={m.label} align="start" sideOffset={6} collisionPadding={12} className={menuContentClass}>
+                {renderMenuEntries(MB, m.items)}
+              </MB.Content>
+            </MB.Portal>
+          </MB.Menu>
+        );
+      })}
     </MB.Root>
   );
-}
+});
 export function NavigationMenu({
   items,
 }: {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { AlignCenter, AlignLeft, AlignRight, Check, Clock, LayoutGrid, List, Map, TriangleAlert, X } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Check, Clock, LayoutGrid, List, Map, Search, TriangleAlert, X } from "lucide-react";
 
 export function BadgeExample() {
   return (
@@ -199,6 +199,66 @@ export function ButtonGroupExample({ onNotice }: { onNotice: (text: string) => v
             <U.Button tone="outline" onClick={() => onNotice("Print sheet exported")}>Export the print sheet with crop marks</U.Button>
             <U.Button tone="outline" disabled>Send to the letterpress</U.Button>
           </U.ButtonGroup>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function KbdExample({ onNotice }: { onNotice: (text: string) => void }) {
+  const [platform, setPlatform] = React.useState<"mac" | "windows">("mac");
+  const mod = platform === "mac" ? "⌘" : "Ctrl";
+  const alt = platform === "mac" ? "⌥" : "Alt";
+  const shortcuts = [
+    { action: "Open the search", keys: [mod, "K"] },
+    { action: "Save the current page", keys: [mod, "S"] },
+    { action: "Move the selected block up", keys: [alt, "⇧", "↑"] },
+    { action: "Close the dialog without saving the changes you made", keys: ["⎋"] },
+  ];
+  return (
+    <div className="grid w-full gap-8">
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm font-medium">Inline in text</p>
+          <p className="text-sm leading-6">
+            Press <U.Kbd keys={[mod, "K"]} /> to open the search, then <U.Kbd>Enter</U.Kbd> to jump to the first result. Use <U.Kbd>?</U.Kbd> for the full list.
+          </p>
+          <p className="mt-3 text-sm leading-6 text-muted">
+            Small size in secondary text: <U.Kbd size="sm">Tab</U.Kbd> moves between fields and <U.Kbd size="sm" keys={["⇧", "⇥"]} /> goes back.
+          </p>
+        </div>
+        <div>
+          <p className="mb-3 text-sm font-medium">Platform labels</p>
+          <U.ButtonGroup label="Platform" attached>
+            <U.Button tone={platform === "mac" ? "primary" : "outline"} size="sm" aria-pressed={platform === "mac"} onClick={() => setPlatform("mac")}>macOS</U.Button>
+            <U.Button tone={platform === "windows" ? "primary" : "outline"} size="sm" aria-pressed={platform === "windows"} onClick={() => setPlatform("windows")}>Windows</U.Button>
+          </U.ButtonGroup>
+          <p className="mt-3 text-sm leading-6">
+            Glyphs are announced as words: <U.Kbd keys={["⌘", "⇧", "P"]} /> reads as Command Shift P. Words stay as typed: <U.Kbd keys={["Ctrl", "Alt", "Del"]} />.
+          </p>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_240px]">
+        <div>
+          <p className="mb-3 text-sm font-medium">Shortcut list</p>
+          <ul className="divide-y divide-line rounded-xl border border-line">
+            {shortcuts.map((item) => (
+              <li key={item.action} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 text-sm">
+                <span className="min-w-0 flex-1">{item.action}</span>
+                <U.Kbd keys={item.keys} />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="w-60 max-w-full">
+          <p className="mb-3 text-sm font-medium">Inside a control, 240px parent</p>
+          <U.Button tone="outline" className="w-full justify-between" onClick={() => onNotice("Search opened")}>
+            <span className="inline-flex items-center gap-2"><Search className="size-4" /> Search</span>
+            <U.Kbd keys={[mod, "K"]} />
+          </U.Button>
+          <p className="mt-3 text-xs leading-5 text-muted">
+            Multiline hint: hold <U.Kbd size="sm" keys={[alt]} /> while dragging a block to duplicate it, or press <U.Kbd size="sm" keys={[mod, "D"]} /> with the block selected.
+          </p>
         </div>
       </div>
     </div>

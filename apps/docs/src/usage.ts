@@ -13,7 +13,7 @@ export const usage: Record<string,string> = {
   "direction": "<Direction dir=\"rtl\"><p>Right-to-left content</p></Direction>",
   "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
-  "kbd": "<Kbd>⌘ K</Kbd>",
+  "kbd": "<p>Press <Kbd keys={[\"⌘\", \"K\"]} /> to search.</p>",
   "progress": "<Progress value={45} label=\"Upload progress\" />",
   "separator": "<Separator />",
   "skeleton": "<Skeleton className=\"h-10 w-40\" />",

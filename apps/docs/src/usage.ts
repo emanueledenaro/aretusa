@@ -61,7 +61,7 @@ export const usage: Record<string,string> = {
   "chart": "<Chart label=\"Contributions\" data={[{name:\"Mon\",value:12},{name:\"Tue\",value:24}]} />",
   "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",
-  "table": "<Table caption=\"Projects\" columns={[\"Name\",\"Status\"]} rows={[[\"Field notes\",\"Draft\"]]} />",
+  "table": "<Table caption=\"Projects\" columns={[\"Name\", \"Status\", { header: \"Budget\", align: \"end\" }]} rows={[[\"Field notes\", \"Draft\", \"120\"]]} emptyMessage=\"No projects yet.\" />",
   "attachment": "<Attachment name=\"notes.pdf\" onRemove={() => setEnabled(true)} />",
   "bubble": "<Bubble side=\"end\">Hello there.</Bubble>",
   "marker": "<Marker>Today</Marker>",

@@ -256,3 +256,54 @@ export function ToastExample() {
     </U.ToastProvider>
   );
 }
+
+const projects = [
+  { id: "1", name: "Field notes", owner: "Alex Rivers", status: "Published", amount: 120 },
+  { id: "2", name: "Quiet interfaces for the printing room archive", owner: "Sam Odell", status: "Draft", amount: 85 },
+  { id: "3", name: "The workshop", owner: "Mara Vento", status: "Published", amount: 1240 },
+  { id: "4", name: "Open studio", owner: "Alex Rivers", status: "Review", amount: 160 },
+];
+const euro = new Intl.NumberFormat("en", { style: "currency", currency: "EUR" });
+export function TableExample() {
+  const [loading, setLoading] = React.useState(false);
+  const [selected, setSelected] = React.useState("3");
+  return (
+    <div className="w-full space-y-8">
+      <U.Table
+        caption="Project overview"
+        columns={["Project", "Owner", "Status", { header: "Budget", align: "end" }, { header: "Actions", srOnly: true, width: "1%" }]}
+        rows={projects.map((project) => ({
+          key: project.id,
+          selected: project.id === selected,
+          cells: [
+            <span className="font-medium">{project.name}</span>,
+            project.owner,
+            <U.Badge tone={project.status === "Published" ? "success" : "neutral"}>{project.status}</U.Badge>,
+            euro.format(project.amount),
+            <U.Button size="sm" tone="quiet" aria-label={"Select " + project.name} onClick={() => setSelected(project.id)}>
+              Select
+            </U.Button>,
+          ],
+        }))}
+        loading={loading}
+      />
+      <div className="flex flex-wrap items-center gap-3">
+        <U.Switch label="Loading" checked={loading} onCheckedChange={setLoading} />
+      </div>
+      <div className="w-60 max-w-full">
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted">Narrow parent, bounded scroll</p>
+        <U.Table
+          caption="Monthly figures"
+          dense
+          columns={["Month", { header: "Sessions", align: "end" }, { header: "Conversion", align: "end" }, { header: "Revenue", align: "end" }]}
+          rows={[
+            ["January", "12,400", "3.2%", euro.format(8200)],
+            ["February", "10,980", "2.9%", euro.format(7010)],
+            ["March", "14,120", "3.6%", euro.format(9400)],
+          ]}
+        />
+      </div>
+      <U.Table caption="Archived projects" columns={["Project", "Owner", { header: "Budget", align: "end" }]} rows={[]} emptyMessage="No archived projects yet." />
+    </div>
+  );
+}

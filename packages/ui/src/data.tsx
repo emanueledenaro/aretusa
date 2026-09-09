@@ -14,49 +14,129 @@ import { Button } from "./button";
 import { Empty } from "./empty";
 import { Input } from "./forms";
 import { Pagination } from "./navigation";
+import { Skeleton } from "./skeleton";
+import { cx } from "./utils";
+export type TableColumn =
+  | string
+  | {
+      header: React.ReactNode;
+      /** Numbers and amounts read best aligned to the end. */
+      align?: "start" | "end";
+      /** Sort state exposed on the header cell when the caller sorts the rows. */
+      sort?: "ascending" | "descending" | "none";
+      /** Column width, any CSS length. */
+      width?: string;
+      /** Hide the header text visually; the name stays for assistive technology. */
+      srOnly?: boolean;
+    };
+export type TableRow =
+  | React.ReactNode[]
+  | {
+      key?: React.Key;
+      cells: React.ReactNode[];
+      /** Marks the row as selected for assistive technology and the selected surface. */
+      selected?: boolean;
+    };
+export type TableProps = {
+  columns: TableColumn[];
+  rows: TableRow[];
+  /** Names the table and its scroll region. */
+  caption: string;
+  /** Keep the caption for assistive technology only. */
+  hideCaption?: boolean;
+  /** Shown as one row across every column when there are no rows. */
+  emptyMessage?: React.ReactNode;
+  /** Replaces the rows with placeholder lines and marks the region busy. */
+  loading?: boolean;
+  /** Placeholder rows shown while loading. */
+  loadingRows?: number;
+  /** Compact rows for dense data. */
+  dense?: boolean;
+  className?: string;
+};
+function columnOf(column: TableColumn) {
+  return typeof column === "string" ? { header: column } : column;
+}
 export function Table({
   columns,
   rows,
   caption,
-}: {
-  columns: string[];
-  rows: React.ReactNode[][];
-  caption: string;
-}) {
+  hideCaption = false,
+  emptyMessage = "Nothing to show.",
+  loading = false,
+  loadingRows = 3,
+  dense = false,
+  className,
+}: TableProps) {
+  const cols = columns.map(columnOf);
+  const pad = dense ? "px-3 py-2" : "px-3 py-3";
+  const body: TableRow[] = loading
+    ? Array.from({ length: loadingRows }, (_, i) => ({
+        key: "loading-" + i,
+        cells: cols.map((_, n) => <Skeleton key={n} className={n === 0 ? "h-4 w-2/3" : "h-4 w-1/2"} />),
+      }))
+    : rows;
   return (
     <div
       role="region"
       aria-label={caption}
+      aria-busy={loading || undefined}
       tabIndex={0}
-      className="a-scrollbar overflow-x-auto focus-visible:outline-offset-2"
+      className={cx("a-scrollbar overflow-x-auto rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink", className)}
     >
       <table className="w-full text-start text-sm">
-        <caption className="pb-3 text-start text-muted">{caption}</caption>
+        <caption className={hideCaption ? "sr-only" : "pb-3 text-start text-sm text-muted"}>{caption}</caption>
         <thead>
           <tr>
-            {columns.map((c) => (
+            {cols.map((c, n) => (
               <th
                 scope="col"
-                key={c}
-                className="border-b border-line px-3 py-3 text-start font-medium"
+                key={n}
+                aria-sort={c.sort}
+                style={c.width ? { width: c.width } : undefined}
+                className={cx(
+                  "border-b border-line text-xs font-medium uppercase tracking-[0.08em] text-muted",
+                  pad,
+                  c.align === "end" ? "text-end" : "text-start",
+                )}
               >
-                {c}
+                {c.srOnly ? <span className="sr-only">{c.header}</span> : c.header}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((r, i) => (
-            <tr key={i} className="hover:bg-surface/60">
-              {r.map((c, n) => (
-                <td key={n} className="border-b border-line px-3 py-3">
-                  {c}
-                </td>
-              ))}
+          {body.length === 0 ? (
+            <tr>
+              <td colSpan={cols.length} className={cx("border-b border-line text-center text-muted", dense ? "px-3 py-6" : "px-3 py-8")}>
+                {emptyMessage}
+              </td>
             </tr>
-          ))}
+          ) : (
+            body.map((row, i) => {
+              const r = Array.isArray(row) ? { cells: row } : row;
+              return (
+                <tr
+                  key={r.key ?? i}
+                  aria-selected={r.selected || undefined}
+                  data-selected={r.selected || undefined}
+                  className="transition-colors hover:bg-surface/60 data-[selected]:bg-surface"
+                >
+                  {r.cells.map((cell, n) => (
+                    <td
+                      key={n}
+                      className={cx("border-b border-line align-top leading-relaxed", pad, cols[n]?.align === "end" ? "text-end tabular-nums" : "text-start")}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
+      {loading && <p className="sr-only">Loading {caption}</p>}
     </div>
   );
 }

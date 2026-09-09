@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { SkeletonExample, SpinnerExample } from "./demos/foundations-b";
+import { SkeletonExample, SpinnerExample, ProgressExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -480,17 +480,7 @@ export function Demo({ id }: { id: string }) {
       content = <SpinnerExample />;
       break;
     case "progress":
-      content = (
-        <div className="space-y-4">
-          <U.Progress value={page * 20} label="Import progress" />
-          <U.Button
-            tone="outline"
-            onClick={() => setPage((p) => (p === 5 ? 1 : p + 1))}
-          >
-            Advance
-          </U.Button>
-        </div>
-      );
+      content = <ProgressExample />;
       break;
     case "empty":
       content = (

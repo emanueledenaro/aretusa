@@ -121,3 +121,42 @@ export function SpinnerExample() {
     </div>
   );
 }
+
+export function ProgressExample() {
+  const [done, setDone] = React.useState(2);
+  const files = 9;
+  return (
+    <div className="w-full space-y-8">
+      <div className="space-y-4">
+        <U.Progress
+          label="Uploading photographs"
+          description={done >= files ? "All files are in the archive." : "Large files are compressed before upload."}
+          value={done}
+          max={files}
+          tone={done >= files ? "success" : "default"}
+          formatValue={(value, max) => `${value} of ${max} files`}
+        />
+        <div className="flex flex-wrap gap-3">
+          <U.Button tone="outline" onClick={() => setDone((d) => Math.min(files, d + 1))} disabled={done >= files}>Next file</U.Button>
+          <U.Button tone="quiet" onClick={() => setDone(0)}>Reset</U.Button>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        <U.Progress label="Not started" value={0} />
+        <U.Progress label="Complete" value={100} />
+        <U.Progress label="Preparing export" description="The total is not known yet." />
+        <U.Progress label="Storage almost full" value={94} tone="danger" description="Free space or upgrade the plan to keep saving." />
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
+        <div className="w-60 max-w-full rounded-xl border border-line p-4">
+          <p className="mb-3 text-xs text-muted">240px parent</p>
+          <U.Progress label="Synchronising the complete studio archive with every collaborator" value={61} />
+        </div>
+        <div className="rounded-xl bg-ink p-4 text-paper" data-theme="dark">
+          <p className="mb-3 text-xs text-muted">Dark surface, label for screen readers only</p>
+          <U.Progress label="Rendering" labelHidden value={38} />
+        </div>
+      </div>
+    </div>
+  );
+}

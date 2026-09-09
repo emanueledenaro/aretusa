@@ -14,7 +14,7 @@ export const usage: Record<string,string> = {
   "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
   "kbd": "<Kbd>⌘ K</Kbd>",
-  "progress": "<Progress value={45} label=\"Upload progress\" />",
+  "progress": "<Progress label=\"Upload progress\" value={45} description=\"Large files are compressed first.\" />",
   "separator": "<Separator />",
   "skeleton": "<SkeletonGroup label=\"Loading profile\" className=\"flex items-center gap-3\"><Skeleton shape=\"circle\" /><Skeleton lines={2} className=\"flex-1\" /></SkeletonGroup>",
   "spinner": "<Spinner size=\"md\" label=\"Loading projects\" />",

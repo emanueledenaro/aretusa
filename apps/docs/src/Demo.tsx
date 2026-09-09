@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample, FieldExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample, InputGroupExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -580,11 +580,7 @@ export function Demo({ id }: { id: string }) {
       content = <LabelExample />;
       break;
     case "input-group":
-      content = (
-        <U.InputGroup prefix="https://" suffix=".design">
-          <U.Input aria-label="Website name" placeholder="your-studio" />
-        </U.InputGroup>
-      );
+      content = <InputGroupExample />;
       break;
     case "checkbox":
       content = <CheckboxExample />;

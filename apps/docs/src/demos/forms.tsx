@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
+import { Search, X, Copy, Eye, EyeOff } from "lucide-react";
 
 export function TextareaExample() {
   const [message, setMessage] = React.useState("");
@@ -108,6 +109,60 @@ export function FieldExample() {
       </div>
       <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
         <U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate room</U.Button>
+      </div>
+    </div>
+  );
+}
+
+export function InputGroupExample() {
+  const [query, setQuery] = React.useState("etchings");
+  const [domain, setDomain] = React.useState("studio ortigia");
+  const [submitted, setSubmitted] = React.useState(false);
+  const [shown, setShown] = React.useState(false);
+  const domainError = submitted && /\s/.test(domain) ? "Use letters, digits and dashes only." : undefined;
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <U.Field label="Website" hint="The address is built from your name.">
+        <U.InputGroup prefix="https://" suffix=".design">
+          <U.Input placeholder="your-studio" autoComplete="off" />
+        </U.InputGroup>
+      </U.Field>
+      <U.Field label="Search the archive">
+        <U.InputGroup prefix={<Search />} action={query ? <button aria-label="Clear search" onClick={() => setQuery("")}><X /></button> : undefined}>
+          <U.Input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Prints, ceramics, maps" enterKeyHint="search" />
+        </U.InputGroup>
+      </U.Field>
+      <div className="grid gap-3">
+        <U.Field label="Domain" required error={domainError}>
+          <U.InputGroup prefix="https://" suffix=".aretusa.app">
+            <U.Input value={domain} onChange={(event) => { setDomain(event.target.value); setSubmitted(false); }} />
+          </U.InputGroup>
+        </U.Field>
+        <div>
+          <U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate domain</U.Button>
+        </div>
+      </div>
+      <U.Field label="Password" hint="At least twelve characters.">
+        <U.InputGroup action={<button aria-label={shown ? "Hide password" : "Show password"} aria-pressed={shown} onClick={() => setShown((value) => !value)}>{shown ? <EyeOff /> : <Eye />}</button>}>
+          <U.Input type={shown ? "text" : "password"} autoComplete="new-password" />
+        </U.InputGroup>
+      </U.Field>
+      <U.Field label="Amount" secondary="EUR">
+        <U.InputGroup prefix="€" suffix=".00">
+          <U.Input type="number" inputMode="decimal" min={0} step={1} defaultValue={120} />
+        </U.InputGroup>
+      </U.Field>
+      <U.Field label="Workspace ID" hint="Read only." disabled>
+        <U.InputGroup suffix="studio" action={<button aria-label="Copy workspace ID" onClick={() => navigator.clipboard?.writeText("ortigia-2026")}><Copy /></button>}>
+          <U.Input value="ortigia-2026" readOnly />
+        </U.InputGroup>
+      </U.Field>
+      <div className="w-60 max-w-full sm:col-span-2">
+        <U.Field label="In a 240px parent" hint="A long prefix truncates before the input shrinks below a usable width.">
+          <U.InputGroup prefix="https://archive.trinacrialabs.example/" suffix=".pdf">
+            <U.Input placeholder="file" />
+          </U.InputGroup>
+        </U.Field>
       </div>
     </div>
   );

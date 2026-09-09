@@ -228,23 +228,93 @@ export function Field({
     </div>
   );
 }
-export function InputGroup({
-  prefix,
-  suffix,
-  children,
-}: {
+export type InputGroupProps = Omit<React.HTMLAttributes<HTMLDivElement>, "prefix"> & {
+  /** Text or icon before the input; pressing it focuses the input. */
   prefix?: React.ReactNode;
+  /** Text or icon after the input; pressing it focuses the input. */
   suffix?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-center gap-2 rounded-lg border border-line bg-card px-3 [&_input]:border-0 [&_input]:bg-transparent">
-      <span className="text-sm text-muted">{prefix}</span>
-      {children}
-      <span className="text-sm text-muted">{suffix}</span>
-    </div>
-  );
-}
+  /** A button at the end of the group; it becomes type="button" unless it declares a type. */
+  action?: React.ReactNode;
+  /** The control; Field ids, descriptions, required and disabled are forwarded to it. */
+  children: React.ReactElement<FieldControlProps>;
+  required?: boolean;
+  disabled?: boolean;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+};
+export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
+  function InputGroup(
+    {
+      prefix,
+      suffix,
+      action,
+      children,
+      className,
+      id,
+      required,
+      disabled,
+      "aria-describedby": describedBy,
+      "aria-invalid": invalid,
+      ...props
+    },
+    ref,
+  ) {
+    const root = React.useRef<HTMLDivElement | null>(null);
+    const focusControl = () => {
+      const control = root.current?.querySelector<HTMLElement>("input, textarea, select");
+      control?.focus();
+    };
+    const control = React.cloneElement(children, {
+      ...(id !== undefined && { id }),
+      ...(describedBy !== undefined && { "aria-describedby": describedBy }),
+      ...(invalid !== undefined && { "aria-invalid": invalid }),
+      ...(required !== undefined && { required }),
+      ...(disabled !== undefined && { disabled }),
+    });
+    const isInvalid = invalid === true || invalid === "true";
+    const isDisabled = disabled || children.props.disabled;
+    const actionNode =
+      React.isValidElement<{ type?: string }>(action) && action.type === "button" && !action.props.type
+        ? React.cloneElement(action, { type: "button" })
+        : action;
+    return (
+      <div
+        ref={mergeRefs(ref, root)}
+        data-invalid={isInvalid || undefined}
+        data-disabled={isDisabled || undefined}
+        {...props}
+        className={cx(
+          "flex min-h-11 w-full min-w-0 items-stretch rounded-lg border border-line bg-paper/50 text-sm text-ink shadow-xs transition-colors focus-within:bg-card data-[invalid]:border-danger data-[disabled]:opacity-50",
+          "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-4 has-[input:focus-visible]:outline-terracotta",
+          "[&_input]:min-h-0 [&_input]:flex-1 [&_input]:rounded-none [&_input]:border-0 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:outline-none [&_input]:focus-visible:bg-transparent",
+          className,
+        )}
+      >
+        {prefix && (
+          <span
+            onClick={focusControl}
+            className="flex max-w-[45%] shrink-0 select-none items-center ps-3 text-muted [&_svg]:size-4 [&_svg]:shrink-0"
+          >
+            <span className="truncate">{prefix}</span>
+          </span>
+        )}
+        {control}
+        {suffix && (
+          <span
+            onClick={focusControl}
+            className="flex max-w-[45%] shrink-0 select-none items-center pe-3 text-muted [&_svg]:size-4 [&_svg]:shrink-0"
+          >
+            <span className="truncate">{suffix}</span>
+          </span>
+        )}
+        {actionNode && (
+          <span className="flex shrink-0 items-center gap-1 pe-1 [&>button]:min-h-9 [&>button]:min-w-9 [&>button]:rounded-md [&>button]:px-2 [&>button]:text-sm [&>button]:font-medium [&>button]:text-ink [&>button]:hover:bg-surface [&>button]:disabled:opacity-45 [&>button_svg]:size-4">
+            {actionNode}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
 export function Checkbox({
   label,
   description,

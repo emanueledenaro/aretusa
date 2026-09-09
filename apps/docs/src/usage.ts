@@ -26,7 +26,7 @@ export const usage: Record<string,string> = {
   "date-picker": "<DatePicker aria-label=\"Start date\" />",
   "field": "<Field label=\"Email\" required hint=\"We send the confirmation here.\" error={undefined}><input type=\"email\" /></Field>",
   "input": "<Input aria-label=\"Project name\" placeholder=\"A new beginning\" />",
-  "input-group": "<InputGroup prefix=\"https://\"><input aria-label=\"Domain\" /></InputGroup>",
+  "input-group": "<InputGroup prefix=\"https://\" suffix=\".design\" action={<button onClick={() => setValue(\"\")}>Clear</button>}><input aria-label=\"Domain\" value={value} onChange={(e) => setValue(e.target.value)} /></InputGroup>",
   "input-otp": "<InputOTP value={value} onChange={setValue} length={6} />",
   "label": "<><Label htmlFor=\"name\" required secondary=\"Shown to your team\">Name</Label><input id=\"name\" required /></>",
   "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} />",

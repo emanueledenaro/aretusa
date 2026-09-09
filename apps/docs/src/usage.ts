@@ -15,7 +15,7 @@ export const usage: Record<string,string> = {
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
   "kbd": "<p>Press <Kbd keys={[\"⌘\", \"K\"]} /> to search.</p>",
   "progress": "<Progress value={45} label=\"Upload progress\" />",
-  "separator": "<Separator />",
+  "separator": "<div><p>Your workspace</p><Separator /><p>Settings</p><Separator label=\"or\" /></div>",
   "skeleton": "<Skeleton className=\"h-10 w-40\" />",
   "spinner": "<Spinner label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",

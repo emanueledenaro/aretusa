@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { AlignCenter, AlignLeft, AlignRight, Check, Clock, LayoutGrid, List, Map, Search, TriangleAlert, X } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Check, Clock, Italic, LayoutGrid, Link2, List, Map, Search, TriangleAlert, Underline, X } from "lucide-react";
 
 export function BadgeExample() {
   return (
@@ -259,6 +259,69 @@ export function KbdExample({ onNotice }: { onNotice: (text: string) => void }) {
           <p className="mt-3 text-xs leading-5 text-muted">
             Multiline hint: hold <U.Kbd size="sm" keys={[alt]} /> while dragging a block to duplicate it, or press <U.Kbd size="sm" keys={[mod, "D"]} /> with the block selected.
           </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SeparatorExample({ onNotice }: { onNotice: (text: string) => void }) {
+  return (
+    <div className="grid w-full gap-8">
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm font-medium">Semantic break between sections</p>
+          <U.Card>
+            <U.CardHeader>
+              <U.CardTitle>Your workspace</U.CardTitle>
+              <U.CardDescription>Three projects, two shared with the studio.</U.CardDescription>
+            </U.CardHeader>
+            <U.Separator />
+            <U.CardContent>
+              <p className="font-medium text-ink">Settings</p>
+              <p className="mt-1 text-muted">Notifications, members and billing live here.</p>
+            </U.CardContent>
+            <U.Separator spacing="sm" />
+            <U.CardContent className="text-muted">Version 0.1, updated today.</U.CardContent>
+          </U.Card>
+        </div>
+        <div>
+          <p className="mb-3 text-sm font-medium">Labelled break between two routes</p>
+          <U.Card>
+            <U.Button className="w-full" onClick={() => onNotice("Magic link sent")}>Send me a sign-in link</U.Button>
+            <U.Separator label="or" />
+            <U.Button tone="outline" className="w-full" onClick={() => onNotice("Password sign-in")}>Use a password</U.Button>
+          </U.Card>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_240px]">
+        <div>
+          <p className="mb-3 text-sm font-medium">Vertical rules bounded by the toolbar row</p>
+          <div className="flex flex-wrap items-center gap-1 rounded-xl border border-line bg-card p-1" role="toolbar" aria-label="Formatting">
+            <U.Button tone="quiet" size="sm" aria-label="Bold"><Bold className="size-4" /></U.Button>
+            <U.Button tone="quiet" size="sm" aria-label="Italic"><Italic className="size-4" /></U.Button>
+            <U.Button tone="quiet" size="sm" aria-label="Underline"><Underline className="size-4" /></U.Button>
+            <U.Separator orientation="vertical" spacing="sm" decorative className="my-2" />
+            <U.Button tone="quiet" size="sm" aria-label="Align left"><AlignLeft className="size-4" /></U.Button>
+            <U.Button tone="quiet" size="sm" aria-label="Align centre"><AlignCenter className="size-4" /></U.Button>
+            <U.Separator orientation="vertical" spacing="sm" decorative className="my-2" />
+            <U.Button tone="quiet" size="sm" onClick={() => onNotice("Link inserted")}><Link2 className="size-4" /> Link</U.Button>
+          </div>
+          <p className="mt-4 flex flex-wrap items-center text-sm text-muted">
+            <span>Alex Rivers</span>
+            <U.Separator orientation="vertical" decorative className="h-3 self-center" />
+            <span>Edited 2 hours ago</span>
+            <U.Separator orientation="vertical" decorative className="h-3 self-center" />
+            <span>12 pages</span>
+          </p>
+        </div>
+        <div className="w-60 max-w-full">
+          <p className="mb-3 text-sm font-medium">Long label in a 240px parent</p>
+          <div className="rounded-xl border border-line bg-card p-4 text-sm">
+            <p>Messages from this morning.</p>
+            <U.Separator label="Earlier this week, before the workshop" />
+            <p className="text-muted">Older messages are archived after thirty days.</p>
+          </div>
         </div>
       </div>
     </div>

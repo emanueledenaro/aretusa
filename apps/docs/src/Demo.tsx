@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BadgeExample, CardExample, ButtonGroupExample, KbdExample } from "./demos/foundations-a";
+import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -430,13 +430,7 @@ export function Demo({ id }: { id: string }) {
       content = <KbdExample onNotice={setNotice} />;
       break;
     case "separator":
-      content = (
-        <>
-          <p className="text-sm">Your workspace</p>
-          <U.Separator />
-          <p className="text-sm text-muted">A new section starts here.</p>
-        </>
-      );
+      content = <SeparatorExample onNotice={setNotice} />;
       break;
     case "skeleton":
       content = (

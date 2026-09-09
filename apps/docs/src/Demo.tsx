@@ -8,6 +8,7 @@ import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
 import { AttachmentExample, BubbleExample, MarkerExample, MessageExample, MessageScrollerExample, QuestionnaireExample } from "./demos/conversation";
 import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample, ItemExample, AlertExample, TypographyExample } from "./demos/foundations-b";
+import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample, AspectRatioExample, DirectionExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -383,44 +384,13 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "button-group":
-      content = (
-        <U.ButtonGroup label="Formatting">
-          <U.Button tone="outline" onClick={() => setNotice("Draft saved")}>
-            Save draft
-          </U.Button>
-          <U.Button onClick={() => setNotice("Published locally")}>
-            Publish
-          </U.Button>
-        </U.ButtonGroup>
-      );
+      content = <ButtonGroupExample onNotice={setNotice} />;
       break;
     case "card":
-      content = (
-        <U.Card>
-          <U.CardHeader>
-            <U.Badge>In progress</U.Badge>
-            <U.CardTitle>A little room for ideas.</U.CardTitle>
-            <U.CardDescription>
-              Keep notes, share work and make your next step a thoughtful one.
-            </U.CardDescription>
-          </U.CardHeader>
-          <U.CardFooter>
-            <U.Button onClick={() => setNotice("Workspace opened")}>
-              Open workspace
-            </U.Button>
-          </U.CardFooter>
-        </U.Card>
-      );
+      content = <CardExample onNotice={setNotice} />;
       break;
     case "badge":
-      content = (
-        <div className="flex gap-3">
-          <U.Badge>Draft</U.Badge>
-          <U.Badge tone="success">Published</U.Badge>
-          <U.Badge tone="warning">Review</U.Badge>
-          <U.Badge tone="danger">Failed</U.Badge>
-        </div>
-      );
+      content = <BadgeExample />;
       break;
     case "avatar":
       content = (
@@ -432,37 +402,19 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "aspect-ratio":
-      content = (
-        <U.AspectRatio className="grid place-items-center bg-surface">
-          <span className="font-editorial text-3xl">Space to create.</span>
-        </U.AspectRatio>
-      );
+      content = <AspectRatioExample />;
       break;
     case "direction":
-      content = (
-        <U.Direction dir="rtl">
-          <U.Card>A right-to-left content container.</U.Card>
-        </U.Direction>
-      );
+      content = <DirectionExample onNotice={setNotice} />;
       break;
     case "item":
       content = <ItemExample />;
       break;
     case "kbd":
-      content = (
-        <p className="text-sm">
-          Press <U.Kbd>⌘</U.Kbd> <U.Kbd>K</U.Kbd> to search.
-        </p>
-      );
+      content = <KbdExample onNotice={setNotice} />;
       break;
     case "separator":
-      content = (
-        <>
-          <p className="text-sm">Your workspace</p>
-          <U.Separator />
-          <p className="text-sm text-muted">A new section starts here.</p>
-        </>
-      );
+      content = <SeparatorExample onNotice={setNotice} />;
       break;
     case "skeleton":
       content = <SkeletonExample />;

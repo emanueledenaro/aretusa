@@ -5,8 +5,8 @@ export const usage: Record<string,string> = {
   "formisch": "<Form of={form} onSubmit={(output) => console.log(output)}><FormischField of={form} path={[\"name\"]} label=\"Name\" description=\"Shown to your team.\">{({ field, controlProps }) => <Input {...field.props} {...controlProps} value={field.input ?? \"\"} />}</FormischField><button type=\"submit\">Save</button></Form>",
   "scroll-fade": "<div className=\"relative overflow-hidden rounded-xl bg-paper\"><div ref={ref} role=\"region\" aria-label=\"Activity\" tabIndex={0} className=\"h-40 overflow-auto p-4\"><p>Your scrollable content.</p></div><ScrollFade edges={edges} depth={32} /></div>",
   "button": "<Button onClick={() => alert(\"Hello\")}>Create project</Button>",
-  "button-group": "<ButtonGroup label=\"Actions\"><button>Save</button><button>Publish</button></ButtonGroup>",
-  "aspect-ratio": "<AspectRatio ratio={16 / 9}><img src=\"/your-image.jpg\" alt=\"Your description\" /></AspectRatio>",
+  "button-group": "<ButtonGroup label=\"Actions\" attached><button type=\"button\">Save</button><button type=\"button\">Publish</button></ButtonGroup>",
+  "aspect-ratio": "<AspectRatio ratio={16 / 9} fit=\"cover\"><img src=\"/your-image.jpg\" alt=\"Your description\" loading=\"lazy\" onError={() => setEnabled(true)} /></AspectRatio>",
   "avatar": "<Avatar name=\"Alex Rivers\" />",
   "badge": "<Badge tone=\"success\">Published</Badge>",
   "card": "<Card><h3>Your project</h3><p>Make room for an idea.</p></Card>",
@@ -20,6 +20,18 @@ export const usage: Record<string,string> = {
   "spinner": "<Spinner size=\"md\" label=\"Loading projects\" />",
   "typography": "<Typography as=\"h2\" variant=\"title\" editorial>A considered beginning.</Typography>",
   "alert": "<Alert tone=\"success\" title=\"Saved\" onDismiss={() => setEnabled(false)}>Your work is up to date.</Alert>",
+  "badge": "<Badge tone=\"success\" dot>Published</Badge>",
+  "card": "<Card><CardHeader><CardTitle>Your project</CardTitle><CardDescription>Make room for an idea.</CardDescription></CardHeader><CardFooter align=\"end\"><button onClick={() => setEnabled(true)}>Open</button></CardFooter></Card>",
+  "direction": "<Direction dir=\"rtl\" className=\"p-4\"><p>Right-to-left content, including any menu or popover opened inside it.</p></Direction>",
+  "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
+  "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
+  "kbd": "<p>Press <Kbd keys={[\"⌘\", \"K\"]} /> to search.</p>",
+  "progress": "<Progress value={45} label=\"Upload progress\" />",
+  "separator": "<div><p>Your workspace</p><Separator /><p>Settings</p><Separator label=\"or\" /></div>",
+  "skeleton": "<Skeleton className=\"h-10 w-40\" />",
+  "spinner": "<Spinner label=\"Loading projects\" />",
+  "typography": "<Typography as=\"h2\" editorial>A considered beginning.</Typography>",
+  "alert": "<Alert title=\"Saved\" tone=\"success\">Your work is up to date.</Alert>",
   "calendar": "<Calendar mode=\"range\" defaultMonth={new Date(2026, 8, 1)} selected={range} onSelect={setRange} numberOfMonths={2} showOutsideDays={false} disabled={{ dayOfWeek: [0, 6] }} excludeDisabled footer={range?.to ? \"Dates selected\" : \"Choose a start and end date\"} />",
   "checkbox": "<Checkbox label=\"Accept terms\" description=\"You can cancel up to two days before.\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",
@@ -73,6 +85,7 @@ export const usage: Record<string,string> = {
 /** Extra named imports and setup statements for examples that need a hook. */
 export const usageImports: Record<string,string[]> = {
   "skeleton": ["SkeletonGroup"],
+  "card": ["CardHeader", "CardTitle", "CardDescription", "CardFooter"],
   "scroll-fade": ["useScrollFade"],
   "tanstack-form": ["focusFirstInvalidField"]
 };

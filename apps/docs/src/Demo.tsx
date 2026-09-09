@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample, DataTableExample, CarouselExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample, DataTableExample, CarouselExample, ChartExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -922,18 +922,7 @@ export function Demo({ id }: { id: string }) {
       content = <DataTableExample />;
       break;
     case "chart":
-      content = (
-        <U.Chart
-          label="Weekly contributions"
-          data={[
-            { name: "Mon", value: 12 },
-            { name: "Tue", value: 28 },
-            { name: "Wed", value: 21 },
-            { name: "Thu", value: 45 },
-            { name: "Fri", value: 38 },
-          ]}
-        />
-      );
+      content = <ChartExample />;
       break;
     case "carousel":
       content = <CarouselExample />;

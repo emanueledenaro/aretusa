@@ -417,19 +417,229 @@ export function DataTable<T extends { id: string } = DataRow>({
     </div>
   );
 }
-export type ChartKind = 'area'|'bar'|'line'|'pie'|'radar'|'radial';
-export function Chart({data,label,kind='line',compact=false}:{data:{name:string;value:number}[];label:string;kind?:ChartKind;compact?:boolean}){
-const tooltip=<ChartTooltip cursor={false} contentStyle={{background:'var(--color-card)',border:'1px solid var(--color-line)',color:'var(--color-ink)',borderRadius:10,fontSize:12,boxShadow:'0 8px 24px #0000000d'}}/>;
-const colors=['var(--color-terracotta)','var(--color-gold)','var(--color-chart-3)','var(--color-chart-4)','var(--color-chart-5)'];
-const axes=<><CartesianGrid stroke="var(--color-line)" vertical={false} strokeDasharray="3 4"/><XAxis dataKey="name" tickLine={false} axisLine={false} tick={{fill:'var(--color-muted)',fontSize:10}} dy={8}/>{!compact&&<YAxis width={30} tickLine={false} axisLine={false} tick={{fill:'var(--color-muted)',fontSize:10}}/>}</>;
-let drawing:React.ReactElement;
-if(kind==='pie')drawing=<PieChart accessibilityLayer>{tooltip}<Pie data={data} dataKey="value" nameKey="name" innerRadius="52%" outerRadius="80%" paddingAngle={4} cornerRadius={5} isAnimationActive={false}>{data.map((d,i)=><Cell key={d.name} fill={colors[i%colors.length]} stroke="none"/>)}</Pie></PieChart>;
-else if(kind==='radar')drawing=<RadarChart data={data} accessibilityLayer><PolarGrid stroke="var(--color-line)"/><PolarAngleAxis dataKey="name" tick={{fill:'var(--color-muted)',fontSize:11}}/>{tooltip}<Radar dataKey="value" stroke={colors[0]} fill={colors[0]} fillOpacity={.15} isAnimationActive={false}/></RadarChart>;
-else if(kind==='radial')drawing=<RadialBarChart data={data.map((d,i)=>({...d,fill:colors[i%colors.length]}))} innerRadius="25%" outerRadius="95%" startAngle={90} endAngle={-270} accessibilityLayer>{tooltip}<RadialBar dataKey="value" background={{fill:'var(--color-surface)'}} cornerRadius={8} isAnimationActive={false}/></RadialBarChart>;
-else if(kind==='bar')drawing=<BarChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Bar dataKey="value" fill={colors[0]} radius={[5,5,2,2]} maxBarSize={38} isAnimationActive={false}>{data.map((d,i)=><Cell key={d.name} fill={i===data.length-1?colors[0]:'var(--color-chart-3)'}/>)}</Bar></BarChart>;
-else if(kind==='area')drawing=<AreaChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Area dataKey="value" type="monotone" fill={colors[0]} fillOpacity={.13} stroke={colors[0]} strokeWidth={2} isAnimationActive={false}/></AreaChart>;
-else drawing=<LineChart data={data} accessibilityLayer margin={{top:12,right:4,bottom:5,left:0}}>{axes}{tooltip}<Line dataKey="value" type="monotone" stroke={colors[0]} strokeWidth={2} dot={false} activeDot={{r:4,strokeWidth:3,stroke:'var(--color-card)'}} isAnimationActive={false}/></LineChart>;
-return <figure><figcaption className={compact?'sr-only':'mb-4 text-sm font-medium'}>{label}</figcaption>{data.length?<><div className={compact?'h-40 min-w-0':'h-60 min-w-0'}><ResponsiveContainer width="100%" height="100%" minWidth={0}>{drawing}</ResponsiveContainer></div><details className={compact?'mt-3 text-[10px] text-muted':'mt-4 text-xs text-muted'}><summary>View data</summary><Table caption={label} columns={['Period','Value']} rows={data.map(d=>[d.name,d.value])}/></details></>:<Empty title="No chart data"/>}</figure>
+export type ChartKind = "area" | "bar" | "line" | "pie" | "radar" | "radial";
+export type ChartDatum = { name: string; value?: number } & Record<string, string | number | undefined>;
+export type ChartSeries = {
+  /** Property of each datum holding the number. */
+  key: string;
+  label: string;
+  /** CSS colour; the palette tokens are used in order otherwise. */
+  color?: string;
+};
+export type ChartProps = {
+  data: ChartDatum[];
+  /** Names the figure and the table alternative. */
+  label: string;
+  kind?: ChartKind;
+  /** Series drawn from each datum. Defaults to the value property with the label as name. */
+  series?: ChartSeries[];
+  /** Formats axis ticks, tooltip values, the summary and the table. */
+  valueFormatter?: (value: number) => string;
+  /** Short visible note under the caption. */
+  description?: React.ReactNode;
+  /** Smaller frame with the caption kept for assistive technology. */
+  compact?: boolean;
+  /** Drawing height in pixels. */
+  height?: number;
+  /** Open the table alternative by default. */
+  tableOpen?: boolean;
+  loading?: boolean;
+  error?: React.ReactNode;
+  onRetry?: () => void;
+  emptyTitle?: string;
+  className?: string;
+};
+const chartPalette = ["var(--color-terracotta)", "var(--color-gold)", "var(--color-chart-3)", "var(--color-chart-4)", "var(--color-chart-5)"];
+export function Chart({
+  data,
+  label,
+  kind = "line",
+  series,
+  valueFormatter = (value) => String(value),
+  description,
+  compact = false,
+  height,
+  tableOpen = false,
+  loading = false,
+  error,
+  onRetry,
+  emptyTitle = "No chart data",
+  className,
+}: ChartProps) {
+  const id = React.useId();
+  const list = series?.length ? series : [{ key: "value", label }];
+  const colored = list.map((item, i) => ({ ...item, color: item.color ?? chartPalette[i % chartPalette.length] }));
+  const size = height ?? (compact ? 160 : 240);
+  const numberOf = (d: ChartDatum, key: string) => (typeof d[key] === "number" ? (d[key] as number) : 0);
+  const first = colored[0];
+  let summary = "";
+  if (data.length) {
+    let min = data[0], max = data[0];
+    for (const d of data) {
+      if (numberOf(d, first.key) < numberOf(min, first.key)) min = d;
+      if (numberOf(d, first.key) > numberOf(max, first.key)) max = d;
+    }
+    summary =
+      data.length === 1
+        ? first.label + " is " + valueFormatter(numberOf(data[0], first.key)) + " (" + data[0].name + ")."
+        : first.label +
+          " ranges from " +
+          valueFormatter(numberOf(min, first.key)) +
+          " (" + min.name + ") to " +
+          valueFormatter(numberOf(max, first.key)) +
+          " (" + max.name + ") across " + data.length + " periods.";
+  }
+  const tooltip = (
+    <ChartTooltip
+      cursor={kind === "bar" ? { fill: "var(--color-surface)" } : { stroke: "var(--color-line)" }}
+      formatter={(value) => valueFormatter(Number(value))}
+      contentStyle={{
+        background: "var(--color-card)",
+        border: "1px solid var(--color-line)",
+        color: "var(--color-ink)",
+        borderRadius: 10,
+        fontSize: 12,
+        boxShadow: "0 8px 24px #0000000d",
+      }}
+      itemStyle={{ color: "var(--color-ink)" }}
+      labelStyle={{ color: "var(--color-muted)", marginBottom: 4 }}
+    />
+  );
+  const axes = (
+    <>
+      <CartesianGrid stroke="var(--color-line)" vertical={false} strokeDasharray="3 4" />
+      <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "var(--color-muted)", fontSize: 11 }} dy={8} interval="preserveStartEnd" minTickGap={16} />
+      {!compact && (
+        <YAxis width={40} tickLine={false} axisLine={false} tick={{ fill: "var(--color-muted)", fontSize: 11 }} tickFormatter={(value) => valueFormatter(Number(value))} />
+      )}
+    </>
+  );
+  const margin = { top: 12, right: 8, bottom: 4, left: 0 };
+  let drawing: React.ReactElement;
+  if (kind === "pie")
+    drawing = (
+      <PieChart accessibilityLayer>
+        {tooltip}
+        <Pie data={data} dataKey={first.key} nameKey="name" innerRadius="52%" outerRadius="80%" paddingAngle={4} cornerRadius={5} isAnimationActive={false}>
+          {data.map((d, i) => (
+            <Cell key={d.name} fill={chartPalette[i % chartPalette.length]} stroke="none" />
+          ))}
+        </Pie>
+      </PieChart>
+    );
+  else if (kind === "radar")
+    drawing = (
+      <RadarChart data={data} accessibilityLayer>
+        <PolarGrid stroke="var(--color-line)" />
+        <PolarAngleAxis dataKey="name" tick={{ fill: "var(--color-muted)", fontSize: 11 }} />
+        {tooltip}
+        {colored.map((item) => (
+          <Radar key={item.key} name={item.label} dataKey={item.key} stroke={item.color} fill={item.color} fillOpacity={0.15} isAnimationActive={false} />
+        ))}
+      </RadarChart>
+    );
+  else if (kind === "radial")
+    drawing = (
+      <RadialBarChart data={data.map((d, i) => ({ ...d, fill: chartPalette[i % chartPalette.length] }))} innerRadius="25%" outerRadius="95%" startAngle={90} endAngle={-270} accessibilityLayer>
+        {tooltip}
+        <RadialBar dataKey={first.key} background={{ fill: "var(--color-surface)" }} cornerRadius={8} isAnimationActive={false} />
+      </RadialBarChart>
+    );
+  else if (kind === "bar")
+    drawing = (
+      <BarChart data={data} accessibilityLayer margin={margin} barCategoryGap="24%">
+        {axes}
+        {tooltip}
+        {colored.map((item) => (
+          <Bar key={item.key} name={item.label} dataKey={item.key} fill={item.color} radius={[5, 5, 2, 2]} maxBarSize={38} isAnimationActive={false}>
+            {colored.length === 1 && data.map((d, i) => <Cell key={d.name} fill={i === data.length - 1 ? item.color : "var(--color-chart-3)"} />)}
+          </Bar>
+        ))}
+      </BarChart>
+    );
+  else if (kind === "area")
+    drawing = (
+      <AreaChart data={data} accessibilityLayer margin={margin}>
+        {axes}
+        {tooltip}
+        {colored.map((item) => (
+          <Area key={item.key} name={item.label} dataKey={item.key} type="monotone" fill={item.color} fillOpacity={0.13} stroke={item.color} strokeWidth={2} isAnimationActive={false} />
+        ))}
+      </AreaChart>
+    );
+  else
+    drawing = (
+      <LineChart data={data} accessibilityLayer margin={margin}>
+        {axes}
+        {tooltip}
+        {colored.map((item) => (
+          <Line key={item.key} name={item.label} dataKey={item.key} type="monotone" stroke={item.color} strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 3, stroke: "var(--color-card)" }} isAnimationActive={false} />
+        ))}
+      </LineChart>
+    );
+  return (
+    <figure aria-labelledby={id + "-caption"} aria-describedby={summary ? id + "-summary" : undefined} aria-busy={loading || undefined} className={cx("min-w-0", className)}>
+      <figcaption id={id + "-caption"} className={compact ? "sr-only" : "mb-1 text-sm font-medium"}>
+        {label}
+      </figcaption>
+      {description && !compact && <p className="mb-4 text-xs leading-relaxed text-muted">{description}</p>}
+      {error ? (
+        <Alert tone="error" title="Something went wrong">
+          <div className="space-y-3">
+            <div>{error}</div>
+            {onRetry && (
+              <Button size="sm" tone="outline" onClick={onRetry}>
+                Try again
+              </Button>
+            )}
+          </div>
+        </Alert>
+      ) : loading ? (
+        <div style={{ height: size }} className="flex flex-col justify-end gap-2">
+          <Skeleton className="h-1/2 w-full rounded-lg" />
+          <Skeleton className="h-3 w-1/3" />
+          <p className="sr-only">Loading {label}</p>
+        </div>
+      ) : data.length === 0 ? (
+        <Empty title={emptyTitle} />
+      ) : (
+        <>
+          {colored.length > 1 && (
+            <ul aria-label="Series" className={cx("flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted", compact ? "mb-2" : "mb-3")}>
+              {colored.map((item) => (
+                <li key={item.key} className="flex items-center gap-2">
+                  <span aria-hidden="true" className="inline-block size-2.5 rounded-full" style={{ background: item.color }} />
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div style={{ height: size }} className="min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+              {drawing}
+            </ResponsiveContainer>
+          </div>
+          <p id={id + "-summary"} className="sr-only">
+            {summary}
+          </p>
+          <details open={tableOpen || undefined} className={cx("group text-muted", compact ? "mt-3 text-[11px]" : "mt-4 text-xs")}>
+            <summary className="inline-flex min-h-8 cursor-pointer list-none items-center gap-1 rounded text-ink/80 underline decoration-line underline-offset-4 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink [&::-webkit-details-marker]:hidden">
+              View data as a table
+            </summary>
+            <div className="mt-3">
+              <Table
+                caption={label}
+                hideCaption
+                dense
+                columns={["Period", ...colored.map((item) => ({ header: item.label, align: "end" as const }))]}
+                rows={data.map((d) => [d.name, ...colored.map((item) => valueFormatter(numberOf(d, item.key)))])}
+              />
+            </div>
+          </details>
+        </>
+      )}
+    </figure>
+  );
 }
 export type CarouselSlide = {
   title: string;

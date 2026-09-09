@@ -58,7 +58,7 @@ export const usage: Record<string,string> = {
   "sidebar": "<Sidebar items={[{label:\"Projects\",href:\"/projects\"}]}><p>Workspace content.</p></Sidebar>",
   "tabs": "<Tabs items={[{value:\"overview\",label:\"Overview\",content:<p>Your overview.</p>},{value:\"settings\",label:\"Settings\",content:<p>Your settings.</p>}]} />",
   "carousel": "<Carousel label=\"Ideas\" loop slides={[{title:\"First idea\",description:\"A beginning.\"},{title:\"Next step\",description:\"Keep going.\",content:<a href=\"/next\">Read more</a>}]} />",
-  "chart": "<Chart label=\"Contributions\" data={[{name:\"Mon\",value:12},{name:\"Tue\",value:24}]} />",
+  "chart": "<Chart label=\"Contributions\" kind=\"area\" data={[{name:\"Mon\",value:12},{name:\"Tue\",value:24}]} valueFormatter={(v) => v + \" notes\"} description=\"This week.\" />",
   "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} selectable onSelectionChange={(ids) => console.log(ids)} defaultSort={{ key: \"amount\", direction: \"descending\" }} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",
   "table": "<Table caption=\"Projects\" columns={[\"Name\", \"Status\", { header: \"Budget\", align: \"end\" }]} rows={[[\"Field notes\", \"Draft\", \"120\"]]} emptyMessage=\"No projects yet.\" />",

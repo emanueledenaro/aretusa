@@ -426,3 +426,67 @@ export function CarouselExample() {
     </div>
   );
 }
+
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"];
+const output = months.map((name, i) => ({ name, plates: [12, 18, 15, 22, 27, 24, 31, 29][i], prints: [30, 26, 34, 41, 38, 45, 52, 48][i] }));
+export function ChartExample() {
+  const [kind, setKind] = React.useState<"line" | "bar" | "area">("line");
+  const [state, setState] = React.useState<"ready" | "loading" | "error" | "empty">("ready");
+  const euroShort = (value: number) => "€" + value.toLocaleString("en");
+  return (
+    <div className="w-full space-y-8">
+      <div className="flex flex-wrap items-center gap-4">
+        <U.ToggleGroup label="Chart kind" options={["line", "bar", "area"]} value={kind} onValueChange={(value) => value && setKind(value as typeof kind)} />
+        <U.Select
+          label="Example state"
+          options={[
+            { value: "ready", label: "Ready" },
+            { value: "loading", label: "Loading" },
+            { value: "error", label: "Error" },
+            { value: "empty", label: "Empty" },
+          ]}
+          value={state}
+          onValueChange={(value) => setState(value as typeof state)}
+        />
+      </div>
+      <U.Chart
+        label="Studio output"
+        description="Plates proofed and prints sold, January to August."
+        kind={kind}
+        data={state === "empty" ? [] : output}
+        series={[
+          { key: "plates", label: "Plates" },
+          { key: "prints", label: "Prints" },
+        ]}
+        loading={state === "loading"}
+        error={state === "error" ? "The series could not be loaded from the example server." : undefined}
+        onRetry={() => setState("ready")}
+      />
+      <div className="grid gap-6 sm:grid-cols-2">
+        <U.Card>
+          <U.Chart
+            label="Weekly revenue"
+            kind="bar"
+            compact
+            valueFormatter={euroShort}
+            data={[
+              { name: "Mon", value: 820 },
+              { name: "Tue", value: 1240 },
+              { name: "Wed", value: 960 },
+              { name: "Thu", value: 1580 },
+              { name: "Fri", value: 1410 },
+            ]}
+          />
+        </U.Card>
+        <div className="w-60 max-w-full">
+          <U.Card>
+            <U.Chart label="Narrow parent" kind="area" compact data={months.map((name, i) => ({ name, value: [4, 9, 6, 12, 10, 15, 13, 18][i] }))} />
+          </U.Card>
+        </div>
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed text-muted">
+        Every chart names its figure, describes the range of the first series for assistive technology and keeps the numbers in a table behind "View data as a table". Tooltips are a pointer extra; nothing depends on hovering. Animations are off, so reduced motion changes nothing.
+      </p>
+    </div>
+  );
+}

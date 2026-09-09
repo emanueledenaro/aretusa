@@ -142,3 +142,36 @@ export function BreadcrumbExample() {
     </div>
   );
 }
+
+export function PaginationExample() {
+  const [page, setPage] = React.useState(1);
+  const [result, setResult] = React.useState(7);
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Five pages. Numbers appear from the sm breakpoint; narrower viewports show the position instead.</p>
+        <U.Pagination page={page} total={5} onChange={setPage} />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Forty pages of search results with gaps around the current one.</p>
+        <U.Pagination label="Search results" page={result} total={40} onChange={setResult} />
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm text-muted">A single page.</p>
+          <U.Pagination page={1} total={1} onChange={() => {}} />
+        </div>
+        <div>
+          <p className="mb-3 text-sm text-muted">No pages yet.</p>
+          <U.Pagination page={1} total={0} onChange={() => {}} />
+        </div>
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Custom labels in a 240px parent.</p>
+        <div className="w-60 max-w-full">
+          <U.Pagination page={page} total={5} onChange={setPage} previousLabel="Newer" nextLabel="Older" />
+        </div>
+      </div>
+    </div>
+  );
+}

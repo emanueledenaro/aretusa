@@ -9,7 +9,7 @@ import {
   NavigationMenu as NM,
   ScrollArea as SA,
 } from "radix-ui";
-import { Search, Menu, ChevronRight, Ellipsis } from "lucide-react";
+import { Search, Menu, ChevronRight, ChevronLeft, Ellipsis } from "lucide-react";
 import { Button } from "./button";
 import { Modal } from "./overlays";
 import { ScrollFade, useScrollFade } from "./scroll-fade";
@@ -427,39 +427,100 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(functio
     </nav>
   );
 });
-export function Pagination({
-  page,
-  total,
-  onChange,
-}: {
+export type PaginationProps = Omit<React.ComponentPropsWithoutRef<"nav">, "onChange"> & {
+  /** Current page, 1-based. Values outside 1..total are clamped. */
   page: number;
+  /** Number of pages; 0 renders an empty state with both controls disabled. */
   total: number;
-  onChange: (p: number) => void;
-}) {
+  onChange: (page: number) => void;
+  /** Accessible name of the navigation landmark. */
+  label?: string;
+  /** Numbered pages shown on each side of the current one; 1 by default. */
+  siblings?: number;
+  /** Visible text of the previous and next controls; the accessible name follows it. */
+  previousLabel?: string;
+  nextLabel?: string;
+};
+function pageRange(page: number, total: number, siblings: number): (number | "gap")[] {
+  if (total <= 0) return [];
+  const window = 2 * siblings + 3;
+  if (total <= window + 2) return Array.from({ length: total }, (_, n) => n + 1);
+  const start = Math.max(2, Math.min(page - siblings, total - window + 2));
+  const end = Math.min(total - 1, start + window - 3);
+  const middle = Array.from({ length: end - start + 1 }, (_, n) => start + n);
+  return [1, ...(start > 2 ? ["gap" as const] : []), ...middle, ...(end < total - 1 ? ["gap" as const] : []), total];
+}
+/**
+ * Previous and next controls with the current position. Numbered pages appear from the sm breakpoint with the first,
+ * last and neighbouring pages always visible; narrower viewports show "Page x of y" instead. A live status announces
+ * the position to assistive technology.
+ */
+export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(function Pagination(
+  { page, total, onChange, label = "Pagination", siblings = 1, previousLabel = "Previous", nextLabel = "Next", className, ...props },
+  ref,
+) {
+  const count = Math.max(0, Math.floor(total));
+  const current = count ? Math.min(Math.max(1, Math.floor(page)), count) : 0;
+  const position = count ? "Page " + current + " of " + count : "No pages";
+  const previousName = previousLabel === "Previous" ? "Previous page" : previousLabel;
+  const nextName = nextLabel === "Next" ? "Next page" : nextLabel;
   return (
-    <nav aria-label="Pagination" className="flex items-center gap-3">
+    <nav ref={ref} aria-label={label} className={cx("flex min-w-0 max-w-full flex-wrap items-center gap-2", className)} {...props}>
       <Button
         tone="outline"
         size="sm"
-        disabled={page <= 1}
-        onClick={() => onChange(page - 1)}
+        aria-label={previousName}
+        disabled={current <= 1}
+        onClick={() => onChange(current - 1)}
+        className="min-w-11 px-2.5 sm:px-3"
       >
-        Previous
+        <ChevronLeft aria-hidden="true" className="size-4" />
+        <span className="hidden sm:inline">{previousLabel}</span>
       </Button>
-      <span className="text-sm" aria-live="polite">
-        Page {page} of {total}
+      <ul className="hidden items-center gap-1 sm:flex" aria-hidden={count === 0 ? true : undefined}>
+        {pageRange(current, count, Math.max(0, siblings)).map((entry, n) =>
+          entry === "gap" ? (
+            <li key={"gap" + n} aria-hidden="true" className="flex min-w-6 items-center justify-center text-sm text-muted">
+              …
+            </li>
+          ) : (
+            <li key={entry}>
+              <button
+                type="button"
+                aria-label={"Page " + entry}
+                aria-current={entry === current ? "page" : undefined}
+                onClick={() => entry !== current && onChange(entry)}
+                className={cx(
+                  "inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 text-sm tabular-nums transition-colors sm:min-h-9 sm:min-w-9",
+                  entry === current ? "bg-ink font-medium text-paper" : "text-ink hover:bg-surface",
+                )}
+              >
+                {entry}
+              </button>
+            </li>
+          ),
+        )}
+      </ul>
+      <span aria-hidden="true" className="px-1 text-sm tabular-nums text-muted sm:hidden">
+        {position}
       </span>
       <Button
         tone="outline"
         size="sm"
-        disabled={page >= total}
-        onClick={() => onChange(page + 1)}
+        aria-label={nextName}
+        disabled={current === 0 || current >= count}
+        onClick={() => onChange(current + 1)}
+        className="min-w-11 px-2.5 sm:px-3"
       >
-        Next
+        <span className="hidden sm:inline">{nextLabel}</span>
+        <ChevronRight aria-hidden="true" className="size-4" />
       </Button>
+      <span role="status" aria-live="polite" className="sr-only">
+        {position}
+      </span>
     </nav>
   );
-}
+});
 export function ScrollArea({
   children,
   className = "h-44",

@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TabsExample, AccordionExample, CollapsibleExample, BreadcrumbExample } from "./demos/navigation";
+import { TabsExample, AccordionExample, CollapsibleExample, BreadcrumbExample, PaginationExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -844,7 +844,7 @@ export function Demo({ id }: { id: string }) {
       content = <BreadcrumbExample />;
       break;
     case "pagination":
-      content = <U.Pagination page={page} total={5} onChange={setPage} />;
+      content = <PaginationExample />;
       break;
     case "shimmer":
       content = <div className="w-full space-y-6"><U.Switch label="Pause shimmer" checked={flag} onCheckedChange={setFlag} /><p className="text-lg"><U.Shimmer enabled={!flag}>Preparing your next idea.</U.Shimmer></p><p className="max-w-64 font-editorial text-2xl"><U.Shimmer enabled={!flag} speed={4}>A little light across words that have room to breathe.</U.Shimmer></p><U.Marker><U.Shimmer enabled={!flag}>Reading project notes</U.Shimmer></U.Marker></div>;

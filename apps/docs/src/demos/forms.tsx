@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { Search, X, Copy, Eye, EyeOff } from "lucide-react";
+import { Search, X, Copy, Eye, EyeOff, Heart, Bold, Italic, Underline, Bell, BellOff } from "lucide-react";
 
 export function TextareaExample() {
   const [message, setMessage] = React.useState("");
@@ -195,6 +195,43 @@ export function NativeSelectExample() {
         <U.Field label="In a 240px parent" hint="Long option text truncates in the closed control and stays complete in the picker.">
           <U.NativeSelect defaultValue="long" options={[{ value: "long", label: "A letter from Ortigia, second draft with margin notes" }, { value: "short", label: "Short" }]} />
         </U.Field>
+      </div>
+    </div>
+  );
+}
+
+export function ToggleExample() {
+  const [favorite, setFavorite] = React.useState(false);
+  const [notify, setNotify] = React.useState(true);
+  const [marks, setMarks] = React.useState({ bold: true, italic: false, underline: false });
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-3">
+        <p className="text-sm text-muted">Text and icon, controlled</p>
+        <div className="flex flex-wrap gap-2">
+          <U.Toggle pressed={favorite} onPressedChange={setFavorite} aria-label="Favorite"><Heart />{favorite ? "Saved" : "Save"}</U.Toggle>
+          <U.Toggle pressed={notify} onPressedChange={setNotify}>{notify ? <Bell /> : <BellOff />}{notify ? "Notifications on" : "Notifications off"}</U.Toggle>
+        </div>
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm text-muted">Icon-only toolbar, quiet tone, small size</p>
+        <div role="toolbar" aria-label="Formatting" className="flex flex-wrap gap-1 rounded-lg border border-line bg-card p-1">
+          <U.Toggle tone="quiet" size="sm" aria-label="Bold" pressed={marks.bold} onPressedChange={(value) => setMarks({ ...marks, bold: value })}><Bold /></U.Toggle>
+          <U.Toggle tone="quiet" size="sm" aria-label="Italic" pressed={marks.italic} onPressedChange={(value) => setMarks({ ...marks, italic: value })}><Italic /></U.Toggle>
+          <U.Toggle tone="quiet" size="sm" aria-label="Underline" pressed={marks.underline} onPressedChange={(value) => setMarks({ ...marks, underline: value })}><Underline /></U.Toggle>
+        </div>
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm text-muted">Uncontrolled and disabled</p>
+        <div className="flex flex-wrap gap-2">
+          <U.Toggle defaultPressed>Pinned</U.Toggle>
+          <U.Toggle disabled>Unavailable</U.Toggle>
+          <U.Toggle disabled pressed>Included</U.Toggle>
+        </div>
+      </div>
+      <div className="w-60 max-w-full">
+        <p className="mb-3 text-sm text-muted">Long label in a 240px parent</p>
+        <U.Toggle defaultPressed className="w-full">Show the printing room schedule on my calendar</U.Toggle>
       </div>
     </div>
   );

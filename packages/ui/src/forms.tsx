@@ -695,19 +695,32 @@ export function Slider({
     </SL.Root>
   );
 }
-export function Toggle({
-  children,
-  ...props
-}: React.ComponentProps<typeof TO.Root>) {
+export type ToggleProps = React.ComponentPropsWithoutRef<typeof TO.Root> & {
+  /** sm keeps a 44px target on touch and 36px from the sm breakpoint. */
+  size?: "sm" | "md";
+  /** outline draws the border at rest; quiet only shows a surface on hover. */
+  tone?: "outline" | "quiet";
+};
+export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(function Toggle(
+  { children, size = "md", tone = "outline", className, ...props },
+  ref,
+) {
   return (
     <TO.Root
+      ref={ref}
+      type="button"
       {...props}
-      className="a-button min-h-10 border border-line px-3 text-sm data-[state=on]:bg-ink data-[state=on]:text-paper"
+      className={cx(
+        "a-button min-w-11 border text-sm text-ink hover:bg-surface data-[state=on]:border-ink data-[state=on]:bg-ink data-[state=on]:text-paper data-[state=on]:shadow-[inset_0_1px_2px_rgb(0_0_0/0.25)] disabled:opacity-45 [&_svg]:size-4 [&_svg]:shrink-0",
+        tone === "outline" ? "border-control bg-transparent" : "border-transparent bg-transparent",
+        size === "sm" ? "min-h-11 px-2.5 sm:min-h-9" : "min-h-11 px-3",
+        className,
+      )}
     >
       {children}
     </TO.Root>
   );
-}
+});
 export function ToggleGroup({
   label,
   options,

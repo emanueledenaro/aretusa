@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample, ToggleExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -635,16 +635,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "toggle":
-      content = (
-        <U.Toggle
-          aria-label="Favorite"
-          pressed={flag}
-          onPressedChange={setFlag}
-        >
-          <Heart className="size-4" />
-          Favorite
-        </U.Toggle>
-      );
+      content = <ToggleExample />;
       break;
     case "toggle-group":
       content = (

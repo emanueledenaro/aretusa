@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -574,15 +574,7 @@ export function Demo({ id }: { id: string }) {
       content = <TextareaExample />;
       break;
     case "field":
-      content = (
-        <U.Field
-          label="Email"
-          hint="Use your work address."
-          error="Enter a valid email address."
-        >
-          <U.Input type="email" defaultValue="not-an-email" />
-        </U.Field>
-      );
+      content = <FieldExample />;
       break;
     case "label":
       content = <LabelExample />;

@@ -24,7 +24,7 @@ export const usage: Record<string,string> = {
   "checkbox": "<Checkbox label=\"Accept terms\" description=\"You can cancel up to two days before.\" checked={enabled} onCheckedChange={v => setEnabled(v === true)} />",
   "combobox": "<Combobox label=\"Discipline\" options={[\"Design\", \"Engineering\"]} />",
   "date-picker": "<DatePicker aria-label=\"Start date\" />",
-  "field": "<Field label=\"Email\" error={undefined}><input type=\"email\" required /></Field>",
+  "field": "<Field label=\"Email\" required hint=\"We send the confirmation here.\" error={undefined}><input type=\"email\" /></Field>",
   "input": "<Input aria-label=\"Project name\" placeholder=\"A new beginning\" />",
   "input-group": "<InputGroup prefix=\"https://\"><input aria-label=\"Domain\" /></InputGroup>",
   "input-otp": "<InputOTP value={value} onChange={setValue} length={6} />",

@@ -162,40 +162,66 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(function Lab
     </label>
   );
 });
+type FieldControlProps = {
+  id?: string;
+  required?: boolean;
+  disabled?: boolean;
+  "aria-describedby"?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+};
+export type FieldProps = {
+  label: React.ReactNode;
+  /** Help text under the control; may hold line breaks or inline elements. */
+  hint?: React.ReactNode;
+  /** Validation message announced as an alert; marks the control invalid. */
+  error?: React.ReactNode;
+  /** Adds the label marker and the `required` attribute to the control. */
+  required?: boolean;
+  /** Trailing muted text beside the label, for example "Optional". */
+  secondary?: React.ReactNode;
+  /** Dims the label and disables the control. */
+  disabled?: boolean;
+  /** Explicit id for the control; the control's own id wins when set. */
+  id?: string;
+  className?: string;
+  /** The control. It receives id, aria-describedby, aria-invalid, required and disabled. */
+  children: React.ReactElement<FieldControlProps>;
+};
 export function Field({
   label,
   hint,
   error,
+  required,
+  secondary,
+  disabled,
+  id: explicitId,
+  className,
   children,
-}: {
-  label: string;
-  hint?: string;
-  error?: string;
-  children: React.ReactElement;
-}) {
-  const id = React.useId();
-  const description =
-    [hint ? id + "-hint" : "", error ? id + "-error" : ""]
-      .filter(Boolean)
-      .join(" ") || undefined;
+}: FieldProps) {
+  const generatedId = React.useId();
+  const id = children.props.id ?? explicitId ?? generatedId;
+  const hintId = hint ? `${id}-hint` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const controlInvalid = children.props["aria-invalid"];
   return (
-    <div className="grid gap-2">
-      <Label htmlFor={id}>{label}</Label>
-      {React.cloneElement(
-        children as React.ReactElement<React.HTMLAttributes<HTMLElement>>,
-        {
-          id,
-          "aria-describedby": description,
-          "aria-invalid": error ? true : undefined,
-        },
-      )}
+    <div className={cx("grid gap-2", className)}>
+      <Label htmlFor={id} required={required} secondary={secondary} disabled={disabled}>
+        {label}
+      </Label>
+      {React.cloneElement(children, {
+        id,
+        "aria-describedby": joinIds(children.props["aria-describedby"], hintId, errorId),
+        "aria-invalid": error ? true : controlInvalid,
+        ...(required !== undefined && { required }),
+        ...(disabled !== undefined && { disabled }),
+      })}
       {hint && (
-        <p id={id + "-hint"} className="text-xs text-muted">
+        <p id={hintId} className="text-xs leading-relaxed text-muted">
           {hint}
         </p>
       )}
       {error && (
-        <p role="alert" id={id + "-error"} className="text-xs text-danger">
+        <p role="alert" id={errorId} className="text-xs leading-relaxed text-danger">
           {error}
         </p>
       )}

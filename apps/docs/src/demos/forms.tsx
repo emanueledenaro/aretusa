@@ -64,3 +64,51 @@ export function LabelExample() {
     </div>
   );
 }
+
+export function FieldExample() {
+  const [email, setEmail] = React.useState("ada@studio");
+  const [checking, setChecking] = React.useState(false);
+  const [asyncError, setAsyncError] = React.useState<string | undefined>();
+  const [room, setRoom] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
+  const check = () => {
+    setChecking(true);
+    setAsyncError(undefined);
+    window.setTimeout(() => {
+      setChecking(false);
+      setAsyncError(email.includes("@") && email.includes(".") ? undefined : "We could not find a mailbox at this address.");
+    }, 700);
+  };
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-3">
+        <U.Field label="Work email" required hint={checking ? "Checking the address…" : "We send the visit confirmation here."} error={asyncError}>
+          <U.Input type="email" name="email" autoComplete="email" value={email} onChange={(event) => { setEmail(event.target.value); setAsyncError(undefined); }} />
+        </U.Field>
+        <div>
+          <U.Button tone="outline" loading={checking} onClick={check}>Check address</U.Button>
+        </div>
+      </div>
+      <U.Field label="Website" secondary="Optional" hint={<>Shown on your member page.<br />Use a full address, including https.</>}>
+        <U.Input type="url" name="website" placeholder="https://" />
+      </U.Field>
+      <U.Field label="Meeting room" required error={submitted && !room ? "Choose a room for the first session." : undefined}>
+        <U.Select label="Meeting room" options={[{ value: "print", label: "Printing room" }, { value: "terrace", label: "Terrace" }, { value: "library", label: "Library, quiet hours only", description: "After 18:00 on weekdays." }]} value={room} onValueChange={(next) => { setRoom(next); setSubmitted(false); }} />
+      </U.Field>
+      <U.Field label="Plan" disabled hint="Managed by your workspace.">
+        <U.Input value="Studio, yearly" readOnly />
+      </U.Field>
+      <U.Field label="Notes for the printer" hint="Paper, ink and edition size.">
+        <U.Textarea name="notes" rows={3} showCount maxLength={240} />
+      </U.Field>
+      <div className="w-60 max-w-full">
+        <U.Field label="Title as it appears in the catalogue and on the wall label" required secondary="Max 80 chars" hint="Long labels and hints wrap inside a 240px parent without pushing the control." error="Add a title before publishing.">
+          <U.Input maxLength={80} />
+        </U.Field>
+      </div>
+      <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+        <U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate room</U.Button>
+      </div>
+    </div>
+  );
+}

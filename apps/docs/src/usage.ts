@@ -62,7 +62,7 @@ export const usage: Record<string,string> = {
   "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",
   "table": "<Table caption=\"Projects\" columns={[\"Name\",\"Status\"]} rows={[[\"Field notes\",\"Draft\"]]} />",
-  "attachment": "<Attachment name=\"notes.pdf\" onRemove={() => setEnabled(true)} />",
+  "attachment": "<Attachment name=\"notes.pdf\" kind=\"PDF\" size={248000} href=\"/files/notes.pdf\" onRemove={() => setEnabled(true)} />",
   "bubble": "<Bubble side=\"end\">Hello there.</Bubble>",
   "marker": "<Marker>Today</Marker>",
   "message": "<Message author=\"Alex\" time=\"09:41\">A new idea.</Message>",

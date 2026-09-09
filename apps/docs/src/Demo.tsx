@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BubbleExample } from "./demos/conversation";
+import { AttachmentExample, BubbleExample } from "./demos/conversation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -1001,11 +1001,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "attachment":
-      content = flag ? (
-        <U.Empty title="Attachment removed" />
-      ) : (
-        <U.Attachment name="project-notes.pdf" onRemove={() => setFlag(true)} />
-      );
+      content = <AttachmentExample />;
       break;
     case "bubble":
       content = <BubbleExample />;

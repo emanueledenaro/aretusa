@@ -32,3 +32,50 @@ export function BubbleExample() {
     </div>
   );
 }
+
+export function AttachmentExample() {
+  const [files, setFiles] = React.useState(["spring-proofs.pdf", "terrace-photo.jpg"]);
+  const [progress, setProgress] = React.useState(35);
+  const [failed, setFailed] = React.useState(true);
+  React.useEffect(() => {
+    if (progress >= 100) return;
+    const id = window.setTimeout(() => setProgress((p) => Math.min(100, p + 5)), 600);
+    return () => window.clearTimeout(id);
+  }, [progress]);
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-[1fr_240px]">
+      <div className="flex min-w-0 flex-col gap-3">
+        {files.includes("spring-proofs.pdf") ? (
+          <U.Attachment name="spring-proofs.pdf" kind="PDF" size={248000} href="#spring-proofs" onRemove={() => setFiles((f) => f.filter((n) => n !== "spring-proofs.pdf"))} />
+        ) : (
+          <p className="text-sm text-muted" role="status">spring-proofs.pdf removed.</p>
+        )}
+        {files.includes("terrace-photo.jpg") ? (
+          <U.Attachment name="terrace-photo.jpg" kind="Image" size={3_400_000} href="#terrace" onRemove={() => setFiles((f) => f.filter((n) => n !== "terrace-photo.jpg"))} />
+        ) : (
+          <p className="text-sm text-muted" role="status">terrace-photo.jpg removed.</p>
+        )}
+        <U.Attachment
+          name="workshop-recording-2026-03-04-morning-session-complete.mov"
+          kind="Video"
+          size={912_000_000}
+          status={progress < 100 ? "uploading" : "idle"}
+          progress={progress}
+          href={progress < 100 ? undefined : "#recording"}
+          onRemove={() => setProgress(100)}
+        />
+        {failed ? (
+          <U.Attachment name="budget.xlsx" kind="Spreadsheet" size={18000} status="error" error="The upload was interrupted." onRetry={() => setFailed(false)} onRemove={() => setFailed(false)} />
+        ) : (
+          <U.Attachment name="budget.xlsx" kind="Spreadsheet" size={18000} href="#budget" />
+        )}
+        <U.Attachment name="read-only.txt" kind="Text" size="2 KB" />
+      </div>
+      <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-dashed border-line p-3">
+        <p className="text-xs text-muted">240px parent</p>
+        <U.Attachment name="a-very-long-export-of-the-spring-collection-final-v3.pdf" kind="PDF" size={248000} href="#long" onRemove={() => {}} />
+        <U.Attachment name="cover.png" status="uploading" />
+      </div>
+    </div>
+  );
+}

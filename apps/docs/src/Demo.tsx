@@ -6,6 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
+import { PopoverExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -747,16 +748,7 @@ export function Demo({ id }: { id: string }) {
       content = <AlertDialogExample onNotice={setNotice} />;
       break;
     case "popover":
-      content = (
-        <U.Popover
-          label="Quick settings"
-          trigger={<U.Button tone="outline">Quick settings</U.Button>}
-        >
-          <U.Field label="Width">
-            <U.Input defaultValue="320" />
-          </U.Field>
-        </U.Popover>
-      );
+      content = <PopoverExample />;
       break;
     case "tooltip":
       content = (

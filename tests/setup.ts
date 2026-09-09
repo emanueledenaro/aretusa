@@ -11,3 +11,13 @@ if (typeof globalThis.ResizeObserver === "undefined") {
     disconnect() {}
   } as unknown as typeof ResizeObserver;
 }
+
+// floating-ui asks every ancestor whether it sits in the top layer through `:modal` and
+// `:popover-open`. jsdom's selector engine rejects both by throwing, which costs hundreds of
+// milliseconds per call and makes popper-positioned overlays (Popover, Tooltip, Hover Card,
+// Select) time out. jsdom has no top layer, so the answer is always false.
+const nativeMatches = Element.prototype.matches;
+Element.prototype.matches = function matches(selector: string) {
+  if (selector === ":modal" || selector === ":popover-open") return false;
+  return nativeMatches.call(this, selector);
+};

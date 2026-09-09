@@ -218,31 +218,89 @@ export function AlertDialog({
     </A.Root>
   );
 }
+export type PopoverProps = {
+  /** Element that opens the popover. Omit it when `open` is controlled from elsewhere. */
+  trigger?: React.ReactElement;
+  children: React.ReactNode;
+  /** Accessible name when there is no visible title. */
+  label?: string;
+  /** Visible heading; also names the surface. */
+  title?: string;
+  /** Short text under the title, linked as the accessible description. */
+  description?: string;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  side?: "top" | "right" | "bottom" | "left";
+  align?: "start" | "center" | "end";
+  /** Surface width before the viewport cap: sm 240px, md 320px, lg 400px. */
+  width?: "sm" | "md" | "lg";
+  /** Hide the round close control when the content has its own closing action. */
+  hideClose?: boolean;
+  className?: string;
+};
 export function Popover({
   trigger,
   children,
   label,
-}: {
-  trigger: React.ReactElement;
-  children: React.ReactNode;
-  label: string;
-}) {
+  title,
+  description,
+  open,
+  defaultOpen,
+  onOpenChange,
+  side = "bottom",
+  align = "center",
+  width = "md",
+  hideClose = false,
+  className,
+}: PopoverProps) {
+  const id = React.useId();
+  const titleId = title ? id + "-title" : undefined;
+  const descriptionId = description ? id + "-description" : undefined;
   return (
-    <P.Root>
-      <P.Trigger asChild>{trigger}</P.Trigger>
+    <P.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+      {trigger && <P.Trigger asChild>{trigger}</P.Trigger>}
       <P.Portal>
         <P.Content
-          aria-label={label}
+          aria-label={title ? undefined : label}
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
+          side={side}
+          align={align}
           sideOffset={8}
-          className="a-popup w-72 p-5"
+          collisionPadding={12}
+          className={cx(
+            "a-popup a-scrollbar relative p-0 outline-none",
+            width === "sm" ? "w-60" : width === "lg" ? "w-[400px]" : "w-80",
+            className,
+          )}
         >
-          {children}
-          <P.Close
-            aria-label="Close popover"
-            className="absolute end-1 top-1 p-1"
-          >
-            <X className="size-3" />
-          </P.Close>
+          {(title || description) && (
+            <div className={cx("px-5 pt-5", hideClose ? "" : "pe-14")}>
+              {title && (
+                <h3 id={titleId} className="font-editorial text-[1.125rem] leading-snug tracking-tight">
+                  {title}
+                </h3>
+              )}
+              {description && (
+                <p id={descriptionId} className="mt-1 text-sm leading-relaxed text-muted">
+                  {description}
+                </p>
+              )}
+            </div>
+          )}
+          <div className={cx("px-5 pb-5", title || description ? "pt-4" : hideClose ? "pt-5" : "pt-5 pe-14")}>
+            {children}
+          </div>
+          {!hideClose && (
+            <P.Close
+              aria-label="Close"
+              className="a-close absolute end-2 top-2 flex size-10 items-center justify-center rounded-full border border-transparent text-muted transition-colors hover:border-line hover:bg-surface hover:text-ink"
+            >
+              <X className="size-4" strokeWidth={1.75} />
+            </P.Close>
+          )}
+          <P.Arrow width={14} height={7} className="fill-card stroke-line [stroke-width:1px]" />
         </P.Content>
       </P.Portal>
     </P.Root>

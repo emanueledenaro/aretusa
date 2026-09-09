@@ -17,19 +17,112 @@ export const Input = React.forwardRef<
 >(function Input({ className, ...p }, ref) {
   return <input ref={ref} className={cx("a-input", className)} {...p} />;
 });
-export const Textarea = React.forwardRef<
-  HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
->(function Textarea({ className, ...p }, ref) {
-  return (
-    <textarea
-      ref={ref}
-      rows={4}
-      className={cx("a-input resize-y", className)}
-      {...p}
-    />
-  );
-});
+/** Joins optional id lists for aria-describedby; returns undefined when empty. */
+function joinIds(...ids: (string | undefined | false | null)[]) {
+  return ids.filter(Boolean).join(" ") || undefined;
+}
+/** Runs every ref in the list with the same node. */
+function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
+  return (node: T | null) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") ref(node);
+      else if (ref) (ref as React.MutableRefObject<T | null>).current = node;
+    }
+  };
+}
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  /** Grow with the content instead of showing a resize handle. */
+  autoResize?: boolean;
+  /** Upper bound for autoResize, in rows; beyond it the content scrolls. */
+  maxRows?: number;
+  /** Show a live character count; pairs with maxLength for a limit. */
+  showCount?: boolean;
+};
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  function Textarea(
+    {
+      className,
+      autoResize = false,
+      maxRows,
+      showCount = false,
+      rows = 4,
+      "aria-describedby": describedBy,
+      "aria-invalid": invalid,
+      onChange,
+      style,
+      ...p
+    },
+    ref,
+  ) {
+    const generatedId = React.useId();
+    const id = p.id ?? generatedId;
+    const countId = showCount ? `${id}-count` : undefined;
+    const inner = React.useRef<HTMLTextAreaElement | null>(null);
+    const [count, setCount] = React.useState(() =>
+      String(p.value ?? p.defaultValue ?? "").length,
+    );
+    const over = p.maxLength !== undefined && count > p.maxLength;
+    const fit = React.useCallback(() => {
+      const node = inner.current;
+      if (!node || !autoResize) return;
+      const style = getComputedStyle(node);
+      const line = parseFloat(style.lineHeight) || 24;
+      const padding =
+        (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+      const border =
+        (parseFloat(style.borderTopWidth) || 0) + (parseFloat(style.borderBottomWidth) || 0);
+      const min = rows * line + padding + border;
+      const max = maxRows ? maxRows * line + padding + border : Infinity;
+      node.style.height = "auto";
+      const wanted = node.scrollHeight + border;
+      const next = Math.min(Math.max(wanted, min), max);
+      node.style.height = `${next}px`;
+      node.style.overflowY = wanted > max ? "auto" : "hidden";
+    }, [autoResize, rows, maxRows]);
+    React.useLayoutEffect(fit, [fit, p.value]);
+    React.useEffect(() => {
+      if (p.value !== undefined) setCount(String(p.value).length);
+    }, [p.value]);
+    return (
+      <>
+        <textarea
+          ref={mergeRefs(ref, inner)}
+          rows={rows}
+          className={cx(
+            "a-input min-h-[calc(var(--rows)*1.5rem+1.25rem+2px)] py-2.5 leading-6",
+            autoResize ? "resize-none" : "resize-y",
+            over && "border-danger",
+            className,
+          )}
+          style={{ "--rows": Math.min(rows, maxRows ?? rows), ...style } as React.CSSProperties}
+          {...p}
+          id={id}
+          aria-invalid={over ? true : invalid}
+          aria-describedby={joinIds(describedBy, countId)}
+          onChange={(event) => {
+            if (p.value === undefined) setCount(event.target.value.length);
+            if (autoResize) fit();
+            onChange?.(event);
+          }}
+        />
+        {showCount && (
+          <p
+            id={countId}
+            aria-live="polite"
+            className={cx(
+              "text-end text-xs tabular-nums leading-relaxed",
+              over ? "text-danger" : "text-muted",
+            )}
+          >
+            {p.maxLength !== undefined
+              ? `${count} of ${p.maxLength} characters`
+              : `${count} characters`}
+          </p>
+        )}
+      </>
+    );
+  },
+);
 export function Label(p: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return <label {...p} className={cx("text-sm font-medium", p.className)} />;
 }

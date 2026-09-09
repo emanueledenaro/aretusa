@@ -149,24 +149,87 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(functi
     </AC.Root>
   );
 });
-export function Collapsible({
-  title,
-  children,
-}: {
-  title: string;
+export type CollapsibleProps = Omit<
+  React.ComponentPropsWithoutRef<typeof CO.Root>,
+  "title"
+> & {
+  /** Label of the trigger and accessible name of the revealed region. */
+  title: React.ReactNode;
+  /** Short line under the trigger label, linked through aria-describedby. */
+  description?: React.ReactNode;
   children: React.ReactNode;
+  /** Visual weight of the trigger; outline by default. */
+  tone?: "outline" | "quiet";
+};
+/** Returns focus to the target when the content unmounts while focus was inside it. */
+function FocusReturn({
+  inside,
+  target,
+}: {
+  inside: React.RefObject<boolean>;
+  target: React.RefObject<HTMLElement | null>;
 }) {
+  React.useLayoutEffect(
+    () => () => {
+      if (inside.current) target.current?.focus({ preventScroll: true });
+    },
+    [inside, target],
+  );
+  return null;
+}
+/**
+ * A single disclosure. The trigger is a button with aria-expanded and aria-controls; the content is a named region.
+ * When the content closes while focus is inside it, focus returns to the trigger.
+ */
+export const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(function Collapsible(
+  { title, description, children, tone = "outline", className, onOpenChange, ...props },
+  ref,
+) {
+  const id = React.useId();
+  const trigger = React.useRef<HTMLButtonElement>(null);
+  const content = React.useRef<HTMLDivElement>(null);
+  const focusInside = React.useRef(false);
   return (
-    <CO.Root>
-      <CO.Trigger asChild>
-        <Button tone="outline">{title}</Button>
-      </CO.Trigger>
-      <CO.Content className="a-collapsible mt-4 rounded-lg bg-surface p-4 text-sm">
+    <CO.Root ref={ref} className={cx("w-full min-w-0", className)} onOpenChange={onOpenChange} {...props}>
+      <div className="flex flex-col items-start gap-1.5">
+        <CO.Trigger asChild>
+          <Button
+            ref={trigger}
+            id={id + "-trigger"}
+            tone={tone}
+            aria-describedby={description ? id + "-description" : undefined}
+            aria-controls={id + "-content"}
+            className="a-collapsible-trigger max-w-full justify-start text-start [&_svg]:transition-[rotate] [&_svg]:duration-[var(--motion-normal)] data-[state=open]:[&_svg]:rotate-90"
+          >
+            <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted" />
+            <span className="min-w-0 [overflow-wrap:anywhere]">{title}</span>
+          </Button>
+        </CO.Trigger>
+        {description && (
+          <p id={id + "-description"} className="ps-1 text-sm leading-relaxed text-muted">
+            {description}
+          </p>
+        )}
+      </div>
+      <CO.Content
+        ref={content}
+        id={id + "-content"}
+        role="region"
+        aria-labelledby={id + "-trigger"}
+        onFocusCapture={() => {
+          focusInside.current = true;
+        }}
+        onBlurCapture={(event) => {
+          if (!content.current?.contains(event.relatedTarget as Node | null)) focusInside.current = false;
+        }}
+        className="a-collapsible mt-3 min-w-0 rounded-lg border border-line bg-surface/60 p-4 text-sm leading-relaxed text-ink [overflow-wrap:anywhere]"
+      >
+        <FocusReturn inside={focusInside} target={trigger} />
         {children}
       </CO.Content>
     </CO.Root>
   );
-}
+});
 export type MenuOption = {
   label: string;
   onSelect: () => void;

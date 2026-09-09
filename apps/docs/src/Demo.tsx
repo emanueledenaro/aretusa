@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TabsExample, AccordionExample } from "./demos/navigation";
+import { TabsExample, AccordionExample, CollapsibleExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -794,11 +794,7 @@ export function Demo({ id }: { id: string }) {
       content = <AccordionExample />;
       break;
     case "collapsible":
-      content = (
-        <U.Collapsible title="Show project details">
-          A few additional details, revealed when you need them.
-        </U.Collapsible>
-      );
+      content = <CollapsibleExample />;
       break;
     case "tabs":
       content = <TabsExample />;

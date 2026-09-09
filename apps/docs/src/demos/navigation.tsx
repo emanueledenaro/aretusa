@@ -75,3 +75,39 @@ export function AccordionExample() {
     </div>
   );
 }
+
+export function CollapsibleExample() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Uncontrolled, with a description under the trigger.</p>
+        <U.Collapsible title="Show project details" description="Budget, dates and the people involved.">
+          <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
+            <dt className="text-muted">Budget</dt><dd>4,200 EUR</dd>
+            <dt className="text-muted">Dates</dt><dd>12 to 26 October</dd>
+            <dt className="text-muted">People</dt><dd>Alex, Giulia and the printing room</dd>
+          </dl>
+        </U.Collapsible>
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Controlled, quiet trigger, with a form and a Done action that closes it and returns focus to the trigger.</p>
+        <U.Collapsible title="Filters" tone="quiet" open={open} onOpenChange={setOpen}>
+          <div className="max-w-sm space-y-3">
+            <U.Field label="Search"><U.Input aria-label="Search" placeholder="Prints, maps, letters" /></U.Field>
+            <U.Button size="sm" tone="outline" onClick={() => setOpen(false)}>Done</U.Button>
+          </div>
+        </U.Collapsible>
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Long hidden content in a 240px parent, plus a disabled trigger.</p>
+        <div className="w-60 max-w-full space-y-4">
+          <U.Collapsible title="Read the full note about paper conservation and framing" defaultOpen>
+            <p>Keep prints out of direct sunlight. Frame with acid-free mounts and leave a small gap so the paper can breathe. Unframed prints travel flat between two boards, never rolled. Sehrlangeswortohneleerzeichenzumtesten.</p>
+          </U.Collapsible>
+          <U.Collapsible title="Archive access" disabled><p>Members only.</p></U.Collapsible>
+        </div>
+      </div>
+    </div>
+  );
+}

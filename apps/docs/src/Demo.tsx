@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TabsExample } from "./demos/navigation";
+import { TabsExample, AccordionExample } from "./demos/navigation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -791,22 +791,7 @@ export function Demo({ id }: { id: string }) {
       content = <U.ToastDemo />;
       break;
     case "accordion":
-      content = (
-        <U.Accordion
-          items={[
-            {
-              title: "Can I customize the source?",
-              content:
-                "Yes. The source is yours to adapt under the MIT license.",
-            },
-            {
-              title: "Does it support keyboard navigation?",
-              content:
-                "Each interactive component documents its keyboard behavior.",
-            },
-          ]}
-        />
-      );
+      content = <AccordionExample />;
       break;
     case "collapsible":
       content = (

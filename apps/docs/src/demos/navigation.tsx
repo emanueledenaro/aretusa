@@ -40,3 +40,38 @@ export function TabsExample() {
     </div>
   );
 }
+
+export function AccordionExample() {
+  const [open, setOpen] = React.useState<string[]>(["shipping"]);
+  return (
+    <div className="w-full space-y-10">
+      <div>
+        <p className="mb-3 text-sm text-muted">Single mode, one answer open at a time, with a disabled entry and a form inside the last answer.</p>
+        <U.Accordion
+          headingLevel={3}
+          items={[
+            { title: "Can I customize the source?", content: "Yes. The source is yours to adapt under the MIT license. Change tokens in one place and every installed component follows." },
+            { title: "Does it support keyboard navigation?", content: "Each interactive component documents its keyboard behavior and is tested through its public role and name." },
+            { title: "Archived: the 2024 pricing question", content: "Kept for reference.", disabled: true },
+            { title: "Where do I report a problem, and what should I include so the studio can reproduce it quickly?", content: <form className="max-w-sm space-y-3" onSubmit={(event) => event.preventDefault()}><U.Field label="What happened?"><U.Input aria-label="What happened?" placeholder="A short description" /></U.Field><U.Button size="sm" type="submit">Send report</U.Button></form> },
+          ]}
+        />
+      </div>
+      <div>
+        <p className="mb-3 text-sm text-muted">Multiple mode, controlled, in a narrow parent. Open: {open.length ? open.join(", ") : "none"}</p>
+        <div className="w-60 max-w-full">
+          <U.Accordion
+            type="multiple"
+            value={open}
+            onValueChange={setOpen}
+            items={[
+              { value: "shipping", title: "Shipping across the island", content: "Two to four working days with a tracked courier." },
+              { value: "returns", title: "Returns", content: "Fourteen days, prints must be unframed." },
+              { value: "care", title: "Caring for a hand-pulled print on cotton paper", content: "Keep it out of direct sunlight and away from damp walls." },
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

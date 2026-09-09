@@ -87,29 +87,68 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
     </TB.Root>
   );
 });
-export function Accordion({
-  items,
-}: {
-  items: { title: string; content: React.ReactNode }[];
-}) {
+export type AccordionItem = {
+  /** Defaults to the item index as a string. */
+  value?: string;
+  title: React.ReactNode;
+  content: React.ReactNode;
+  disabled?: boolean;
+};
+type AccordionShared = {
+  items: AccordionItem[];
+  className?: string;
+  dir?: "ltr" | "rtl";
+  /** Heading level of each header; 3 by default. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
+};
+type AccordionSingle = {
+  type?: "single";
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  /** Allow the open item to close again; true by default. */
+  collapsible?: boolean;
+};
+type AccordionMultiple = {
+  type: "multiple";
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (value: string[]) => void;
+};
+export type AccordionProps = AccordionShared & (AccordionSingle | AccordionMultiple);
+/**
+ * Headers are buttons inside headings: Enter and Space toggle, ArrowUp/ArrowDown, Home and End move between headers,
+ * disabled items are skipped. Single mode keeps one item open (collapsible by default); multiple mode keeps any number open.
+ */
+export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
+  { items, className, dir, headingLevel = 3, ...mode },
+  ref,
+) {
+  const Heading = ("h" + headingLevel) as "h3";
+  const rootProps =
+    mode.type === "multiple"
+      ? { type: "multiple" as const, value: mode.value, defaultValue: mode.defaultValue, onValueChange: mode.onValueChange }
+      : { type: "single" as const, value: mode.value, defaultValue: mode.defaultValue, onValueChange: mode.onValueChange, collapsible: mode.collapsible ?? true };
   return (
-    <AC.Root type="single" collapsible>
+    <AC.Root ref={ref} dir={dir} className={cx("w-full min-w-0 border-t border-line", className)} {...rootProps}>
       {items.map((i, n) => (
-        <AC.Item key={n} value={String(n)} className="border-b border-line">
-          <AC.Header>
-            <AC.Trigger className="a-accordion-trigger flex w-full items-center justify-between gap-3 py-5 text-start text-sm font-medium">
-              {i.title}
-              <ChevronRight className="size-4 shrink-0" />
-            </AC.Trigger>
+        <AC.Item key={i.value ?? n} value={i.value ?? String(n)} disabled={i.disabled} className="border-b border-line">
+          <AC.Header asChild>
+            <Heading className="m-0 text-[length:inherit] font-normal">
+              <AC.Trigger className="a-accordion-trigger flex min-h-11 w-full items-center justify-between gap-4 rounded-md py-4 text-start text-[0.9375rem] font-medium leading-snug text-ink transition-colors [overflow-wrap:anywhere] hover:text-terracotta focus-visible:outline-offset-[-2px] disabled:pointer-events-none disabled:opacity-40 data-[state=open]:text-ink">
+                <span className="min-w-0 flex-1">{i.title}</span>
+                <ChevronRight aria-hidden="true" className="size-4 shrink-0 text-muted" />
+              </AC.Trigger>
+            </Heading>
           </AC.Header>
-          <AC.Content className="a-accordion-content text-sm leading-relaxed text-muted">
-            <div className="pb-5">{i.content}</div>
+          <AC.Content className="a-accordion-content text-sm leading-relaxed text-muted [overflow-wrap:anywhere]">
+            <div className="pb-5 pe-8">{i.content}</div>
           </AC.Content>
         </AC.Item>
       ))}
     </AC.Root>
   );
-}
+});
 export function Collapsible({
   title,
   children,

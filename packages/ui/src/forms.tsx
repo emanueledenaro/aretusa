@@ -671,30 +671,89 @@ export function Select({
     </SE.Root>
   );
 }
-export function Slider({
-  label,
-  ...props
-}: React.ComponentProps<typeof SL.Root> & { label: string }) {
-  const values = props.value || props.defaultValue || [50];
+export type SliderProps = React.ComponentPropsWithoutRef<typeof SL.Root> & {
+  /** Accessible name; range thumbs are numbered from it. */
+  label: string;
+  /** Shows the label and the current value above the track. */
+  showValue?: boolean;
+  /** Formats a value for display and for aria-valuetext. */
+  formatValue?: (value: number) => string;
+  /** Optional tick labels under a horizontal track; ignored when vertical. */
+  marks?: { value: number; label?: React.ReactNode }[];
+};
+export const Slider = React.forwardRef<HTMLSpanElement, SliderProps>(function Slider(
+  { label, showValue = false, formatValue, marks, className, onValueChange, ...props },
+  ref,
+) {
+  const min = props.min ?? 0;
+  const max = props.max ?? 100;
+  const vertical = props.orientation === "vertical";
+  const [internal, setInternal] = React.useState<number[]>(props.defaultValue ?? [50]);
+  const values = props.value ?? internal;
+  const format = formatValue ?? ((value: number) => String(value));
+  const shown =
+    values.length > 1 ? `${format(values[0])} to ${format(values[values.length - 1])}` : format(values[0]);
+  const thumbId = React.useId();
   return (
-    <SL.Root
-      {...props}
-      defaultValue={props.defaultValue || (!props.value ? [50] : undefined)}
-      className="relative flex h-8 w-full touch-none items-center"
-    >
-      <SL.Track className="relative h-1.5 grow rounded-full bg-surface">
-        <SL.Range className="absolute h-full rounded-full bg-terracotta" />
-      </SL.Track>
-      {values.map((_, i) => (
-        <SL.Thumb
-          key={i}
-          aria-label={values.length > 1 ? label + " " + (i + 1) : label}
-          className="block size-5 rounded-full border border-line bg-card shadow-sm"
-        />
-      ))}
-    </SL.Root>
+    <div className={cx("grid gap-2", vertical ? "justify-items-start" : "w-full", className)}>
+      {showValue && (
+        <div className="flex items-baseline justify-between gap-3 text-sm">
+          <span id={`${thumbId}-label`} className="font-medium">
+            {label}
+          </span>
+          <output aria-live="polite" htmlFor={values.map((_, i) => `${thumbId}-${i}`).join(" ")} className="tabular-nums text-muted">
+            {shown}
+          </output>
+        </div>
+      )}
+      <SL.Root
+        ref={ref}
+        {...props}
+        value={props.value}
+        defaultValue={props.value === undefined ? (props.defaultValue ?? [50]) : undefined}
+        onValueChange={(next) => {
+          if (props.value === undefined) setInternal(next);
+          onValueChange?.(next);
+        }}
+        className={cx(
+          "relative flex touch-none select-none items-center data-[disabled]:opacity-45",
+          vertical ? "h-48 w-11 flex-col" : "h-11 w-full",
+        )}
+      >
+        <SL.Track
+          className={cx(
+            "relative grow rounded-full bg-control/40",
+            vertical ? "w-1.5" : "h-1.5",
+          )}
+        >
+          <SL.Range className={cx("absolute rounded-full bg-terracotta", vertical ? "w-full" : "h-full")} />
+        </SL.Track>
+        {values.map((value, i) => (
+          <SL.Thumb
+            key={i}
+            id={`${thumbId}-${i}`}
+            aria-label={values.length > 1 ? `${label} ${i + 1}` : label}
+            aria-valuetext={format(value)}
+            className="relative block size-5 rounded-full border border-control bg-card shadow-sm transition-[box-shadow,border-color] before:absolute before:-inset-3 before:content-[''] hover:border-ink focus-visible:border-terracotta data-[disabled]:cursor-default motion-reduce:transition-none"
+          />
+        ))}
+      </SL.Root>
+      {marks && marks.length > 0 && !vertical && (
+        <div aria-hidden="true" className="relative h-4 text-[11px] leading-4 text-muted">
+          {marks.map((mark) => (
+            <span
+              key={mark.value}
+              className="absolute -translate-x-1/2 whitespace-nowrap tabular-nums"
+              style={{ insetInlineStart: `${((mark.value - min) / (max - min)) * 100}%` }}
+            >
+              {mark.label ?? format(mark.value)}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   );
-}
+});
 export type ToggleProps = React.ComponentPropsWithoutRef<typeof TO.Root> & {
   /** sm keeps a 44px target on touch and 36px from the sm breakpoint. */
   size?: "sm" | "md";

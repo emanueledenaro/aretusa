@@ -32,7 +32,7 @@ export const usage: Record<string,string> = {
   "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} placeholder=\"Choose a discipline\" value={value} onChange={(e) => setValue(e.target.value)} />",
   "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" description=\"You can change this later.\" />",
   "select": "<Select label=\"Discipline\" options={options} value={value} onValueChange={setValue} />",
-  "slider": "<Slider label=\"Volume\" defaultValue={[40]} min={0} max={100} />",
+  "slider": "<Slider label=\"Volume\" defaultValue={[40]} min={0} max={100} showValue formatValue={(v) => `${v}%`} />",
   "switch": "<Switch label=\"Updates\" description=\"A weekly digest every Monday.\" checked={enabled} onCheckedChange={setEnabled} />",
   "textarea": "<Textarea aria-label=\"Notes\" placeholder=\"Your thoughts…\" autoResize maxRows={6} showCount maxLength={400} />",
   "toggle": "<Toggle aria-label=\"Favorite\" pressed={enabled} onPressedChange={setEnabled} size=\"sm\" tone=\"quiet\">Favorite</Toggle>",

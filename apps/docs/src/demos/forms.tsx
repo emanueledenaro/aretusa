@@ -275,3 +275,36 @@ export function ToggleGroupExample() {
     </div>
   );
 }
+
+export function SliderExample() {
+  const [contrast, setContrast] = React.useState([40]);
+  const [price, setPrice] = React.useState([120, 340]);
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <div className="grid gap-3">
+        <U.Slider label="Contrast" showValue value={contrast} onValueChange={setContrast} formatValue={(value) => `${value}%`} />
+        <p className="text-xs text-muted">Controlled, value beside the label.</p>
+      </div>
+      <div className="grid gap-3">
+        <U.Slider label="Price" showValue min={0} max={500} step={10} minStepsBetweenThumbs={1} value={price} onValueChange={setPrice} formatValue={(value) => `${value} EUR`} />
+        <p className="text-xs text-muted">Range with two named thumbs and a formatted value.</p>
+      </div>
+      <div className="grid gap-3">
+        <U.Slider label="Quality" showValue min={0} max={4} step={1} defaultValue={[2]} marks={[{ value: 0, label: "Draft" }, { value: 2, label: "Balanced" }, { value: 4, label: "Final" }]} />
+        <p className="text-xs text-muted">Stepped with marks under the track.</p>
+      </div>
+      <div className="grid gap-3">
+        <U.Slider label="Brightness" showValue defaultValue={[65]} disabled />
+        <p className="text-xs text-muted">Disabled.</p>
+      </div>
+      <div className="w-60 max-w-full">
+        <p className="mb-3 text-sm font-medium">Long label in a 240px parent</p>
+        <U.Slider label="Time before the printing room closes" showValue defaultValue={[15]} max={60} formatValue={(value) => `${value} min`} />
+      </div>
+      <div className="grid gap-3">
+        <p className="text-sm font-medium">Vertical orientation</p>
+        <U.Slider label="Volume" orientation="vertical" defaultValue={[30]} />
+      </div>
+    </div>
+  );
+}

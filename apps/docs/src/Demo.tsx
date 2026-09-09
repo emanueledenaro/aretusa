@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample, ToggleExample, ToggleGroupExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample, ToggleExample, ToggleGroupExample, SliderExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -607,12 +607,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "slider":
-      content = (
-        <div className="space-y-3">
-          <p className="text-sm">Contrast preference</p>
-          <U.Slider label="Contrast preference" defaultValue={[40]} />
-        </div>
-      );
+      content = <SliderExample />;
       break;
     case "calendar":
       content = <CalendarExample />;

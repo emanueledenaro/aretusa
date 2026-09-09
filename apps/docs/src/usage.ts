@@ -66,7 +66,7 @@ export const usage: Record<string,string> = {
   "bubble": "<Bubble side=\"end\">Hello there.</Bubble>",
   "marker": "<Marker>Today</Marker>",
   "message": "<Message author=\"Alex\" time=\"09:41\" dateTime=\"2026-03-04T09:41:00Z\" side=\"end\" status=\"sent\">A new idea.</Message>",
-  "message-scroller": "<MessageScroller label=\"Project conversation\"><p>First message.</p><p>Second message.</p></MessageScroller>",
+  "message-scroller": "<MessageScroller label=\"Project conversation\" loading={enabled} className=\"max-h-80\"><p>First message.</p><p>Second message.</p></MessageScroller>",
   "questionnaire": "<Questionnaire questions={[{id:\"focus\",title:\"Your focus?\",options:[\"Design\",\"Engineering\"]}]} onComplete={answers=>console.log(answers)} />"
 };
 

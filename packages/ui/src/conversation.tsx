@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Download, Paperclip, RotateCw, TriangleAlert, X } from "lucide-react";
+import { ArrowDown, Download, LoaderCircle, Paperclip, RotateCw, TriangleAlert, X } from "lucide-react";
 import { Button } from "./button";
 import { Progress } from "./progress";
 import { Input, RadioGroup } from "./forms";
 import { cx } from "./utils";
+import { ScrollFade, useScrollFade } from "./scroll-fade";
 /** Format a byte count as B, KB, MB or GB with one decimal above the unit boundary. */
 export function formatFileSize(bytes: number) {
   const units = ["B", "KB", "MB", "GB"];
@@ -234,25 +235,127 @@ export const Message = React.forwardRef<HTMLElement, MessageProps>(function Mess
     </article>
   );
 });
-export function MessageScroller({
-  children,
-  label = "Conversation",
-}: {
-  children: React.ReactNode;
+export type MessageScrollerProps = React.ComponentPropsWithRef<"div"> & {
+  /** Accessible name of the log region. */
   label?: string;
-}) {
+  /** Height and surface classes for the outer frame. */
+  className?: string;
+  /** Follow new content while the reader is at the newest message. */
+  stickToBottom?: boolean;
+  /** Earlier messages are being fetched; shows a status row at the top. */
+  loading?: boolean;
+  /** Rendered when there are no children and nothing is loading. */
+  empty?: React.ReactNode;
+  labels?: Partial<{ newMessages: string; loading: string }>;
+};
+const scrollerLabels = { newMessages: "New messages", loading: "Loading earlier messages" };
+const bottomThreshold = 8;
+/** A bounded conversation log that follows new messages without stealing the reader's place. */
+export const MessageScroller = React.forwardRef<HTMLDivElement, MessageScrollerProps>(function MessageScroller(
+  { label = "Conversation", className, stickToBottom = true, loading = false, empty, labels, children, ...props },
+  ref,
+) {
+  const text = { ...scrollerLabels, ...labels };
+  const [node, setNode] = React.useState<HTMLDivElement | null>(null);
+  const [pending, setPending] = React.useState(false);
+  const atBottom = React.useRef(true);
+  const count = React.Children.count(children);
+  const previousCount = React.useRef(count);
+  const { ref: fadeRef, edges } = useScrollFade();
+  const viewportRef = React.useCallback(
+    (element: HTMLDivElement | null) => {
+      setNode(element);
+      fadeRef(element);
+      if (typeof ref === "function") ref(element);
+      else if (ref) ref.current = element;
+    },
+    [fadeRef, ref],
+  );
+  const measure = React.useCallback(() => {
+    if (!node) return true;
+    return node.scrollHeight - node.scrollTop - node.clientHeight <= bottomThreshold;
+  }, [node]);
+  const jumpToLatest = React.useCallback(() => {
+    if (!node) return;
+    node.scrollTop = node.scrollHeight;
+    atBottom.current = true;
+    setPending(false);
+  }, [node]);
+  // First paint starts at the newest message; later growth follows only while the reader is there.
+  React.useLayoutEffect(() => {
+    if (!node) return;
+    const grew = count > previousCount.current;
+    previousCount.current = count;
+    if (!stickToBottom) return;
+    if (atBottom.current) jumpToLatest();
+    else if (grew) setPending(true);
+  }, [node, count, stickToBottom, jumpToLatest]);
+  React.useEffect(() => {
+    if (!node) return;
+    const onScroll = () => {
+      atBottom.current = measure();
+      if (atBottom.current) setPending(false);
+    };
+    node.addEventListener("scroll", onScroll, { passive: true });
+    // Content that grows without a new child, such as streamed text or a loaded image, also follows.
+    const resize =
+      typeof ResizeObserver === "undefined" || !stickToBottom
+        ? null
+        : new ResizeObserver(() => {
+            if (atBottom.current) node.scrollTop = node.scrollHeight;
+          });
+    if (resize) for (const child of Array.from(node.children)) resize.observe(child);
+    return () => {
+      node.removeEventListener("scroll", onScroll);
+      resize?.disconnect();
+    };
+  }, [node, measure, stickToBottom]);
+  const showEmpty = count === 0 && !loading;
   return (
-    <div
-      role="log"
-      aria-label={label}
-      aria-live="polite"
-      tabIndex={0}
-      className="max-h-64 space-y-4 overflow-y-auto rounded-xl border border-line p-4"
-    >
-      {children}
+    <div className={cx("relative flex max-h-72 min-h-0 flex-col overflow-hidden rounded-xl border border-line bg-paper", className)}>
+      <div
+        {...props}
+        ref={viewportRef}
+        role="log"
+        aria-label={label}
+        aria-live="polite"
+        aria-busy={loading ? true : props["aria-busy"]}
+        tabIndex={0}
+        className="a-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain scroll-smooth p-4 focus-visible:outline-offset-[-2px] motion-reduce:scroll-auto"
+      >
+        <div className="flex min-h-full flex-col justify-end gap-5">
+          {loading && (
+            <p role="status" className="flex items-center justify-center gap-2 py-1 text-xs text-muted">
+              <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+              {text.loading}
+            </p>
+          )}
+          {showEmpty ? (
+            <div className="flex flex-1 items-center justify-center py-8 text-center text-sm text-muted">{empty ?? "No messages yet."}</div>
+          ) : (
+            children
+          )}
+        </div>
+      </div>
+      <ScrollFade edges={edges} depth="min(40px, 12%)" style={{ insetInlineEnd: 12 }} />
+      {pending && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              jumpToLatest();
+              node?.focus();
+            }}
+            className="a-button pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-card px-4 text-xs font-medium text-ink shadow-sm hover:bg-surface"
+          >
+            <ArrowDown aria-hidden className="size-4" />
+            {text.newMessages}
+          </button>
+        </div>
+      )}
     </div>
   );
-}
+});
 export function Questionnaire({
   questions,
   onComplete,

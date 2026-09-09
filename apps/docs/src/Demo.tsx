@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { AttachmentExample, BubbleExample, MessageExample } from "./demos/conversation";
+import { AttachmentExample, BubbleExample, MessageExample, MessageScrollerExample } from "./demos/conversation";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -1013,15 +1013,7 @@ export function Demo({ id }: { id: string }) {
       content = <MessageExample />;
       break;
     case "message-scroller":
-      content = (
-        <U.MessageScroller>
-          {Array.from({ length: 6 }, (_, i) => (
-            <U.Message key={i} author={i % 2 ? "Sam" : "Alex"}>
-              A thought for our next iteration, number {i + 1}.
-            </U.Message>
-          ))}
-        </U.MessageScroller>
-      );
+      content = <MessageScrollerExample />;
       break;
     case "questionnaire":
       content = notice ? (

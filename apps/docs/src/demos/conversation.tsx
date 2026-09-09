@@ -130,3 +130,58 @@ export function MessageExample() {
     </div>
   );
 }
+
+const seed = [
+  { author: "Alex Rivers", side: "start" as const, text: "Good morning. The proofs came back from the printer." },
+  { author: "You", side: "end" as const, text: "How does the cream stock look under daylight?" },
+  { author: "Alex Rivers", side: "start" as const, text: "Warmer than the sample, and the margins hold. I would keep them." },
+  { author: "Sam Costa", side: "start" as const, text: "Agreed. The photo from the terrace works for the cover if we crop the railing." },
+  { author: "You", side: "end" as const, text: "Let us go with twenty copies for the open studio and ten for the archive." },
+  { author: "Alex Rivers", side: "start" as const, text: "Ordering now. I will send the invoice this afternoon." },
+];
+
+export function MessageScrollerExample() {
+  const [items, setItems] = React.useState(seed);
+  const [loading, setLoading] = React.useState(false);
+  const [count, setCount] = React.useState(0);
+  const add = () => {
+    const n = count + 1;
+    setCount(n);
+    setItems((list) => [...list, { author: n % 2 ? "Sam Costa" : "You", side: n % 2 ? "start" : "end", text: "A new thought for the next iteration, number " + n + "." }]);
+  };
+  const loadEarlier = () => {
+    setLoading(true);
+    window.setTimeout(() => {
+      setItems((list) => [{ author: "Sam Costa", side: "start", text: "Earlier: the first sketches arrived on Monday." }, ...list]);
+      setLoading(false);
+    }, 900);
+  };
+  return (
+    <div className="grid w-full gap-6 lg:grid-cols-[1fr_240px]">
+      <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex flex-wrap gap-2">
+          <U.Button tone="outline" size="sm" onClick={add}>Add a message</U.Button>
+          <U.Button tone="outline" size="sm" onClick={loadEarlier} loading={loading}>Load earlier</U.Button>
+        </div>
+        <U.MessageScroller label="Project conversation" loading={loading} className="max-h-80">
+          <U.Marker>Today</U.Marker>
+          {items.map((m, i) => (
+            <U.Message key={i} author={m.author} side={m.side} time={"09:" + String(41 + i).padStart(2, "0")}>
+              {m.text}
+            </U.Message>
+          ))}
+        </U.MessageScroller>
+        <p className="text-xs text-muted">Scroll up, then add a message: the view stays where you are and a control offers the newest message.</p>
+      </div>
+      <div className="flex min-w-0 flex-col gap-3">
+        <p className="text-xs text-muted">Empty and short containers</p>
+        <U.MessageScroller label="New conversation" className="max-h-40">{[]}</U.MessageScroller>
+        <U.MessageScroller label="Short viewport" className="max-h-40">
+          <U.Message author="Alex Rivers">A short log that still shows the scrollbar and the edge fade.</U.Message>
+          <U.Message author="You" side="end">Understood.</U.Message>
+          <U.Message author="Alex Rivers">One more line to force scrolling in a 160px frame.</U.Message>
+        </U.MessageScroller>
+      </div>
+    </div>
+  );
+}

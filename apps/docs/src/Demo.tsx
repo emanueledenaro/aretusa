@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BadgeExample, CardExample } from "./demos/foundations-a";
+import { BadgeExample, CardExample, ButtonGroupExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -382,16 +382,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "button-group":
-      content = (
-        <U.ButtonGroup label="Formatting">
-          <U.Button tone="outline" onClick={() => setNotice("Draft saved")}>
-            Save draft
-          </U.Button>
-          <U.Button onClick={() => setNotice("Published locally")}>
-            Publish
-          </U.Button>
-        </U.ButtonGroup>
-      );
+      content = <ButtonGroupExample onNotice={setNotice} />;
       break;
     case "card":
       content = <CardExample onNotice={setNotice} />;

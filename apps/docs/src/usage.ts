@@ -5,7 +5,7 @@ export const usage: Record<string,string> = {
   "formisch": "<Form of={form} onSubmit={(output) => console.log(output)}><FormischField of={form} path={[\"name\"]} label=\"Name\" description=\"Shown to your team.\">{({ field, controlProps }) => <Input {...field.props} {...controlProps} value={field.input ?? \"\"} />}</FormischField><button type=\"submit\">Save</button></Form>",
   "scroll-fade": "<div className=\"relative overflow-hidden rounded-xl bg-paper\"><div ref={ref} role=\"region\" aria-label=\"Activity\" tabIndex={0} className=\"h-40 overflow-auto p-4\"><p>Your scrollable content.</p></div><ScrollFade edges={edges} depth={32} /></div>",
   "button": "<Button onClick={() => alert(\"Hello\")}>Create project</Button>",
-  "button-group": "<ButtonGroup label=\"Actions\"><button>Save</button><button>Publish</button></ButtonGroup>",
+  "button-group": "<ButtonGroup label=\"Actions\" attached><button type=\"button\">Save</button><button type=\"button\">Publish</button></ButtonGroup>",
   "aspect-ratio": "<AspectRatio ratio={16 / 9}><img src=\"/your-image.jpg\" alt=\"Your description\" /></AspectRatio>",
   "avatar": "<Avatar name=\"Alex Rivers\" />",
   "badge": "<Badge tone=\"success\" dot>Published</Badge>",

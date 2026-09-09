@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
-import { Check, Clock, TriangleAlert, X } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Check, Clock, LayoutGrid, List, Map, TriangleAlert, X } from "lucide-react";
 
 export function BadgeExample() {
   return (
@@ -131,6 +131,75 @@ export function CardExample({ onNotice }: { onNotice: (text: string) => void }) 
             <U.Button tone="outline" size="sm" onClick={() => onNotice("Archive opened")}>Open the archive folder</U.Button>
           </U.CardFooter>
         </U.Card>
+      </div>
+    </div>
+  );
+}
+
+export function ButtonGroupExample({ onNotice }: { onNotice: (text: string) => void }) {
+  const [view, setView] = React.useState<"grid" | "list" | "map">("grid");
+  const [align, setAlign] = React.useState<"left" | "center" | "right">("left");
+  const [saving, setSaving] = React.useState(false);
+  const views = [
+    { id: "grid" as const, label: "Grid", icon: <LayoutGrid className="size-4" /> },
+    { id: "list" as const, label: "List", icon: <List className="size-4" /> },
+    { id: "map" as const, label: "Map", icon: <Map className="size-4" /> },
+  ];
+  const aligns = [
+    { id: "left" as const, label: "Align left", icon: <AlignLeft className="size-4" /> },
+    { id: "center" as const, label: "Align centre", icon: <AlignCenter className="size-4" /> },
+    { id: "right" as const, label: "Align right", icon: <AlignRight className="size-4" /> },
+  ];
+  return (
+    <div className="grid w-full gap-8">
+      <div>
+        <p className="mb-3 text-sm font-medium">Spaced actions, one primary</p>
+        <U.ButtonGroup label="Draft actions">
+          <U.Button tone="outline" onClick={() => onNotice("Draft discarded")}>Discard</U.Button>
+          <U.Button tone="outline" loading={saving} onClick={() => { setSaving(true); onNotice("Saving draft"); setTimeout(() => setSaving(false), 1200); }}>Save draft</U.Button>
+          <U.Button tone="outline" disabled>Archive</U.Button>
+          <U.Button onClick={() => onNotice("Published locally")}>Publish</U.Button>
+        </U.ButtonGroup>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <p className="mb-3 text-sm font-medium">Attached, selected view with aria-pressed</p>
+          <U.ButtonGroup label="View" attached>
+            {views.map((item) => (
+              <U.Button key={item.id} tone={view === item.id ? "primary" : "outline"} aria-pressed={view === item.id} onClick={() => { setView(item.id); onNotice(item.label + " view"); }}>
+                {item.icon}
+                {item.label}
+              </U.Button>
+            ))}
+          </U.ButtonGroup>
+        </div>
+        <div>
+          <p className="mb-3 text-sm font-medium">Attached icon actions, 44px each</p>
+          <U.ButtonGroup label="Text alignment" attached>
+            {aligns.map((item) => (
+              <U.Button key={item.id} tone={align === item.id ? "secondary" : "outline"} aria-pressed={align === item.id} aria-label={item.label} onClick={() => setAlign(item.id)}>
+                {item.icon}
+              </U.Button>
+            ))}
+          </U.ButtonGroup>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="w-60 max-w-full">
+          <p className="mb-3 text-sm font-medium">Mixed lengths in a 240px parent</p>
+          <U.ButtonGroup label="Reservation">
+            <U.Button tone="outline" onClick={() => onNotice("Reservation cancelled")}>Cancel</U.Button>
+            <U.Button onClick={() => onNotice("Printing room reserved")}>Reserve the printing room for Saturday morning</U.Button>
+          </U.ButtonGroup>
+        </div>
+        <div className="w-60 max-w-full">
+          <p className="mb-3 text-sm font-medium">Attached and vertical in a 240px parent</p>
+          <U.ButtonGroup label="Export" attached orientation="vertical">
+            <U.Button tone="outline" onClick={() => onNotice("PDF exported")}>Export as PDF</U.Button>
+            <U.Button tone="outline" onClick={() => onNotice("Print sheet exported")}>Export the print sheet with crop marks</U.Button>
+            <U.Button tone="outline" disabled>Send to the letterpress</U.Button>
+          </U.ButtonGroup>
+        </div>
       </div>
     </div>
   );

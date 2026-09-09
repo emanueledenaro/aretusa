@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { TextareaExample, LabelExample, FieldExample, InputGroupExample } from "./demos/forms";
+import { TextareaExample, LabelExample, FieldExample, InputGroupExample, NativeSelectExample } from "./demos/forms";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -595,11 +595,7 @@ export function Demo({ id }: { id: string }) {
       content = <SelectExample />;
       break;
     case "native-select":
-      content = (
-        <U.Field label="Discipline">
-          <U.NativeSelect options={choices} />
-        </U.Field>
-      );
+      content = <NativeSelectExample />;
       break;
     case "combobox":
       content = (

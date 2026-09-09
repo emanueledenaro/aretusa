@@ -167,3 +167,35 @@ export function InputGroupExample() {
     </div>
   );
 }
+
+export function NativeSelectExample() {
+  const [room, setRoom] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-2">
+      <U.Field label="Discipline" hint="Uses the platform picker on phones.">
+        <U.NativeSelect name="discipline" defaultValue="design" options={[{ value: "design", label: "Design" }, { value: "engineering", label: "Engineering" }, { value: "product", label: "Product" }, { value: "archive", label: "Archive, by invitation only", disabled: true }]} />
+      </U.Field>
+      <U.Field label="Meeting room" required error={submitted && !room ? "Choose a room for the first session." : undefined}>
+        <U.NativeSelect name="room" placeholder="Choose a room" value={room} onChange={(event) => { setRoom(event.target.value); setSubmitted(false); }} options={[
+          { label: "Ground floor", options: [{ value: "print", label: "Printing room" }, { value: "workshop", label: "Workshop" }] },
+          { label: "Upstairs", options: [{ value: "terrace", label: "Terrace" }, { value: "library", label: "Library, quiet hours only after 18:00 on weekdays" }] },
+        ]} />
+      </U.Field>
+      <U.Field label="Plan" hint="Managed by your workspace." disabled>
+        <U.NativeSelect options={[{ value: "studio", label: "Studio, yearly" }]} value="studio" onChange={() => {}} />
+      </U.Field>
+      <U.Field label="Season">
+        <U.NativeSelect defaultValue="autumn" options={[{ value: "spring", label: "Spring" }, { value: "summer", label: "Summer" }, { value: "autumn", label: "Autumn" }, { value: "winter", label: "Winter" }]} />
+      </U.Field>
+      <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+        <U.Button tone="outline" onClick={() => setSubmitted(true)}>Validate room</U.Button>
+      </div>
+      <div className="w-60 max-w-full sm:col-span-2">
+        <U.Field label="In a 240px parent" hint="Long option text truncates in the closed control and stays complete in the picker.">
+          <U.NativeSelect defaultValue="long" options={[{ value: "long", label: "A letter from Ortigia, second draft with margin notes" }, { value: "short", label: "Short" }]} />
+        </U.Field>
+      </div>
+    </div>
+  );
+}

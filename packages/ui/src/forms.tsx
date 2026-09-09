@@ -526,22 +526,65 @@ export function RadioGroup({
     </div>
   );
 }
-export function NativeSelect({
-  options,
-  ...props
-}: React.ComponentPropsWithRef<"select"> & {
-  options: { value: string; label: string; disabled?: boolean }[];
-}) {
-  return (
-    <select {...props} className={cx("a-input", props.className)}>
-      {options.map((o) => (
-        <option key={o.value} {...o}>
-          {o.label}
-        </option>
-      ))}
-    </select>
-  );
-}
+export type NativeSelectOption = { value: string; label: string; disabled?: boolean };
+export type NativeSelectGroup = { label: string; options: NativeSelectOption[]; disabled?: boolean };
+export type NativeSelectProps = React.ComponentPropsWithoutRef<"select"> & {
+  /** Flat options or labelled groups rendered as optgroup. */
+  options: (NativeSelectOption | NativeSelectGroup)[];
+  /** Empty first option shown until a value is chosen; it cannot be re-selected. */
+  placeholder?: string;
+};
+export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
+  function NativeSelect({ options, placeholder, className, onChange, ...props }, ref) {
+    const [internal, setInternal] = React.useState(String(props.defaultValue ?? ""));
+    const current = props.value !== undefined ? String(props.value) : internal;
+    const empty = placeholder !== undefined && current === "";
+    const renderOption = (o: NativeSelectOption) => (
+      <option key={o.value} value={o.value} disabled={o.disabled}>
+        {o.label}
+      </option>
+    );
+    return (
+      <span className="relative block min-w-0">
+        <select
+          ref={ref}
+          {...props}
+          defaultValue={
+            props.value === undefined ? (props.defaultValue ?? (placeholder !== undefined ? "" : undefined)) : undefined
+          }
+          data-placeholder={empty || undefined}
+          onChange={(event) => {
+            if (props.value === undefined) setInternal(event.target.value);
+            onChange?.(event);
+          }}
+          className={cx(
+            "a-input min-h-11 appearance-none truncate pe-10 data-[placeholder]:text-muted/75",
+            className,
+          )}
+        >
+          {placeholder !== undefined && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          {options.map((o) =>
+            "options" in o ? (
+              <optgroup key={o.label} label={o.label} disabled={o.disabled}>
+                {o.options.map(renderOption)}
+              </optgroup>
+            ) : (
+              renderOption(o)
+            ),
+          )}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted"
+        />
+      </span>
+    );
+  },
+);
 export function Select({
   label,
   options,

@@ -29,7 +29,7 @@ export const usage: Record<string,string> = {
   "input-group": "<InputGroup prefix=\"https://\" suffix=\".design\" action={<button onClick={() => setValue(\"\")}>Clear</button>}><input aria-label=\"Domain\" value={value} onChange={(e) => setValue(e.target.value)} /></InputGroup>",
   "input-otp": "<InputOTP value={value} onChange={setValue} length={6} />",
   "label": "<><Label htmlFor=\"name\" required secondary=\"Shown to your team\">Name</Label><input id=\"name\" required /></>",
-  "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} />",
+  "native-select": "<NativeSelect aria-label=\"Discipline\" options={options} placeholder=\"Choose a discipline\" value={value} onChange={(e) => setValue(e.target.value)} />",
   "radio-group": "<RadioGroup label=\"Discipline\" options={options} defaultValue=\"design\" description=\"You can change this later.\" />",
   "select": "<Select label=\"Discipline\" options={options} value={value} onValueChange={setValue} />",
   "slider": "<Slider label=\"Volume\" defaultValue={[40]} min={0} max={100} />",

@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample } from "./demos/foundations-a";
+import { BadgeExample, CardExample, ButtonGroupExample, KbdExample, SeparatorExample, AspectRatioExample } from "./demos/foundations-a";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -400,11 +400,7 @@ export function Demo({ id }: { id: string }) {
       );
       break;
     case "aspect-ratio":
-      content = (
-        <U.AspectRatio className="grid place-items-center bg-surface">
-          <span className="font-editorial text-3xl">Space to create.</span>
-        </U.AspectRatio>
-      );
+      content = <AspectRatioExample />;
       break;
     case "direction":
       content = (

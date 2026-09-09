@@ -327,3 +327,90 @@ export function SeparatorExample({ onNotice }: { onNotice: (text: string) => voi
     </div>
   );
 }
+
+/** Inline SVG placeholders so the demo needs no network and the intrinsic size is known. */
+function placeholder(width: number, height: number, from: string, to: string, title: string) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/></linearGradient></defs><rect width="${width}" height="${height}" fill="url(#g)"/><circle cx="${width * 0.72}" cy="${height * 0.3}" r="${Math.min(width, height) * 0.12}" fill="#f4f1e9" fill-opacity="0.7"/><text x="${width / 2}" y="${height * 0.88}" text-anchor="middle" font-family="Georgia, serif" font-size="${Math.min(width, height) * 0.09}" fill="#f4f1e9">${title}</text></svg>`;
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+const harbour = placeholder(1600, 900, "#8b9fa2", "#326145", "Harbour, 1600 by 900");
+const portrait = placeholder(900, 1200, "#ac4333", "#edbd52", "Portrait, 900 by 1200");
+
+export function AspectRatioExample() {
+  const [failed, setFailed] = React.useState(false);
+  return (
+    <div className="grid w-full gap-8">
+      <div>
+        <p className="mb-3 text-sm font-medium">Ratios side by side, same image, no layout shift</p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <figure className="min-w-0">
+            <U.AspectRatio ratio={16 / 9}>
+              <img src={harbour} alt="Harbour at dawn, cropped to a wide frame" loading="lazy" />
+            </U.AspectRatio>
+            <figcaption className="mt-2 text-xs text-muted">16:9, cover</figcaption>
+          </figure>
+          <figure className="min-w-0">
+            <U.AspectRatio ratio={1}>
+              <img src={harbour} alt="Harbour at dawn, cropped to a square" loading="lazy" />
+            </U.AspectRatio>
+            <figcaption className="mt-2 text-xs text-muted">1:1, cover</figcaption>
+          </figure>
+          <figure className="min-w-0">
+            <U.AspectRatio ratio={3 / 4} fit="contain">
+              <img src={harbour} alt="Harbour at dawn, whole picture inside a portrait frame" loading="lazy" />
+            </U.AspectRatio>
+            <figcaption className="mt-2 text-xs text-muted">3:4, contain on the surface token</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_240px]">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <figure className="min-w-0">
+            <U.AspectRatio ratio={4 / 5}>
+              <img src={portrait} alt="Portrait print from the archive" loading="lazy" />
+            </U.AspectRatio>
+            <figcaption className="mt-2 text-xs text-muted">Portrait source in a 4:5 frame</figcaption>
+          </figure>
+          <figure className="min-w-0">
+            <U.AspectRatio ratio={4 / 5}>
+              {failed ? (
+                <div role="img" aria-label="Terrace at noon, image unavailable" className="grid size-full place-items-center p-4 text-center text-sm text-muted">
+                  Image unavailable
+                </div>
+              ) : (
+                <img src="/aretusa-missing-image.jpg" alt="Terrace at noon" onError={() => setFailed(true)} />
+              )}
+            </U.AspectRatio>
+            <figcaption className="mt-2 text-xs text-muted">Load error: the fallback keeps the frame and an accessible name</figcaption>
+          </figure>
+        </div>
+        <div className="w-60 max-w-full">
+          <p className="mb-3 text-sm font-medium">240px parent, intrinsic minimum width</p>
+          <U.AspectRatio ratio={1} className="rounded-lg">
+            <div className="size-full overflow-auto p-3" role="region" aria-label="Schedule table" tabIndex={0}>
+              <table className="min-w-[360px] border-collapse text-xs">
+                <caption className="sr-only">Workshop schedule</caption>
+                <thead>
+                  <tr className="text-start text-muted"><th className="pe-4 text-start font-medium">Time</th><th className="pe-4 text-start font-medium">Room</th><th className="text-start font-medium">Session</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td className="pe-4">09:00</td><td className="pe-4">Printing room</td><td>Letterpress introduction</td></tr>
+                  <tr><td className="pe-4">11:00</td><td className="pe-4">Library</td><td>Map folding</td></tr>
+                  <tr><td className="pe-4">15:00</td><td className="pe-4">Terrace</td><td>Open studio</td></tr>
+                  <tr><td className="pe-4">19:00</td><td className="pe-4">Hall</td><td>Evening talk</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </U.AspectRatio>
+          <p className="mt-2 text-xs text-muted">The frame clips; the table scrolls inside its own labelled region.</p>
+        </div>
+      </div>
+      <div>
+        <p className="mb-3 text-sm font-medium">Non-media content</p>
+        <U.AspectRatio ratio={21 / 9} className="grid place-items-center">
+          <span className="px-4 text-center font-editorial text-2xl sm:text-3xl">Space to create.</span>
+        </U.AspectRatio>
+      </div>
+    </div>
+  );
+}

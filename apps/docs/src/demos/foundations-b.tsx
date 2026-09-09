@@ -160,3 +160,85 @@ export function ProgressExample() {
     </div>
   );
 }
+
+export function EmptyExample() {
+  const [notice, setNotice] = React.useState("");
+  const [query, setQuery] = React.useState("harbour maps 1962");
+  return (
+    <div className="w-full space-y-6">
+      <div className="grid gap-4 md:grid-cols-2">
+        <U.Empty
+          title="No projects yet"
+          action={<U.Button onClick={() => setNotice("Project created")}>Create project</U.Button>}
+        >
+          Your first project belongs here. Start from a blank page or import notes from the archive.
+        </U.Empty>
+        <U.Empty
+          variant="search"
+          title={query ? `Nothing matches "${query}"` : "Search the archive"}
+          action={
+            <>
+              <U.Button tone="outline" onClick={() => { setQuery(""); setNotice("Search cleared"); }} disabled={!query}>Clear search</U.Button>
+              <U.Button tone="quiet" onClick={() => setNotice("Filters opened")}>Adjust filters</U.Button>
+            </>
+          }
+        >
+          {query ? "Check the spelling or try a broader phrase. Titles, tags and author names are searched." : "Type a title, a tag or an author name."}
+        </U.Empty>
+        <U.Empty
+          variant="permission"
+          title="Members only"
+          action={
+            <>
+              <U.Button onClick={() => setNotice("Access requested")}>Request access</U.Button>
+              <U.Button tone="quiet" onClick={() => setNotice("Back to the catalogue")}>Back to the catalogue</U.Button>
+            </>
+          }
+        >
+          This collection is shared with studio members. An administrator will review your request within a day.
+        </U.Empty>
+        <U.Empty
+          variant="error"
+          title="The archive could not be loaded"
+          action={
+            <>
+              <U.Button onClick={() => setNotice("Retrying")}>Try again</U.Button>
+              <U.Button tone="quiet" onClick={() => setNotice("Support opened")}>Contact support</U.Button>
+            </>
+          }
+        >
+          The connection dropped while loading. Your drafts are safe and nothing was sent.
+        </U.Empty>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
+        <div className="w-60 max-w-full">
+          <p className="mb-2 text-xs text-muted">240px parent, long explanation and two actions</p>
+          <U.Empty
+            variant="search"
+            title="No photographs from the Marsala saltworks trip were found"
+            action={
+              <>
+                <U.Button onClick={() => setNotice("Upload started")}>Upload photographs</U.Button>
+                <U.Button tone="quiet" onClick={() => setNotice("Search cleared")}>Clear</U.Button>
+              </>
+            }
+          >
+            Photographs are matched by caption, place name and the date written on the back of the print, so a misspelled place name hides the whole set.
+          </U.Empty>
+        </div>
+        <div className="space-y-4">
+          <div className="rounded-xl border border-line bg-card p-4">
+            <p className="mb-3 text-sm font-medium">Comments</p>
+            <U.Empty compact title="No comments yet" action={<U.Button tone="outline" size="sm" onClick={() => setNotice("Composer opened")}>Write the first</U.Button>}>
+              Notes you leave here are visible to the studio.
+            </U.Empty>
+          </div>
+          <div className="rounded-xl bg-ink p-4 text-paper" data-theme="dark">
+            <U.Empty compact variant="permission" title="Private notebook">Ask the owner to share it with you.</U.Empty>
+          </div>
+        </div>
+      </div>
+      {notice && <p className="text-sm text-success" role="status">{notice}</p>}
+    </div>
+  );
+}

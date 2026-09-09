@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { SkeletonExample, SpinnerExample, ProgressExample } from "./demos/foundations-b";
+import { SkeletonExample, SpinnerExample, ProgressExample, EmptyExample } from "./demos/foundations-b";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -483,16 +483,7 @@ export function Demo({ id }: { id: string }) {
       content = <ProgressExample />;
       break;
     case "empty":
-      content = (
-        <U.Empty title="A fresh page.">
-          Your first project belongs here.
-          <div className="mt-4">
-            <U.Button onClick={() => setNotice("Project created")}>
-              Create project
-            </U.Button>
-          </div>
-        </U.Empty>
-      );
+      content = <EmptyExample />;
       break;
     case "alert":
       content = (

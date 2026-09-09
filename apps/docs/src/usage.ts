@@ -11,7 +11,7 @@ export const usage: Record<string,string> = {
   "badge": "<Badge tone=\"success\">Published</Badge>",
   "card": "<Card><h3>Your project</h3><p>Make room for an idea.</p></Card>",
   "direction": "<Direction dir=\"rtl\"><p>Right-to-left content</p></Direction>",
-  "empty": "<Empty title=\"No projects yet\">Create your first project.</Empty>",
+  "empty": "<Empty title=\"No projects yet\" action={<button>Create project</button>}>Your first project belongs here.</Empty>",
   "item": "<Item title=\"Field notes\" description=\"Updated today\" action={<button>Open</button>} />",
   "kbd": "<Kbd>⌘ K</Kbd>",
   "progress": "<Progress label=\"Upload progress\" value={45} description=\"Large files are compressed first.\" />",

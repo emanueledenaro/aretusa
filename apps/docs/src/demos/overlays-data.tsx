@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as U from "../../../../packages/ui/src/index";
+import { Bold, Italic, Link2, Heart, Share2, Trash2 } from "lucide-react";
 
 const paragraph =
   "The salt gardens sit below the old harbour wall, where the tide leaves a thin white line on the stones each morning. The printing room keeps its shutters half closed until noon.";
@@ -84,6 +85,50 @@ export function PopoverExample() {
           </U.Popover>
         </div>
       </U.Dialog>
+    </div>
+  );
+}
+
+export function TooltipExample() {
+  const [favorite, setFavorite] = React.useState(false);
+  return (
+    <div className="w-full space-y-6">
+      <U.TooltipProvider>
+        <div role="toolbar" aria-label="Formatting" className="flex flex-wrap items-center gap-1 rounded-xl border border-line bg-card p-1">
+          <U.Tooltip content="Bold">
+            <U.Button tone="quiet" aria-label="Bold"><Bold className="size-4" /></U.Button>
+          </U.Tooltip>
+          <U.Tooltip content="Italic">
+            <U.Button tone="quiet" aria-label="Italic"><Italic className="size-4" /></U.Button>
+          </U.Tooltip>
+          <U.Tooltip content="Insert link">
+            <U.Button tone="quiet" aria-label="Insert link"><Link2 className="size-4" /></U.Button>
+          </U.Tooltip>
+          <U.Separator className="mx-1 h-6" />
+          <U.Tooltip content={favorite ? "Remove from favorites" : "Add to favorites"}>
+            <U.Button tone="quiet" aria-pressed={favorite} aria-label="Favorite" onClick={() => setFavorite((value) => !value)}>
+              <Heart className="size-4" fill={favorite ? "currentColor" : "none"} />
+            </U.Button>
+          </U.Tooltip>
+          <U.Tooltip content="Select a block first">
+            <U.Button tone="quiet" aria-label="Delete block" disabled><Trash2 className="size-4" /></U.Button>
+          </U.Tooltip>
+        </div>
+      </U.TooltipProvider>
+      <div className="flex flex-wrap items-center gap-3">
+        <U.Tooltip content="Share a read-only link with anyone. Members keep their own permissions and the link can be revoked from the project settings." side="bottom">
+          <U.Button tone="outline"><Share2 className="size-4" />Share</U.Button>
+        </U.Tooltip>
+        <U.Tooltip content="Opens the studio calendar" side="right">
+          <a href="#calendar" className="text-sm underline underline-offset-4">Calendar</a>
+        </U.Tooltip>
+        <U.Tooltip content="Ortigia, Syracuse" side="left">
+          <U.Button tone="secondary" size="sm">Location</U.Button>
+        </U.Tooltip>
+      </div>
+      <p className="max-w-prose text-sm leading-relaxed text-muted">
+        Tooltips add a hint to a control that already has a name. They open on focus without delay, close on Escape and never carry an action or content the task depends on. Touch users do not see them, so the toolbar buttons above keep their accessible names.
+      </p>
     </div>
   );
 }

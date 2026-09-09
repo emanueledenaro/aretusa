@@ -306,29 +306,75 @@ export function Popover({
     </P.Root>
   );
 }
+const TooltipProviderContext = React.createContext(false);
+/** Wrap a page or toolbar so several tooltips share one delay and skip it when moving between triggers. */
+export function TooltipProvider({
+  children,
+  delay = 300,
+  skipDelay = 400,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  skipDelay?: number;
+}) {
+  return (
+    <TooltipProviderContext.Provider value={true}>
+      <T.Provider delayDuration={delay} skipDelayDuration={skipDelay}>
+        {children}
+      </T.Provider>
+    </TooltipProviderContext.Provider>
+  );
+}
+export type TooltipProps = {
+  /** The trigger. A disabled control is wrapped in a focusable span so the tooltip stays reachable. */
+  children: React.ReactElement<{ disabled?: boolean }>;
+  /** Short supplementary text. Keep essential information outside the tooltip. */
+  content: React.ReactNode;
+  side?: "top" | "right" | "bottom" | "left";
+  align?: "start" | "center" | "end";
+  /** Milliseconds before a hover opens the tooltip. Focus opens immediately. */
+  delay?: number;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
 export function Tooltip({
   children,
   content,
-}: {
-  children: React.ReactElement;
-  content: string;
-}) {
-  return (
-    <T.Provider delayDuration={250}>
-      <T.Root>
-        <T.Trigger asChild>{children}</T.Trigger>
-        <T.Portal>
-          <T.Content
-            sideOffset={6}
-            className="a-tooltip z-[60] rounded-md bg-ink px-3 py-2 text-xs text-paper"
-          >
-            {content}
-            <T.Arrow className="fill-ink" />
-          </T.Content>
-        </T.Portal>
-      </T.Root>
-    </T.Provider>
+  side = "top",
+  align = "center",
+  delay = 300,
+  open,
+  defaultOpen,
+  onOpenChange,
+}: TooltipProps) {
+  const shared = React.useContext(TooltipProviderContext);
+  const disabled = Boolean(children.props.disabled);
+  const trigger = disabled ? (
+    <span tabIndex={0} className="inline-flex max-w-full rounded-lg">
+      {children}
+    </span>
+  ) : (
+    children
   );
+  const root = (
+    <T.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} delayDuration={delay} disableHoverableContent>
+      <T.Trigger asChild>{trigger}</T.Trigger>
+      <T.Portal>
+        <T.Content
+          side={side}
+          align={align}
+          sideOffset={6}
+          collisionPadding={12}
+          className="a-tooltip z-[60] max-w-64 rounded-lg bg-ink px-3 py-2 text-[0.8125rem] leading-snug text-paper shadow-lg [overflow-wrap:anywhere]"
+        >
+          {content}
+          <T.Arrow width={12} height={6} className="fill-ink" />
+        </T.Content>
+      </T.Portal>
+    </T.Root>
+  );
+  return shared ? root : <T.Provider delayDuration={delay}>{root}</T.Provider>;
 }
 export function HoverCard({
   trigger,

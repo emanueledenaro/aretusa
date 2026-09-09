@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -751,13 +751,7 @@ export function Demo({ id }: { id: string }) {
       content = <PopoverExample />;
       break;
     case "tooltip":
-      content = (
-        <U.Tooltip content="Add this project to your favorites">
-          <U.Button tone="outline" aria-label="Favorite">
-            <Heart className="size-4" />
-          </U.Button>
-        </U.Tooltip>
-      );
+      content = <TooltipExample />;
       break;
     case "hover-card":
       content = (

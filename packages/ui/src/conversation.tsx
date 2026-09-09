@@ -143,15 +143,42 @@ export function Bubble({ side = "start", className, children, ...props }: Bubble
     </div>
   );
 }
-export function Marker({ children }: { children: React.ReactNode }) {
+export type MarkerProps = Omit<React.ComponentPropsWithRef<"div">, "children"> & {
+  children: React.ReactNode;
+  /** Machine readable value when the marker is a time boundary. */
+  dateTime?: string;
+  /** accent uses the terracotta token for state boundaries such as unread. */
+  tone?: "default" | "accent";
+  /** Keep the marker visible at the top of its scroll region. */
+  sticky?: boolean;
+};
+/** A quiet boundary between groups of messages. Plain text, never a live region. */
+export const Marker = React.forwardRef<HTMLDivElement, MarkerProps>(function Marker(
+  { children, dateTime, tone = "default", sticky = false, className, ...props },
+  ref,
+) {
+  const lineClass = cx("h-px min-w-4 flex-1", tone === "accent" ? "bg-terracotta/60" : "bg-line");
+  const Label = dateTime ? "time" : "span";
   return (
-    <div className="my-5 flex items-center gap-3 text-xs text-muted">
-      <hr className="flex-1 border-line" />
-      {children}
-      <hr className="flex-1 border-line" />
+    <div
+      {...props}
+      ref={ref}
+      data-tone={tone}
+      className={cx(
+        "flex w-full items-center gap-3 py-1 text-xs font-medium tracking-wide",
+        tone === "accent" ? "text-terracotta" : "text-muted",
+        sticky && "sticky top-0 z-10 -mx-4 w-auto bg-paper/95 px-4",
+        className,
+      )}
+    >
+      <span aria-hidden className={lineClass} />
+      <Label dateTime={dateTime} className="min-w-0 max-w-[75%] text-center leading-5 break-words">
+        {children}
+      </Label>
+      <span aria-hidden className={lineClass} />
     </div>
   );
-}
+});
 export type MessageStatus = "sending" | "sent" | "failed";
 export type MessageProps = Omit<React.ComponentPropsWithRef<"article">, "children"> & {
   author: string;

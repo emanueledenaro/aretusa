@@ -164,7 +164,7 @@ export function MessageScrollerExample() {
           <U.Button tone="outline" size="sm" onClick={loadEarlier} loading={loading}>Load earlier</U.Button>
         </div>
         <U.MessageScroller label="Project conversation" loading={loading} className="max-h-80">
-          <U.Marker>Today</U.Marker>
+          <U.Marker dateTime="2026-03-04" sticky>Today</U.Marker>
           {items.map((m, i) => (
             <U.Message key={i} author={m.author} side={m.side} time={"09:" + String(41 + i).padStart(2, "0")}>
               {m.text}
@@ -181,6 +181,26 @@ export function MessageScrollerExample() {
           <U.Message author="You" side="end">Understood.</U.Message>
           <U.Message author="Alex Rivers">One more line to force scrolling in a 160px frame.</U.Message>
         </U.MessageScroller>
+      </div>
+    </div>
+  );
+}
+
+export function MarkerExample() {
+  return (
+    <div className="grid w-full gap-6 sm:grid-cols-[1fr_240px]">
+      <div className="flex min-w-0 flex-col gap-4">
+        <U.Marker dateTime="2026-03-04">Today</U.Marker>
+        <U.Message author="Alex Rivers" time="09:41">The proofs came back from the printer.</U.Message>
+        <U.Marker tone="accent">3 unread messages</U.Marker>
+        <U.Message author="You" side="end" time="09:46">Let us go with the cream stock.</U.Message>
+        <U.Marker>Conversation moved to the printing room channel on Wednesday afternoon after the review</U.Marker>
+        <U.Message author="Sam Costa" time="10:02">Picking this up here.</U.Message>
+      </div>
+      <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-dashed border-line p-3">
+        <p className="text-xs text-muted">240px parent</p>
+        <U.Marker dateTime="2026-03-03">Yesterday at the open studio</U.Marker>
+        <U.Marker tone="accent">New</U.Marker>
       </div>
     </div>
   );

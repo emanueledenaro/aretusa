@@ -307,3 +307,78 @@ export function TableExample() {
     </div>
   );
 }
+
+type Note = { id: string; name: string; owner: string; status: string; amount: number; updated: string };
+const notes: Note[] = [
+  { id: "1", name: "Field notes", owner: "Alex Rivers", status: "Published", amount: 120, updated: "2026-09-02" },
+  { id: "2", name: "Quiet interfaces", owner: "Sam Odell", status: "Draft", amount: 85, updated: "2026-08-28" },
+  { id: "3", name: "The workshop", owner: "Mara Vento", status: "Published", amount: 1240, updated: "2026-09-05" },
+  { id: "4", name: "Open studio", owner: "Alex Rivers", status: "Review", amount: 160, updated: "2026-09-01" },
+  { id: "5", name: "Small details", owner: "Sam Odell", status: "Draft", amount: 40, updated: "2026-07-19" },
+  { id: "6", name: "A new beginning for the salt garden archive and its printed plates", owner: "Mara Vento", status: "Published", amount: 300, updated: "2026-09-08" },
+  { id: "7", name: "Harbour wall survey", owner: "Alex Rivers", status: "Review", amount: 510, updated: "2026-08-14" },
+  { id: "8", name: "Printing room inventory", owner: "Sam Odell", status: "Published", amount: 95, updated: "2026-06-30" },
+];
+export function DataTableExample() {
+  const [state, setState] = React.useState<"ready" | "loading" | "error">("ready");
+  const [archived, setArchived] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>([]);
+  const visible = notes.filter((note) => !archived.includes(note.id));
+  return (
+    <div className="w-full space-y-6">
+      <U.DataTable<Note>
+        rows={visible}
+        caption="notes"
+        selectable
+        selected={selected}
+        onSelectionChange={setSelected}
+        defaultSort={{ key: "updated", direction: "descending" }}
+        loading={state === "loading"}
+        error={state === "error" ? "The notes could not be loaded from the example server." : undefined}
+        onRetry={() => setState("ready")}
+        filterPlaceholder="Filter by title or owner"
+        columns={[
+          { key: "name", header: "Title", sortable: true, cell: (row) => <span className="font-medium">{row.name}</span> },
+          { key: "owner", header: "Owner", sortable: true },
+          {
+            key: "status",
+            header: "Status",
+            sortable: true,
+            cell: (row) => <U.Badge tone={row.status === "Published" ? "success" : "neutral"}>{row.status}</U.Badge>,
+          },
+          { key: "amount", header: "Budget", align: "end", sortable: true, cell: (row) => euro.format(row.amount) },
+          { key: "updated", header: "Updated", sortable: true, cell: (row) => new Date(row.updated).toLocaleDateString("en", { day: "numeric", month: "short" }) },
+        ]}
+        bulkActions={(ids) => (
+          <U.Button
+            size="sm"
+            tone="outline"
+            onClick={() => {
+              setArchived((list) => [...list, ...ids]);
+              setSelected([]);
+            }}
+          >
+            Archive
+          </U.Button>
+        )}
+        toolbar={
+          <U.Select
+            label="Example state"
+            options={[
+              { value: "ready", label: "Ready" },
+              { value: "loading", label: "Loading" },
+              { value: "error", label: "Error" },
+            ]}
+            value={state}
+            onValueChange={(value) => setState(value as typeof state)}
+          />
+        }
+      />
+      {archived.length > 0 && (
+        <U.Button tone="quiet" size="sm" onClick={() => setArchived([])}>
+          Restore {archived.length} archived
+        </U.Button>
+      )}
+    </div>
+  );
+}

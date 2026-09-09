@@ -9,10 +9,11 @@ import {
   Tooltip as ChartTooltip,
   ResponsiveContainer,
 } from "recharts";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "./button";
 import { Empty } from "./empty";
-import { Input } from "./forms";
+import { Input, Checkbox } from "./forms";
+import { Alert } from "./alert";
 import { Pagination } from "./navigation";
 import { Skeleton } from "./skeleton";
 import { cx } from "./utils";
@@ -146,55 +147,273 @@ export type DataRow = {
   status: string;
   amount: number;
 };
-export function DataTable({ rows }: { rows: DataRow[] }) {
-  const [query, setQuery] = React.useState(""),
-    [sort, setSort] = React.useState(false),
-    [page, setPage] = React.useState(1);
-  const filtered = rows
-    .filter((r) => r.name.toLowerCase().includes(query.toLowerCase()))
-    .sort((a, b) => (sort ? b.amount - a.amount : a.amount - b.amount));
-  const total = Math.max(1, Math.ceil(filtered.length / 5));
+export type DataTableColumn<T> = {
+  /** Property read from the row for text, filtering and sorting. */
+  key: string;
+  header: string;
+  align?: "start" | "end";
+  sortable?: boolean;
+  /** Custom cell content; the raw value is used otherwise. */
+  cell?: (row: T) => React.ReactNode;
+  /** Value compared when sorting; the raw value is used otherwise. */
+  sortValue?: (row: T) => string | number;
+  width?: string;
+};
+export type DataTableSort = { key: string; direction: "ascending" | "descending" };
+export type DataTableProps<T extends { id: string }> = {
+  rows: T[];
+  /** Columns in order. Defaults to name, status and amount for the DataRow shape. */
+  columns?: DataTableColumn<T>[];
+  /** Names the table; the record count is appended. */
+  caption?: string;
+  pageSize?: number;
+  /** Row properties searched by the filter. Defaults to the string columns. */
+  filterKeys?: string[];
+  filterPlaceholder?: string;
+  /** Adds a checkbox column and a select-all control for the current page. */
+  selectable?: boolean;
+  selected?: string[];
+  defaultSelected?: string[];
+  onSelectionChange?: (ids: string[]) => void;
+  sort?: DataTableSort | null;
+  defaultSort?: DataTableSort | null;
+  onSortChange?: (sort: DataTableSort | null) => void;
+  loading?: boolean;
+  /** Replaces the table with an alert; onRetry adds a Try again control. */
+  error?: React.ReactNode;
+  onRetry?: () => void;
+  emptyTitle?: string;
+  emptyDescription?: React.ReactNode;
+  /** Extra toolbar content beside the filter. */
+  toolbar?: React.ReactNode;
+  /** Controls shown while rows are selected. */
+  bulkActions?: (ids: string[]) => React.ReactNode;
+  /** Accessible name for each row checkbox. Defaults to the name property or the id. */
+  rowLabel?: (row: T) => string;
+  className?: string;
+};
+const euro = new Intl.NumberFormat("en", { style: "currency", currency: "EUR" });
+const defaultColumns: DataTableColumn<DataRow>[] = [
+  { key: "name", header: "Name", sortable: true },
+  { key: "status", header: "Status", sortable: true },
+  { key: "amount", header: "Amount", align: "end", sortable: true, cell: (row) => euro.format(row.amount) },
+];
+function useControllable<V>(value: V | undefined, fallback: V, onChange?: (value: V) => void) {
+  const [inner, setInner] = React.useState(fallback);
+  const current = value === undefined ? inner : value;
+  const set = React.useCallback(
+    (next: V) => {
+      if (value === undefined) setInner(next);
+      onChange?.(next);
+    },
+    [value, onChange],
+  );
+  return [current, set] as const;
+}
+function rawValue<T>(row: T, key: string) {
+  return (row as Record<string, unknown>)[key];
+}
+export function DataTable<T extends { id: string } = DataRow>({
+  rows,
+  columns = defaultColumns as unknown as DataTableColumn<T>[],
+  caption = "records",
+  pageSize = 5,
+  filterKeys,
+  filterPlaceholder = "Filter\u2026",
+  selectable = false,
+  selected,
+  defaultSelected = [],
+  onSelectionChange,
+  sort,
+  defaultSort = null,
+  onSortChange,
+  loading = false,
+  error,
+  onRetry,
+  emptyTitle = "No matching records",
+  emptyDescription = "Try a different filter.",
+  toolbar,
+  bulkActions,
+  rowLabel,
+  className,
+}: DataTableProps<T>) {
+  const [query, setQuery] = React.useState("");
+  const [page, setPage] = React.useState(1);
+  const [sorting, setSorting] = useControllable(sort, defaultSort, onSortChange);
+  const [selection, setSelection] = useControllable(selected, defaultSelected, onSelectionChange);
+  const keys =
+    filterKeys ?? columns.filter((column) => rows.length === 0 || typeof rawValue(rows[0], column.key) === "string").map((column) => column.key);
+  const needle = query.trim().toLowerCase();
+  const filtered = needle
+    ? rows.filter((row) => keys.some((key) => String(rawValue(row, key) ?? "").toLowerCase().includes(needle)))
+    : rows;
+  const sorted = React.useMemo(() => {
+    if (!sorting) return filtered;
+    const column = columns.find((c) => c.key === sorting.key);
+    const read = column?.sortValue ?? ((row: T) => rawValue(row, sorting.key) as string | number);
+    const sign = sorting.direction === "ascending" ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      const x = read(a), y = read(b);
+      if (typeof x === "number" && typeof y === "number") return (x - y) * sign;
+      return String(x ?? "").localeCompare(String(y ?? ""), undefined, { numeric: true, sensitivity: "base" }) * sign;
+    });
+  }, [filtered, sorting, columns]);
+  const total = Math.max(1, Math.ceil(sorted.length / pageSize));
   const current = Math.min(page, total);
+  const pageRows = sorted.slice((current - 1) * pageSize, current * pageSize);
+  const pageIds = pageRows.map((row) => row.id);
+  const selectedOnPage = pageIds.filter((id) => selection.includes(id));
+  const allOnPage = pageIds.length > 0 && selectedOnPage.length === pageIds.length;
+  const label = rowLabel ?? ((row: T) => String(rawValue(row, "name") ?? row.id));
+  const filterId = React.useId();
+  function cycle(key: string) {
+    if (!sorting || sorting.key !== key) setSorting({ key, direction: "ascending" });
+    else if (sorting.direction === "ascending") setSorting({ key, direction: "descending" });
+    else setSorting(null);
+  }
+  function toggleRow(id: string, checked: boolean) {
+    setSelection(checked ? [...selection, id] : selection.filter((item) => item !== id));
+  }
+  function togglePage(checked: boolean) {
+    const rest = selection.filter((id) => !pageIds.includes(id));
+    setSelection(checked ? [...rest, ...pageIds] : rest);
+  }
+  const tableColumns: TableColumn[] = [
+    ...(selectable
+      ? [
+          {
+            header: (
+              <Checkbox
+                className="gap-0 py-0"
+                label={<span className="sr-only">Select all rows on this page</span>}
+                checked={allOnPage ? true : selectedOnPage.length ? "indeterminate" : false}
+                disabled={pageIds.length === 0}
+                onCheckedChange={(value) => togglePage(value === true)}
+              />
+            ),
+            width: "1%",
+          } satisfies TableColumn,
+        ]
+      : []),
+    ...columns.map(
+      (column): TableColumn => ({
+        align: column.align,
+        width: column.width,
+        sort: column.sortable ? (sorting?.key === column.key ? sorting.direction : "none") : undefined,
+        header: column.sortable ? (
+          <button
+            type="button"
+            onClick={() => cycle(column.key)}
+            className={cx(
+              "-mx-1 inline-flex min-h-8 items-center gap-1 rounded px-1 uppercase tracking-[0.08em] transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
+              sorting?.key === column.key && "text-ink",
+            )}
+          >
+            {column.header}
+            {sorting?.key === column.key ? (
+              sorting.direction === "ascending" ? (
+                <ChevronUp aria-hidden="true" className="size-3.5" />
+              ) : (
+                <ChevronDown aria-hidden="true" className="size-3.5" />
+              )
+            ) : (
+              <ChevronsUpDown aria-hidden="true" className="size-3.5 opacity-50" />
+            )}
+          </button>
+        ) : (
+          column.header
+        ),
+      }),
+    ),
+  ];
+  const tableRows: TableRow[] = pageRows.map((row) => ({
+    key: row.id,
+    selected: selectable && selection.includes(row.id),
+    cells: [
+      ...(selectable
+        ? [
+            <Checkbox
+              key="select"
+              className="gap-0 py-0"
+              label={<span className="sr-only">Select {label(row)}</span>}
+              checked={selection.includes(row.id)}
+              onCheckedChange={(value) => toggleRow(row.id, value === true)}
+            />,
+          ]
+        : []),
+      ...columns.map((column) => (column.cell ? column.cell(row) : String(rawValue(row, column.key) ?? ""))),
+    ],
+  }));
+  const from = sorted.length ? (current - 1) * pageSize + 1 : 0;
+  const to = Math.min(current * pageSize, sorted.length);
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-3">
-        <Input
-          aria-label="Filter records"
-          placeholder="Filter by name…"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setPage(1);
-          }}
-          className="max-w-xs"
-        />
-        <Button
-          tone="outline"
-          onClick={() => setSort(!sort)}
-          aria-pressed={sort}
-        >
-          Amount {sort ? "descending" : "ascending"}
-        </Button>
+    <div className={cx("space-y-4", className)}>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative min-w-0 flex-1 basis-56">
+          <Input
+            id={filterId}
+            type="search"
+            aria-label={"Filter " + caption}
+            placeholder={filterPlaceholder}
+            value={query}
+            disabled={loading}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
+            className="w-full pe-11"
+          />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear filter"
+              onClick={() => {
+                setQuery("");
+                setPage(1);
+              }}
+              className="absolute end-1 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-surface hover:text-ink"
+            >
+              <X className="size-4" strokeWidth={1.75} />
+            </button>
+          )}
+        </div>
+        {toolbar}
       </div>
-      {filtered.length ? (
-        <Table
-          caption={filtered.length + " records"}
-          columns={["Name", "Status", "Amount"]}
-          rows={filtered
-            .slice((current - 1) * 5, current * 5)
-            .map((r) => [
-              r.name,
-              r.status,
-              new Intl.NumberFormat("en", {
-                style: "currency",
-                currency: "EUR",
-              }).format(r.amount),
-            ])}
-        />
-      ) : (
-        <Empty title="No matching records">Try a different name.</Empty>
+      {selectable && selection.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-surface px-4 py-2 text-sm">
+          <span className="font-medium">{selection.length} selected</span>
+          {bulkActions?.(selection)}
+          <Button size="sm" tone="quiet" className="ms-auto" onClick={() => setSelection([])}>
+            Clear selection
+          </Button>
+        </div>
       )}
-      <Pagination page={current} total={total} onChange={setPage} />
+      {error ? (
+        <Alert tone="error" title="Something went wrong">
+          <div className="space-y-3">
+            <div>{error}</div>
+            {onRetry && (
+              <Button size="sm" tone="outline" onClick={onRetry}>
+                Try again
+              </Button>
+            )}
+          </div>
+        </Alert>
+      ) : loading ? (
+        <Table caption={"Loading " + caption} hideCaption columns={tableColumns} rows={[]} loading loadingRows={pageSize} />
+      ) : sorted.length === 0 ? (
+        <Empty title={emptyTitle}>{emptyDescription}</Empty>
+      ) : (
+        <Table caption={sorted.length + " " + caption} hideCaption columns={tableColumns} rows={tableRows} />
+      )}
+      {!error && !loading && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p aria-live="polite" className="text-sm text-muted">
+            {sorted.length ? "Showing " + from + " to " + to + " of " + sorted.length : "No records"}
+          </p>
+          {total > 1 && <Pagination page={current} total={total} onChange={setPage} />}
+        </div>
+      )}
     </div>
   );
 }

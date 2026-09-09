@@ -6,7 +6,7 @@ import type { DateRange } from "react-day-picker";
 import { ReactHookFormExample } from "../../../examples/react-hook-form/example";
 import { TanStackFormExample } from "../../../examples/tanstack-form/example";
 import { FormischExample } from "../../../examples/formisch/example";
-import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample } from "./demos/overlays-data";
+import { PopoverExample, TooltipExample, HoverCardExample, ToastExample, TableExample, DataTableExample } from "./demos/overlays-data";
 const choices = [
   { value: "design", label: "Design" },
   { value: "engineering", label: "Engineering" },
@@ -919,7 +919,7 @@ export function Demo({ id }: { id: string }) {
       content = <TableExample />;
       break;
     case "data-table":
-      content = <U.DataTable rows={rows} />;
+      content = <DataTableExample />;
       break;
     case "chart":
       content = (

@@ -59,7 +59,7 @@ export const usage: Record<string,string> = {
   "tabs": "<Tabs items={[{value:\"overview\",label:\"Overview\",content:<p>Your overview.</p>},{value:\"settings\",label:\"Settings\",content:<p>Your settings.</p>}]} />",
   "carousel": "<Carousel slides={[{title:\"First idea\",description:\"A beginning.\"},{title:\"Next step\",description:\"Keep going.\"}]} />",
   "chart": "<Chart label=\"Contributions\" data={[{name:\"Mon\",value:12},{name:\"Tue\",value:24}]} />",
-  "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} />",
+  "data-table": "<DataTable rows={[{id:\"1\",name:\"Field notes\",status:\"Draft\",amount:120}]} selectable onSelectionChange={(ids) => console.log(ids)} defaultSort={{ key: \"amount\", direction: \"descending\" }} />",
   "resizable": "<Resizable left={<p>Navigation</p>} right={<p>Workspace</p>} />",
   "table": "<Table caption=\"Projects\" columns={[\"Name\", \"Status\", { header: \"Budget\", align: \"end\" }]} rows={[[\"Field notes\", \"Draft\", \"120\"]]} emptyMessage=\"No projects yet.\" />",
   "attachment": "<Attachment name=\"notes.pdf\" onRemove={() => setEnabled(true)} />",

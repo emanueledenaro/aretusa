@@ -49,3 +49,5 @@ Dispatched on 9 September 2026 from `eb71728`, six Claude workers in local workt
 | agent/batch3-conversation | #73 Message, #71 Bubble, #74 Message Scroller, #70 Attachment, #72 Marker, #75 Questionnaire |
 
 Blocks #76 to #86 wait for a later batch. This records dispatch, not completion.
+
+Status on 10 September 2026: conversation and both foundations branches are integrated. The forms, navigation and overlays-data workers were cut off by rate limits partway through their lists; their branches are pushed with the finished tickets and their worktrees still hold work in progress. See [the handoff](handoff.md).
